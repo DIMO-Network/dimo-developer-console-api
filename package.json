@@ -3,13 +3,19 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 3001",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
+    "@types/jsonwebtoken": "^9.0.6",
+    "@types/lodash": "^4.17.0",
     "@types/pg": "^8.11.5",
+    "axios": "^1.6.8",
+    "googleapis": "^134.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "lodash": "^4.17.21",
     "next": "14.2.2",
     "pg": "^8.11.5",
     "react": "^18",
