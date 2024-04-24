@@ -1,4 +1,10 @@
-import { DataTypes, Model, Sequelize } from 'sequelize';
+import {
+  DataTypes,
+  InferAttributes,
+  InferCreationAttributes,
+  Model,
+  Sequelize,
+} from 'sequelize';
 
 import DB from '@/services/db';
 
@@ -7,19 +13,24 @@ const GOOGLE_AUTH = 'google';
 
 const DEFAULT_ROLE = 'admin';
 
-export class User extends Model {
-  declare id: string;
+export class User extends Model<
+  InferAttributes<User>,
+  InferCreationAttributes<User>
+> {
+  declare id?: string;
   declare name: string;
   declare email: string;
   declare auth: string;
-  declare role: string;
-  declare company_name: string;
-  declare company_website: string;
-  declare company_region: string;
-  declare team: string;
-  declare crm_id: string;
-  declare refresh_token: string;
-  declare refresh_token_expiration: Date;
+  declare role?: string;
+  declare company_name?: string;
+  declare company_website?: string;
+  declare company_region?: string;
+  declare team?: string;
+  declare crm_id?: string;
+  declare refresh_token?: string;
+  declare refresh_token_expiration?: Date;
+  declare deleted?: boolean;
+  declare deleted_at?: Date;
 }
 
 User.init(
@@ -37,7 +48,6 @@ User.init(
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        isAlpha: true,
         notNull: true,
       },
     },
@@ -81,9 +91,6 @@ User.init(
     company_region: {
       type: DataTypes.STRING,
       allowNull: true,
-      validate: {
-        isAlpha: true,
-      },
     },
     team: {
       type: DataTypes.STRING,
@@ -98,6 +105,15 @@ User.init(
       allowNull: true,
     },
     refresh_token_expiration: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
+    deleted: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+      defaultValue: false,
+    },
+    deleted_at: {
       type: DataTypes.DATE,
       allowNull: true,
     },

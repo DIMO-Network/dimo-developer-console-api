@@ -1,5 +1,4 @@
-import { getUsers } from '@/controllers/user.controller';
-import { GitHubAuthService, GoogleAuthService } from '@/services/auth';
+import Controller from '@/controllers/auth.controller';
 
 interface IProps {
   code: string;
@@ -8,23 +7,26 @@ interface IProps {
 }
 
 export async function POST(request: Request) {
-  const { code, app, process } = (await request.json()) as IProps;
+  const { code, app } = (await request.json()) as IProps;
+  try {
+    const user = await Controller.processOAuth(code, app);
+    const token = Controller.generateToken(user);
 
-  // const ProviderService = {
-  //   github: GitHubAuthService,
-  //   google: GoogleAuthService,
-  // }[app];
-
-  // if (ProviderService) {
-  //   const providerService = new ProviderService();
-  //   const token = await providerService.processCallback(code);
-  //   const user = await providerService.getUser();
-  // }
-
-  // return Response.redirect('http://localhost:3000/');
-}
-
-export async function GET() {
-  const users = await getUsers();
-  return Response.json(users);
+    return Response.json({
+      token,
+    });
+  } catch (error: any) {
+    console.error({
+      error,
+      step: 'OAuth process',
+      code,
+      app,
+    });
+    return Response.json(
+      {
+        message: error.message,
+      },
+      { status: 400 }
+    );
+  }
 }

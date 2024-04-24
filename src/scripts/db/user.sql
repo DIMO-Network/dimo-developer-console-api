@@ -12,5 +12,7 @@ CREATE TABLE IF NOT EXISTS Users (
   refresh_token VARCHAR(250),
   refresh_token_expiration TIMESTAMP,
   created_at TIMESTAMP,
-  updated_at TIMESTAMP
+  updated_at TIMESTAMP,
+  deleted BOOLEAN,
+  deleted_at TIMESTAMP
 )
