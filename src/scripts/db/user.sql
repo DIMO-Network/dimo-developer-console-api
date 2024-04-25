@@ -4,6 +4,8 @@ CREATE TABLE IF NOT EXISTS Users (
   email VARCHAR(250) NOT NULL,
   auth VARCHAR(15) NOT NULL,
   role VARCHAR(50) NOT NULL,
+  build_for VARCHAR(50),
+  build_for_text VARCHAR(250),
   company_name VARCHAR(120),
   company_website VARCHAR(120),
   company_region VARCHAR(120),

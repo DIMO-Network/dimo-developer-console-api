@@ -22,6 +22,8 @@ export class User extends Model<
   declare email: string;
   declare auth: string;
   declare role?: string;
+  declare build_for?: string;
+  declare build_for_text?: string;
   declare company_name?: string;
   declare company_website?: string;
   declare company_region?: string;
@@ -73,13 +75,17 @@ User.init(
       type: DataTypes.STRING,
       defaultValue: DEFAULT_ROLE,
     },
+    build_for: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    build_for_text: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
     company_name: {
       type: DataTypes.STRING,
       allowNull: true,
-
-      validate: {
-        isAlpha: true,
-      },
     },
     company_website: {
       type: DataTypes.STRING,
