@@ -6,7 +6,7 @@ import { JwtPayload } from 'jsonwebtoken';
 export const processOAuth = async (code: string, app: string) => {
   const { token, user } = await AuthService.processOAuth(code, app);
 
-  const where = { email: user.email };
+  const where = { email: user.email, auth: app };
   const [currentUser] = await User.findOrCreate({
     where,
     defaults: {

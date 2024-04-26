@@ -51,11 +51,19 @@ export class GitHubAuthService extends AuthService {
   }
 
   async processCallback(code: string) {
-    const { data } = await this.client.post('/login/oauth/access_token', {
-      client_id: this.clientId,
-      client_secret: this.clientSecret,
-      code,
-    });
+    const { data } = await this.client.post(
+      '/login/oauth/access_token',
+      {
+        client_id: this.clientId,
+        client_secret: this.clientSecret,
+        code,
+      },
+      {
+        headers: {
+          'X-OAuth-Scopes': 'user:email',
+        },
+      }
+    );
 
     this.apiClient.defaults.headers.common[
       'Authorization'
@@ -64,18 +72,27 @@ export class GitHubAuthService extends AuthService {
     return GitHubAuthService.transformTokenData(data);
   }
 
-  static transformUserData(user = {}): IUser {
+  static transformUserData(user = {}, email: string): IUser {
     return {
       name: _.get(user, 'name', ''),
-      email: _.get(user, 'email', ''),
+      email,
       avatarUrl: _.get(user, 'avatar_url', ''),
     };
   }
 
   async getUser() {
     const { data: user } = await this.apiClient.get('/user');
+    const email = await this.getEmail();
 
-    return GitHubAuthService.transformUserData(user);
+    return GitHubAuthService.transformUserData(user, email);
+  }
+
+  async getEmail() {
+    const {
+      data: [{ email = '' }],
+    } = await this.apiClient.get('/user/emails');
+
+    return email;
   }
 }
 
