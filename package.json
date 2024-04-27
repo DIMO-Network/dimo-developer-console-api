@@ -13,6 +13,7 @@
     "@types/lodash": "^4.17.0",
     "@types/pg": "^8.11.5",
     "axios": "^1.6.8",
+    "eslint-config-prettier": "^9.1.0",
     "googleapis": "^134.0.0",
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",

@@ -1,7 +1,13 @@
+import { JwtPayload } from 'jsonwebtoken';
+
 import AuthService from '@/services/auth';
 import AuthUtils from '@/utils/auth';
 import { User } from '@/models/user.model';
-import { JwtPayload } from 'jsonwebtoken';
+import {
+  handleErrorType,
+  handleUniqueConstraintError,
+} from '@/models/error.model';
+import { UniqueConstraintError } from 'sequelize';
 
 export const processOAuth = async (code: string, app: string) => {
   const { token, user } = await AuthService.processOAuth(code, app);
@@ -16,7 +22,9 @@ export const processOAuth = async (code: string, app: string) => {
       refresh_token: token.refreshToken || '',
       refresh_token_expiration: new Date(token.expiryDate),
     },
-  });
+  }).catch(
+    handleErrorType(UniqueConstraintError, handleUniqueConstraintError('email'))
+  );
 
   return currentUser;
 };
