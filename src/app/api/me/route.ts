@@ -1,7 +1,9 @@
 import { headers } from 'next/headers';
+import { NextRequest } from 'next/server';
 
 import Controller from '@/controllers/auth.controller';
 import { updateUserById } from '@/controllers/user.controller';
+import { fleetGeneration } from '@/controllers/lead.controller';
 
 const getTokenFromHeader = () => {
   const authorizationToken = headers().get('Authorization') ?? '';
@@ -16,7 +18,7 @@ const getUserFromToken = async () => {
 export async function GET() {
   try {
     const user = await getUserFromToken();
-    return Response.json(user);
+    return Response.json(user?.dataValues);
   } catch (error: any) {
     console.error({
       error,
@@ -31,13 +33,15 @@ export async function GET() {
   }
 }
 
-export async function PUT(request: Request) {
+export async function PUT(request: NextRequest) {
+  const searchParams = request.nextUrl.searchParams;
   const loggedUser = await getUserFromToken();
   const incomingUser = await request.json();
+  const complete = Boolean(searchParams.get('complete'));
 
-  console.log({ incomingUser });
+  await updateUserById(loggedUser?.id ?? '', incomingUser);
+  const user = await getUserFromToken();
+  if (complete) fleetGeneration(user);
 
-  const createdUser = await updateUserById(loggedUser?.id ?? '', incomingUser);
-
-  return Response.json(createdUser);
+  return Response.json(user);
 }
