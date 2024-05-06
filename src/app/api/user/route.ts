@@ -7,7 +7,15 @@ export async function POST(request: Request) {
   return Response.json(createdUSer);
 }
 
-export async function GET() {
-  const users = await getUsers();
+export async function GET(request: NextRequest) {
+  const params = request.nextUrl.searchParams;
+
+  const page = Number(params.get('page') || 1);
+  const pageSize = Number(params.get('pageSize') || 10);
+  console.log({ page, pageSize });
+  const users = await getUsers({
+    page,
+    pageSize,
+  });
   return Response.json(users);
 }

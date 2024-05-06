@@ -1,5 +1,6 @@
 import {
   DataTypes,
+  FindOptions,
   InferAttributes,
   InferCreationAttributes,
   Model,
@@ -7,6 +8,7 @@ import {
 } from 'sequelize';
 
 import DB from '@/services/db';
+import { PaginationOptions, paginateData } from '@/utils/paginateData.utils';
 
 const GITHUB_AUTH = 'github';
 const GOOGLE_AUTH = 'google';
@@ -33,6 +35,13 @@ export class User extends Model<
   declare refresh_token_expiration?: Date;
   declare deleted?: boolean;
   declare deleted_at?: Date;
+
+  static findAllPaginated(
+    findOptions: FindOptions,
+    paginationOptions: PaginationOptions
+  ) {
+    return paginateData(User, findOptions, paginationOptions);
+  }
 }
 
 User.init(

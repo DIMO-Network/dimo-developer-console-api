@@ -1,5 +1,3 @@
-import { JwtPayload } from 'jsonwebtoken';
-
 import AuthService from '@/services/auth';
 import AuthUtils from '@/utils/auth';
 import { User } from '@/models/user.model';
@@ -33,13 +31,7 @@ export const generateToken = ({ id = '' }: User) => {
   return AuthUtils.generateToken({ id });
 };
 
-export const getUserByToken = async (token: string) => {
-  const { id: userId } = AuthUtils.verifyAuth(token) as JwtPayload;
-  return User.findOne({ where: { id: userId } });
-};
-
 export default {
   processOAuth,
   generateToken,
-  getUserByToken,
 };

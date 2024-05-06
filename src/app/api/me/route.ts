@@ -1,9 +1,10 @@
 import { headers } from 'next/headers';
 import { NextRequest } from 'next/server';
 
-import Controller from '@/controllers/auth.controller';
 import { updateUserById } from '@/controllers/user.controller';
 import { fleetGeneration } from '@/controllers/lead.controller';
+import { getUserByToken } from '@/services/user.service';
+import { isErrorWithMessage } from '@/utils/error.utils';
 
 const getTokenFromHeader = () => {
   const authorizationToken = headers().get('Authorization') ?? '';
@@ -12,21 +13,22 @@ const getTokenFromHeader = () => {
 
 const getUserFromToken = async () => {
   const token = getTokenFromHeader();
-  return Controller.getUserByToken(token);
+  return getUserByToken(token);
 };
 
 export async function GET() {
   try {
     const user = await getUserFromToken();
     return Response.json(user?.dataValues);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error({
       error,
       step: '[OAuth] Get user information by token',
     });
+    const message = isErrorWithMessage(error) ? error?.message : '';
     return Response.json(
       {
-        message: error.message,
+        message: message,
       },
       { status: 400 }
     );

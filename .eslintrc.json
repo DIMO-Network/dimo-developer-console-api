@@ -1,8 +1,15 @@
 {
-  "extends": ["eslint:recommended", "next", "prettier"],
+  "extends": [
+    "next/core-web-vitals",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier"
+  ],
   "env": {
     "jest": true
   },
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
   "rules": {
     "semi": "error",
     "no-console": "warn"

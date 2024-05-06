@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS Users (
+CREATE TABLE IF NOT EXISTS users (
   id VARCHAR(36) PRIMARY KEY NOT NULL,
   name VARCHAR(150) NOT NULL,
   email VARCHAR(150) NOT NULL UNIQUE,
@@ -17,4 +17,17 @@ CREATE TABLE IF NOT EXISTS Users (
   updated_at TIMESTAMP,
   deleted BOOLEAN,
   deleted_at TIMESTAMP
-)
+);
+
+CREATE TABLE IF NOT EXISTS teams (
+  id VARCHAR(36) PRIMARY KEY NOT NULL,
+  name VARCHAR(150) NOT NULL,
+  created_by VARCHAR(36) NOT NULL,
+  created_at TIMESTAMP,
+  updated_at TIMESTAMP,
+  deleted BOOLEAN,
+  deleted_at TIMESTAMP,
+  CONSTRAINT fk_user
+      FOREIGN KEY(created_by) 
+        REFERENCES users(id)
+);

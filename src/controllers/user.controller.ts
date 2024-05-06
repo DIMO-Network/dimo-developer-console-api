@@ -1,7 +1,8 @@
 import { User } from '@/models/user.model';
+import { PaginationOptions } from '@/utils/paginateData.utils';
 
-export function getUsers() {
-  return User.findAll();
+export function getUsers({ pageSize, page }: PaginationOptions) {
+  return User.findAllPaginated({ where: {} }, { pageSize, page });
 }
 
 export function findUserById(id: string) {
