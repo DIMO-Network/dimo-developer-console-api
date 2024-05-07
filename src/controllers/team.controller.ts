@@ -1,5 +1,5 @@
 import { Team } from '@/models/team.model';
-import { PaginationOptions } from '@/utils/paginateData.utils';
+import { PaginationOptions } from '@/utils/paginateData';
 
 export function getTeams(paginationOptions: PaginationOptions) {
   return Team.findAllPaginated({ where: {} }, paginationOptions);

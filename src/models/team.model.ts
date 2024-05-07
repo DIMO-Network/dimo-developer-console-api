@@ -8,7 +8,7 @@ import {
 } from 'sequelize';
 
 import DB from '@/services/db';
-import { PaginationOptions, paginateData } from '@/utils/paginateData.utils';
+import { PaginationOptions, paginateData } from '@/utils/paginateData';
 
 export class Team extends Model<
   InferAttributes<Team>,

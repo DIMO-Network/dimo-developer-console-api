@@ -12,8 +12,12 @@ export async function GET(request: NextRequest) {
 
   const page = Number(params.get('page') || 1);
   const pageSize = Number(params.get('pageSize') || 10);
-  console.log({ page, pageSize });
-  const users = await getUsers({
+
+  const filter = {
+    name: params.get('name') || '',
+  };
+
+  const users = await getUsers(filter, {
     page,
     pageSize,
   });

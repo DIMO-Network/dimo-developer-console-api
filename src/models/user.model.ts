@@ -1,6 +1,5 @@
 import {
   DataTypes,
-  FindOptions,
   InferAttributes,
   InferCreationAttributes,
   Model,
@@ -8,7 +7,8 @@ import {
 } from 'sequelize';
 
 import DB from '@/services/db';
-import { PaginationOptions, paginateData } from '@/utils/paginateData.utils';
+import { PaginationOptions, paginateData } from '@/utils/paginateData';
+import { FilterObject, transformObjectToSequelize } from '@/utils/likeFilter';
 
 const GITHUB_AUTH = 'github';
 const GOOGLE_AUTH = 'google';
@@ -37,10 +37,13 @@ export class User extends Model<
   declare deleted_at?: Date;
 
   static findAllPaginated(
-    findOptions: FindOptions,
+    findOptions: FilterObject,
     paginationOptions: PaginationOptions
   ) {
-    return paginateData(User, findOptions, paginationOptions);
+    const filter = transformObjectToSequelize(findOptions, {
+      like: ['name'],
+    });
+    return paginateData(User, { where: filter }, paginationOptions);
   }
 }
 
