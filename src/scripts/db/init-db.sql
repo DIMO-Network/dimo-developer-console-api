@@ -31,3 +31,20 @@ CREATE TABLE IF NOT EXISTS teams (
       FOREIGN KEY(created_by) 
         REFERENCES users(id)
 );
+
+CREATE TABLE IF NOT EXISTS team_collaborators (
+  id VARCHAR(36) PRIMARY KEY NOT NULL,
+  team_id VARCHAR(36) NOT NULL,
+  user_id VARCHAR(36) NOT NULL,
+  role VARCHAR(50) NOT NULL,
+  created_at TIMESTAMP,
+  updated_at TIMESTAMP,
+  deleted BOOLEAN,
+  deleted_at TIMESTAMP,
+  CONSTRAINT fk_team
+      FOREIGN KEY(team_id) 
+        REFERENCES teams(id),
+  CONSTRAINT fk_user
+      FOREIGN KEY(user_id) 
+        REFERENCES users(id)
+);

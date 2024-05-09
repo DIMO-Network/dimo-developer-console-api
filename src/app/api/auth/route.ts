@@ -1,4 +1,5 @@
 import Controller from '@/controllers/auth.controller';
+import { isErrorWithMessage } from '@/utils/error.utils';
 
 interface IProps {
   code: string;
@@ -15,18 +16,14 @@ export async function POST(request: Request) {
     return Response.json({
       token,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error({
       error,
       step: '[OAuth] Sign In/Up process',
       code,
       app,
     });
-    return Response.json(
-      {
-        message: error.message,
-      },
-      { status: 400 }
-    );
+    const message = isErrorWithMessage(error) ? error?.message : '';
+    return Response.json({ message }, { status: 400 });
   }
 }

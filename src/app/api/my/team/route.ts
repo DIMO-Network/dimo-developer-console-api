@@ -13,11 +13,6 @@ export async function GET(request: NextRequest) {
       step: '[My Team] Get team created by the logged user',
     });
     const message = isErrorWithMessage(error) ? error?.message : '';
-    return Response.json(
-      {
-        message: message,
-      },
-      { status: 400 }
-    );
+    return Response.json({ message }, { status: 400 });
   }
 }

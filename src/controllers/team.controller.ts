@@ -1,8 +1,9 @@
 import { Team } from '@/models/team.model';
+import { FilterObject } from '@/utils/filter';
 import { PaginationOptions } from '@/utils/paginateData';
 
-export function getTeams(paginationOptions: PaginationOptions) {
-  return Team.findAllPaginated({ where: {} }, paginationOptions);
+export function getTeams(filter: FilterObject, pagination: PaginationOptions) {
+  return Team.findAllPaginated(filter, pagination);
 }
 
 export function findTeamById(id: string) {

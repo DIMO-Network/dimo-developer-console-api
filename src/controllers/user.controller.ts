@@ -1,12 +1,9 @@
 import { User } from '@/models/user.model';
-import { FilterObject } from '@/utils/likeFilter';
+import { FilterObject } from '@/utils/filter';
 import { PaginationOptions } from '@/utils/paginateData';
 
-export function getUsers(
-  filter: FilterObject,
-  { pageSize, page }: PaginationOptions
-) {
-  return User.findAllPaginated(filter, { pageSize, page });
+export function getUsers(filter: FilterObject, pagination: PaginationOptions) {
+  return User.findAllPaginated(filter, pagination);
 }
 
 export function findUserById(id: string) {

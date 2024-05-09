@@ -5,6 +5,14 @@ export interface PaginationOptions {
   pageSize: number;
 }
 
+export const getPaginationFromParams = (params: {
+  [k: string]: string;
+}): PaginationOptions => {
+  const page = Number(params?.page || 1);
+  const pageSize = Number(params?.pageSize || 10);
+  return { page, pageSize };
+};
+
 export async function paginateData<T extends Model>(
   model: ModelStatic<T>,
   options: FindOptions,

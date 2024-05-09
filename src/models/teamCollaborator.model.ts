@@ -8,15 +8,21 @@ import {
 
 import DB from '@/services/db';
 import { PaginationOptions, paginateData } from '@/utils/paginateData';
-import { FilterObject, transformObjectToSequelize } from '@/utils/filter';
+import { FilterObject } from '@/utils/filter';
 
-export class Team extends Model<
-  InferAttributes<Team>,
-  InferCreationAttributes<Team>
+export enum TeamRoles {
+  OWNER = 'OWNER',
+  COLLABORATOR = 'COLLABORATOR',
+}
+
+export class TeamCollaborator extends Model<
+  InferAttributes<TeamCollaborator>,
+  InferCreationAttributes<TeamCollaborator>
 > {
   declare id?: string;
-  declare name: string;
-  declare created_by: string;
+  declare team_id: string;
+  declare user_id: string;
+  declare role: string;
   declare deleted?: boolean;
   declare deleted_at?: Date;
 
@@ -24,21 +30,11 @@ export class Team extends Model<
     findOptions: FilterObject,
     paginationOptions: PaginationOptions
   ) {
-    const filter = transformObjectToSequelize(findOptions, {
-      like: [
-        'name',
-        'email',
-        'company_name',
-        'company_website',
-        'company_region',
-      ],
-      exact: ['role'],
-    });
-    return paginateData(Team, { where: filter }, paginationOptions);
+    return paginateData(TeamCollaborator, findOptions, paginationOptions);
   }
 }
 
-Team.init(
+TeamCollaborator.init(
   {
     id: {
       type: DataTypes.UUID,
@@ -49,19 +45,29 @@ Team.init(
       },
       primaryKey: true,
     },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notNull: true,
-      },
-    },
-    created_by: {
+    team_id: {
       type: DataTypes.UUID,
       allowNull: false,
       validate: {
         notEmpty: true,
         notNull: true,
+      },
+    },
+    user_id: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+        notNull: true,
+      },
+    },
+    role: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+        notNull: true,
+        isIn: [[TeamRoles.OWNER, TeamRoles.COLLABORATOR]],
       },
     },
     deleted: {
@@ -76,8 +82,8 @@ Team.init(
   },
   {
     sequelize: DB.connection as Sequelize,
-    modelName: 'Team',
-    tableName: 'teams',
+    modelName: 'TeamCollaborator',
+    tableName: 'team_collaborators',
     createdAt: 'created_at',
     updatedAt: 'updated_at',
   }

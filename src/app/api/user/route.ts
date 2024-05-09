@@ -1,4 +1,5 @@
 import { createUser, getUsers } from '@/controllers/user.controller';
+import { getPaginationFromParams } from '@/utils/paginateData';
 
 export async function POST(request: Request) {
   const user = await request.json();
@@ -8,18 +9,10 @@ export async function POST(request: Request) {
 }
 
 export async function GET(request: NextRequest) {
-  const params = request.nextUrl.searchParams;
+  const params = Object.fromEntries(request.nextUrl.searchParams.entries());
+  const pagination = getPaginationFromParams(params);
 
-  const page = Number(params.get('page') || 1);
-  const pageSize = Number(params.get('pageSize') || 10);
+  const users = await getUsers(params, pagination);
 
-  const filter = {
-    name: params.get('name') || '',
-  };
-
-  const users = await getUsers(filter, {
-    page,
-    pageSize,
-  });
   return Response.json(users);
 }

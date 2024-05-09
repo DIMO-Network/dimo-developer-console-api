@@ -8,7 +8,7 @@ import {
 
 import DB from '@/services/db';
 import { PaginationOptions, paginateData } from '@/utils/paginateData';
-import { FilterObject, transformObjectToSequelize } from '@/utils/likeFilter';
+import { FilterObject, transformObjectToSequelize } from '@/utils/filter';
 
 const GITHUB_AUTH = 'github';
 const GOOGLE_AUTH = 'google';
@@ -41,7 +41,14 @@ export class User extends Model<
     paginationOptions: PaginationOptions
   ) {
     const filter = transformObjectToSequelize(findOptions, {
-      like: ['name'],
+      like: [
+        'name',
+        'email',
+        'company_name',
+        'company_website',
+        'company_region',
+      ],
+      exact: ['role'],
     });
     return paginateData(User, { where: filter }, paginationOptions);
   }

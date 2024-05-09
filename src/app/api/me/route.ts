@@ -43,7 +43,9 @@ export async function PUT(request: NextRequest) {
 
   await updateUserById(loggedUser?.id ?? '', incomingUser);
   const user = await getUserFromToken();
-  if (complete) fleetGeneration(user);
+  if (complete) {
+    fleetGeneration(user);
+  }
 
   return Response.json(user);
 }
