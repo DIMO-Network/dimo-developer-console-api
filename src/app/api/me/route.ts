@@ -5,6 +5,7 @@ import { updateUserById } from '@/controllers/user.controller';
 import { fleetGeneration } from '@/controllers/lead.controller';
 import { getUserByToken } from '@/services/user.service';
 import { isErrorWithMessage } from '@/utils/error.utils';
+import { associateTeam } from '@/controllers/team.controller';
 
 const getTokenFromHeader = () => {
   const authorizationToken = headers().get('Authorization') ?? '';
@@ -43,8 +44,9 @@ export async function PUT(request: NextRequest) {
 
   await updateUserById(loggedUser?.id ?? '', incomingUser);
   const user = await getUserFromToken();
-  if (complete) {
+  if (user && complete) {
     fleetGeneration(user);
+    associateTeam(user);
   }
 
   return Response.json(user);
