@@ -14,8 +14,13 @@ export function createUser(user: User) {
   return User.create(user);
 }
 
-export function updateUserById(id: string, user: User) {
-  return User.update(user, { where: { id } });
+export async function updateUserById(id: string, user: User) {
+  const [affectedRows, [updatedUser]] = await User.update(user, {
+    where: { id },
+    returning: true,
+  });
+  if (affectedRows > 0) return updatedUser;
+  else return null;
 }
 
 export function deleteUserById(id: string) {
