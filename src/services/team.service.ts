@@ -2,6 +2,10 @@ import { Team } from '@/models/team.model';
 import { TeamCollaborator, TeamRoles } from '@/models/teamCollaborator.model';
 import { User } from '@/models/user.model';
 
+export const getTeamById = async (id: string) => {
+  return Team.findOne({ where: { id } });
+};
+
 export const getTeamOwner = async (id: string) => {
   return Team.findOne({ where: { created_by: id } });
 };

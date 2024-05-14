@@ -1,4 +1,7 @@
-import { TeamCollaborator } from '@/models/teamCollaborator.model';
+import { TeamCollaborator, TeamRoles } from '@/models/teamCollaborator.model';
+import { User } from '@/models/user.model';
+import { findTeamCollaboratorByUserId } from '@/services/teamCollaborator.service';
+import { ValidatorError } from '@/utils/error.utils';
 import { FilterObject } from '@/utils/filter';
 import { PaginationOptions } from '@/utils/paginateData';
 
@@ -30,3 +33,33 @@ export async function deleteTeamCollaboratorById(id: string) {
     { where: { id } }
   );
 }
+
+export const removeMyCollaboratorById = async (
+  { id: userId }: User,
+  id: string
+) => {
+  const { role: currentUserRole } =
+    (await findTeamCollaboratorByUserId(userId ?? '')) ?? {};
+
+  if (currentUserRole !== TeamRoles.OWNER)
+    throw new ValidatorError(
+      'Do not have enough permissions to remove a collaborator'
+    );
+
+  const { user_id: collaboratorId } =
+    (await findTeamCollaboratorById(id ?? '')) ?? {};
+  const { totalItems: totalOwners } = await getTeamCollaborators(
+    { role: TeamRoles.OWNER, deleted: 'false' },
+    { page: 1, pageSize: 10 }
+  );
+  if (totalOwners === 1 && userId === collaboratorId)
+    throw new ValidatorError(
+      'Cannot remove the only administrator from the group.'
+    );
+
+  return deleteTeamCollaboratorById(id);
+};
+
+export const findMyTeam = async (userId: string) => {
+  return TeamCollaborator.findOne({ where: { user_id: userId } });
+};

@@ -1,10 +1,11 @@
-import {} from '@/controllers/auth.controller';
-import { findMyTeam } from '@/controllers/team.controller';
+import { findMyTeam } from '@/controllers/teamCollaborator.controller';
+import { AuthenticationMiddleware } from '@/middlewares/authentication.middleware';
 import { isErrorWithMessage } from '@/utils/error.utils';
 
 export async function GET(request: NextRequest) {
-  const loggedUser = request.user;
   try {
+    await AuthenticationMiddleware(request);
+    const loggedUser = request.user;
     const team = await findMyTeam(loggedUser?.user?.id ?? '');
     return Response.json(team?.dataValues);
   } catch (error: unknown) {
