@@ -10,6 +10,12 @@ import DB from '@/services/db';
 import { PaginationOptions, paginateData } from '@/utils/paginateData';
 import { FilterObject } from '@/utils/filter';
 
+export enum InvitationStatuses {
+  PENDING = 'PENDING',
+  SENT = 'SENT',
+  ACCEPTED = 'ACCEPTED',
+}
+
 export class TeamInvitation extends Model<
   InferAttributes<TeamInvitation>,
   InferCreationAttributes<TeamInvitation>
@@ -17,6 +23,8 @@ export class TeamInvitation extends Model<
   declare id?: string;
   declare team_id: string;
   declare email: string;
+  declare expires_at: Date;
+  declare status: string;
   declare deleted?: boolean;
   declare deleted_at?: Date;
 
@@ -48,13 +56,26 @@ TeamInvitation.init(
       },
     },
     email: {
-      type: DataTypes.UUID,
+      type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notEmpty: true,
         notNull: true,
         isEmail: true,
       },
+    },
+    status: {
+      type: DataTypes.STRING,
+      defaultValue: InvitationStatuses.PENDING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+        notNull: true,
+      },
+    },
+    expires_at: {
+      type: DataTypes.DATE,
+      allowNull: true,
     },
     deleted: {
       type: DataTypes.BOOLEAN,

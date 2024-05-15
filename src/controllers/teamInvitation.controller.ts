@@ -1,12 +1,17 @@
 import { isEmail } from 'validator';
 
-import { TeamInvitation } from '@/models/teamInvitation.model';
+import {
+  InvitationStatuses,
+  TeamInvitation,
+} from '@/models/teamInvitation.model';
 import { findUserByEmail } from '@/services/user.service';
 import { FilterObject } from '@/utils/filter';
 import { PaginationOptions } from '@/utils/paginateData';
 import { validateMandatoryFields } from '@/utils/vaslidations';
 import { ValidatorError } from '@/utils/error.utils';
 import { CreationAttributes } from 'sequelize';
+import { User } from '@/models/user.model';
+import { getTeamCollaborator } from '@/services/teamCollaborator.service';
 
 export function getTeamInvitations(
   filter: FilterObject,
@@ -43,6 +48,19 @@ export const addTeamInvitation = async (
     throw new ValidatorError('The email provided is an user already');
 
   return TeamInvitation.create(inputTeamInvitation);
+};
+
+export const invitePersonToMyTeam = async (user: User, email: string) => {
+  const expirationDate = new Date();
+  expirationDate.setDate(expirationDate.getDate() + 7);
+
+  const team = await getTeamCollaborator(user?.id ?? '');
+  return await addTeamInvitation({
+    team_id: team?.team_id ?? '',
+    email,
+    status: InvitationStatuses.PENDING,
+    expires_at: expirationDate,
+  });
 };
 
 export function deleteTeamInvitationById(id: string) {

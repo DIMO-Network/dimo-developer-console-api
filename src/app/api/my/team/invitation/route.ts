@@ -1,8 +1,13 @@
-import { findMyTeam } from '@/controllers/teamCollaborator.controller';
-import { addTeamInvitation, getTeamInvitations } from '@/controllers/teamInvitation.controller';
+import _ from 'lodash';
+
+import {
+  getTeamInvitations,
+  invitePersonToMyTeam,
+} from '@/controllers/teamInvitation.controller';
 import { AuthenticationMiddleware } from '@/middlewares/authentication.middleware';
 import { isErrorWithMessage } from '@/utils/error.utils';
 import { getPaginationFromParams } from '@/utils/paginateData';
+import { User } from '@/models/user.model';
 
 export const GET = async (request: NextRequest) => {
   try {
@@ -26,14 +31,13 @@ export const GET = async (request: NextRequest) => {
 export const POST = async (request: NextRequest) => {
   try {
     await AuthenticationMiddleware(request);
-    const loggedUser = request.user;
+    const loggedUser = request?.user?.user as User;
 
-    const inputInvitation = (await request.json()) as { email: string };
-    const team = await findMyTeam(loggedUser?.user?.id ?? '');
-    await addTeamInvitation({
-      team_id: team?.team_id ?? ' ',
-      email: inputInvitation.email,
-    });
+    const inputInvitation = _.pick(await request.json(), ['email']) as {
+      email: string;
+    };
+
+    await invitePersonToMyTeam(loggedUser, inputInvitation.email);
     return Response.json(
       {
         message: `Invitation has been sent to ${inputInvitation.email}`,
