@@ -27,12 +27,12 @@ export async function updateTeamCollaboratorById(
   return TeamCollaborator.update(user, { where: { id } });
 }
 
-export async function deleteTeamCollaboratorById(id: string) {
+export const deleteTeamCollaboratorById = async (id: string) => {
   return TeamCollaborator.update(
     { deleted: false, deleted_at: new Date() },
     { where: { id } }
   );
-}
+};
 
 export const removeMyCollaboratorById = async (
   { id: userId }: User,

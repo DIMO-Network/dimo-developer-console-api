@@ -9,6 +9,7 @@ import {
 import DB from '@/services/db';
 import { PaginationOptions, paginateData } from '@/utils/paginateData';
 import { FilterObject } from '@/utils/filter';
+import { TeamRoles } from './teamCollaborator.model';
 
 export enum InvitationStatuses {
   PENDING = 'PENDING',
@@ -23,6 +24,7 @@ export class TeamInvitation extends Model<
   declare id?: string;
   declare team_id: string;
   declare email: string;
+  declare role: string;
   declare expires_at: Date;
   declare status: string;
   declare deleted?: boolean;
@@ -62,6 +64,15 @@ TeamInvitation.init(
         notEmpty: true,
         notNull: true,
         isEmail: true,
+      },
+    },
+    role: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+        notNull: true,
+        isIn: [[TeamRoles.OWNER, TeamRoles.COLLABORATOR]],
       },
     },
     status: {

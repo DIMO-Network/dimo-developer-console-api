@@ -9,27 +9,31 @@ import { FilterObject } from '@/utils/filter';
 import { PaginationOptions } from '@/utils/paginateData';
 import { validateMandatoryFields } from '@/utils/vaslidations';
 import { ValidatorError } from '@/utils/error.utils';
-import { CreationAttributes } from 'sequelize';
+import { Attributes } from 'sequelize';
 import { User } from '@/models/user.model';
-import { getTeamCollaborator } from '@/services/teamCollaborator.service';
+import {
+  addTeamCollaborator,
+  getTeamCollaborator,
+} from '@/services/teamCollaborator.service';
+import { TeamRoles } from '@/models/teamCollaborator.model';
 
-export function getTeamInvitations(
+export const getTeamInvitations = (
   filter: FilterObject,
   pagination: PaginationOptions
-) {
+) => {
   return TeamInvitation.findAllPaginated(filter, pagination);
-}
+};
 
-export function findTeamInvitationById(id: string) {
+export const findTeamInvitationById = (id: string) => {
   return TeamInvitation.findOne({ where: { id } });
-}
+};
 
-export function findTeamInvitationByEmail(email: string) {
+export const findTeamInvitationByEmail = (email: string) => {
   return TeamInvitation.findOne({ where: { email } });
-}
+};
 
 export const addTeamInvitation = async (
-  inputTeamInvitation: CreationAttributes<TeamInvitation>
+  inputTeamInvitation: Attributes<TeamInvitation>
 ) => {
   const email = inputTeamInvitation?.email;
   const isValid =
@@ -50,7 +54,11 @@ export const addTeamInvitation = async (
   return TeamInvitation.create(inputTeamInvitation);
 };
 
-export const invitePersonToMyTeam = async (user: User, email: string) => {
+export const invitePersonToMyTeam = async (
+  user: User,
+  email: string,
+  role: string
+) => {
   const expirationDate = new Date();
   expirationDate.setDate(expirationDate.getDate() + 7);
 
@@ -58,14 +66,38 @@ export const invitePersonToMyTeam = async (user: User, email: string) => {
   return await addTeamInvitation({
     team_id: team?.team_id ?? '',
     email,
+    role,
     status: InvitationStatuses.PENDING,
     expires_at: expirationDate,
   });
 };
 
-export function deleteTeamInvitationById(id: string) {
+export const deleteTeamInvitationById = (id: string) => {
   return TeamInvitation.update(
     { deleted: false, deleted_at: new Date() },
     { where: { id } }
   );
-}
+};
+
+export const acceptTeamInvitation = async (
+  user: User,
+  invitationCode: string
+) => {
+  const invitationId = Buffer.from(invitationCode, 'base64').toString('utf8');
+  const { team_id: teamId, expires_at: expiresAt = new Date() } =
+    (await findTeamInvitationById(invitationId)) ?? {};
+
+  if (!teamId) throw new ValidatorError('Invitation was not found');
+
+  const now = new Date();
+  const isAvailable = now < expiresAt;
+  if (!isAvailable) throw new ValidatorError('The invitation has expired');
+
+  const teamCollaboratorData = {
+    team_id: teamId,
+    user_id: user.id ?? '',
+    role: TeamRoles.COLLABORATOR,
+  };
+
+  return await addTeamCollaborator(teamCollaboratorData);
+};
