@@ -1,3 +1,5 @@
+import { Attributes } from 'sequelize';
+
 import { TeamCollaborator, TeamRoles } from '@/models/teamCollaborator.model';
 import { User } from '@/models/user.model';
 import { findTeamCollaboratorByUserId } from '@/services/teamCollaborator.service';
@@ -16,15 +18,15 @@ export async function findTeamCollaboratorById(id: string) {
   return TeamCollaborator.findOne({ where: { id } });
 }
 
-export async function addTeamCollaborator(user: TeamCollaborator) {
-  return TeamCollaborator.create(user);
+export async function addTeamCollaborator(teamCollaboratorData: Attributes<TeamCollaborator>) {
+  return TeamCollaborator.create(teamCollaboratorData);
 }
 
 export async function updateTeamCollaboratorById(
   id: string,
-  user: TeamCollaborator
+  teamCollaboratorData: Attributes<TeamCollaborator>
 ) {
-  return TeamCollaborator.update(user, { where: { id } });
+  return TeamCollaborator.update(teamCollaboratorData, { where: { id } });
 }
 
 export const deleteTeamCollaboratorById = async (id: string) => {
