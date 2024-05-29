@@ -66,6 +66,7 @@ export class GoogleAuthService extends AuthService {
     return {
       name: _.get(user, 'names.0.unstructuredName', ''),
       email: _.get(user, 'emailAddresses.0.value', ''),
+      authLogin: _.get(user, 'emailAddresses.0.value', ''),
       avatarUrl: _.get(user, 'photos.0.url', ''),
     };
   }

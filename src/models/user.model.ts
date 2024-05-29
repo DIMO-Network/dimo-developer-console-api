@@ -15,6 +15,18 @@ const GOOGLE_AUTH = 'google';
 
 const DEFAULT_ROLE = 'admin';
 
+export const USER_MODIFIABLE_FIELDS = [
+  'name',
+  'email',
+  'avatar_url',
+  'role',
+  'build_for',
+  'build_for_text',
+  'company_name',
+  'company_website',
+  'company_region',
+];
+
 export class User extends Model<
   InferAttributes<User>,
   InferCreationAttributes<User>
@@ -23,13 +35,14 @@ export class User extends Model<
   declare name: string;
   declare email: string;
   declare auth: string;
+  declare auth_login: string;
+  declare avatar_url?: string | null;
   declare role?: string;
   declare build_for?: string;
   declare build_for_text?: string;
   declare company_name?: string;
   declare company_website?: string;
   declare company_region?: string;
-  declare team?: string;
   declare crm_id?: string;
   declare refresh_token?: string;
   declare refresh_token_expiration?: Date;
@@ -118,9 +131,21 @@ User.init(
       type: DataTypes.STRING,
       allowNull: true,
     },
-    team: {
+    auth_login: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notNull: true,
+        notEmpty: true,
+      },
+    },
+    avatar_url: {
       type: DataTypes.STRING,
       allowNull: true,
+      validate: {
+        notNull: false,
+        isUrl: true,
+      },
     },
     crm_id: {
       type: DataTypes.STRING,

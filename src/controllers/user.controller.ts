@@ -1,3 +1,5 @@
+import { Attributes } from 'sequelize';
+
 import { User } from '@/models/user.model';
 import { FilterObject } from '@/utils/filter';
 import { PaginationOptions } from '@/utils/paginateData';
@@ -10,7 +12,7 @@ export function findUserById(id: string) {
   return User.findOne({ where: { id } });
 }
 
-export function createUser(user: User) {
+export function createUser(user: Attributes<User>) {
   return User.create(user);
 }
 
