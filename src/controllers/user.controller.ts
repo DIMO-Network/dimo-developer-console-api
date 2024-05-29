@@ -12,12 +12,17 @@ export function findUserById(id: string) {
   return User.findOne({ where: { id } });
 }
 
-export function createUser(user: Attributes<User>) {
-  return User.create(user);
+export function createUser(userData: Attributes<User>) {
+  return User.create(userData);
 }
 
-export function updateUserById(id: string, user: User) {
-  return User.update(user, { where: { id } });
+export async function updateUserById(id: string, userData: Attributes<User>) {
+  const [affectedRows, [updatedUser]] = await User.update(userData, {
+    where: { id },
+    returning: true,
+  });
+  if (affectedRows > 0) return updatedUser;
+  else return null;
 }
 
 export function deleteUserById(id: string) {

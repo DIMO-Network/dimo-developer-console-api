@@ -1,8 +1,12 @@
+import _ from 'lodash';
+import { Attributes } from 'sequelize';
+
 import {
   deleteUserById,
   findUserById,
   updateUserById,
 } from '@/controllers/user.controller';
+import { User } from '@/models/user.model';
 
 type Params = { params: { id: string } };
 
@@ -12,8 +16,18 @@ export async function GET(_request: Request, { params: { id } }: Params) {
 }
 
 export async function PUT(request: Request, { params: { id } }: Params) {
-  const user = await request.json();
-  const createdUser = await updateUserById(id, user);
+  const userData = _.pick(await request.json(), [
+    'name',
+    'email',
+    'role',
+    'build_for',
+    'build_for_text',
+    'company_name',
+    'company_region',
+    'company_website',
+    'crm_id',
+  ]) as Attributes<User>;
+  const createdUser = await updateUserById(id, userData);
 
   return Response.json(createdUser);
 }

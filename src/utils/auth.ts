@@ -15,6 +15,7 @@ export const verifyAuth = (token: string) => {
   try {
     return jwt.verify(token, privateKey);
   } catch (err) {
+    console.error(err);
     throw new JWTError('Your token has expired.');
   }
 };

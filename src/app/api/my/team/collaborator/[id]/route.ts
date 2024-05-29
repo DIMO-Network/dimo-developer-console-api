@@ -1,20 +1,29 @@
-import { findMyTeam } from '@/controllers/teamCollaborator.controller';
+import { removeMyCollaboratorById } from '@/controllers/teamCollaborator.controller';
 import { AuthenticationMiddleware } from '@/middlewares/authentication.middleware';
 import { User } from '@/models/user.model';
 import { isErrorWithMessage } from '@/utils/error.utils';
 
-export async function GET(request: NextRequest) {
+type Params = { params: { id: string } };
+
+export const DELETE = async (
+  request: NextRequest,
+  { params: { id } }: Params
+) => {
   try {
     await AuthenticationMiddleware(request);
     const loggedUser = request.user?.user as User;
-    const team = await findMyTeam(loggedUser?.id ?? '');
-    return Response.json(team?.dataValues);
+    await removeMyCollaboratorById(loggedUser, id);
+
+    return Response.json(
+      { message: 'The collaborator has been removed' },
+      { status: 200 }
+    );
   } catch (error: unknown) {
     console.error({
       error,
-      step: '[My Team] Get team created by the logged user',
+      step: '[My Team Collaborators] Remove team collaborator by the owner user',
     });
     const message = isErrorWithMessage(error) ? error?.message : '';
     return Response.json({ message }, { status: 400 });
   }
-}
+};

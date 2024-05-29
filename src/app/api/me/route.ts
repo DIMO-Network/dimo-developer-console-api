@@ -1,26 +1,16 @@
 import _ from 'lodash';
-import { headers } from 'next/headers';
 
-import { updateUserById } from '@/controllers/user.controller';
+import { associateTeam } from '@/controllers/team.controller';
+import { AuthenticationMiddleware } from '@/middlewares/authentication.middleware';
 import { fleetGeneration } from '@/controllers/lead.controller';
-import { getUserByToken } from '@/services/user.service';
 import { isErrorWithMessage } from '@/utils/error.utils';
 import { USER_MODIFIABLE_FIELDS, User } from '@/models/user.model';
+import { updateUserById } from '@/controllers/user.controller';
 
-const getTokenFromHeader = () => {
-  const authorizationToken = headers().get('Authorization') ?? '';
-  return authorizationToken.replace('Bearer ', '');
-};
-
-const getUserFromToken = async () => {
-  const token = getTokenFromHeader();
-  return getUserByToken(token);
-};
-
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    const user = await getUserFromToken();
-    return Response.json(user?.dataValues);
+    await AuthenticationMiddleware(request);
+    return Response.json(request.user?.user);
   } catch (error: unknown) {
     console.error({
       error,
@@ -37,15 +27,19 @@ export async function GET() {
 }
 
 export async function PUT(request: NextRequest) {
+  await AuthenticationMiddleware(request);
   const searchParams = request.nextUrl.searchParams;
-  const loggedUser = request.user?.user;
-  const incomingUser = _.pick(await request.json(), USER_MODIFIABLE_FIELDS) as User;
+  const { id: userId } = request.user?.user as User;
+  const incomingUser = _.pick(
+    await request.json(),
+    USER_MODIFIABLE_FIELDS
+  ) as User;
   const complete = Boolean(searchParams.get('complete'));
 
-  await updateUserById(loggedUser?.id ?? '', incomingUser);
-  const user = await getUserFromToken();
-  if (complete) {
+  const user = await updateUserById(userId ?? '', incomingUser);
+  if (user && complete) {
     fleetGeneration(user);
+    associateTeam(user);
   }
 
   return Response.json(user);

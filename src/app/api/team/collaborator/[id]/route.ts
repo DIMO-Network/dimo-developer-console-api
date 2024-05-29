@@ -1,8 +1,12 @@
+import _ from 'lodash';
+import { Attributes } from 'sequelize';
+
 import {
   deleteTeamCollaboratorById,
   findTeamCollaboratorById,
   updateTeamCollaboratorById,
 } from '@/controllers/teamCollaborator.controller';
+import { TeamCollaborator } from '@/models/teamCollaborator.model';
 
 type Params = { params: { id: string } };
 
@@ -12,8 +16,12 @@ export async function GET(_request: Request, { params: { id } }: Params) {
 }
 
 export async function PUT(request: Request, { params: { id } }: Params) {
-  const user = await request.json();
-  const updatedTeam = await updateTeamCollaboratorById(id, user);
+  const teamCollaboratorData = _.pick(await request.json(), [
+    'team_id',
+    'user_id',
+    'role',
+  ]) as Attributes<TeamCollaborator>;
+  const updatedTeam = await updateTeamCollaboratorById(id, teamCollaboratorData);
 
   return Response.json(updatedTeam);
 }
