@@ -15,17 +15,7 @@ const GOOGLE_AUTH = 'google';
 
 const DEFAULT_ROLE = 'admin';
 
-export const USER_MODIFIABLE_FIELDS = [
-  'name',
-  'email',
-  'avatar_url',
-  'role',
-  'build_for',
-  'build_for_text',
-  'company_name',
-  'company_website',
-  'company_region',
-];
+export const USER_MODIFIABLE_FIELDS = ['name', 'email', 'avatar_url', 'role'];
 
 export class User extends Model<
   InferAttributes<User>,
@@ -38,12 +28,6 @@ export class User extends Model<
   declare auth_login: string;
   declare avatar_url?: string | null;
   declare role?: string;
-  declare build_for?: string;
-  declare build_for_text?: string;
-  declare company_name?: string;
-  declare company_website?: string;
-  declare company_region?: string;
-  declare crm_id?: string;
   declare refresh_token?: string;
   declare refresh_token_expiration?: Date;
   declare deleted?: boolean;
@@ -54,13 +38,7 @@ export class User extends Model<
     paginationOptions: PaginationOptions
   ) {
     const filter = transformObjectToSequelize(findOptions, {
-      like: [
-        'name',
-        'email',
-        'company_name',
-        'company_website',
-        'company_region',
-      ],
+      like: ['name', 'email', 'auth_login'],
       exact: ['role'],
     });
     return paginateData(User, { where: filter }, paginationOptions);
@@ -108,29 +86,6 @@ User.init(
       type: DataTypes.STRING,
       defaultValue: DEFAULT_ROLE,
     },
-    build_for: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    build_for_text: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    company_name: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    company_website: {
-      type: DataTypes.STRING,
-      allowNull: true,
-      validate: {
-        isUrl: true,
-      },
-    },
-    company_region: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
     auth_login: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -146,10 +101,6 @@ User.init(
         notNull: false,
         isUrl: true,
       },
-    },
-    crm_id: {
-      type: DataTypes.STRING,
-      allowNull: true,
     },
     refresh_token: {
       type: DataTypes.STRING,

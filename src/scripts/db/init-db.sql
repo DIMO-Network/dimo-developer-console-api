@@ -16,11 +16,11 @@ CREATE TABLE IF NOT EXISTS users (
 
 CREATE TABLE IF NOT EXISTS companies (
   id VARCHAR(36) PRIMARY KEY NOT NULL,
-  name VARCHAR(120),
+  name VARCHAR(120) NOT NULL,
   website VARCHAR(120),
-  region VARCHAR(120),
-  type VARCHAR(50),
-  build_for VARCHAR(50),
+  region VARCHAR(120) NOT NULL,
+  type VARCHAR(50) NOT NULL,
+  build_for VARCHAR(50) NOT NULL,
   build_for_text VARCHAR(150),
   crm_id VARCHAR(100),
   created_by VARCHAR(36) NOT NULL,
