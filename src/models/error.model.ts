@@ -1,5 +1,5 @@
 export const handleErrorType =
-  // eslint-disable-next-line no-unused-vars
+  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-explicit-any
   (type: any, cb: (e: unknown) => never) =>
   (error: unknown): never => {
     if (error instanceof type) cb(error);

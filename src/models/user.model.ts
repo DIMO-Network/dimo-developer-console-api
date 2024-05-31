@@ -16,6 +16,14 @@ const GOOGLE_AUTH = 'google';
 const DEFAULT_ROLE = 'admin';
 
 export const USER_MODIFIABLE_FIELDS = ['name', 'email', 'avatar_url', 'role'];
+export const USER_COMPANY_MODIFIABLE_FIELDS = [
+  'company_name',
+  'company_type',
+  'company_region',
+  'company_website',
+  'build_for',
+  'build_for_text',
+];
 
 export class User extends Model<
   InferAttributes<User>,

@@ -7,6 +7,7 @@ import { isTeamCollaborator } from '@/services/teamCollaborator.service';
 import { PaginationOptions } from '@/utils/paginateData';
 import { Team } from '@/models/team.model';
 import { User } from '@/models/user.model';
+import { Company } from '@/models/company.model';
 
 export function getTeams(filter: FilterObject, pagination: PaginationOptions) {
   return Team.findAllPaginated(filter, pagination);
@@ -35,11 +36,11 @@ export function findMyTeam(id: string) {
   return Team.findOne({ where: { created_by: id } });
 }
 
-export const associateTeam = async (teamData: User) => {
+export const associateTeam = async (teamData: User, companyData: Company) => {
   const isOwner = await isTeamOwner(teamData.id || '');
   const isCollaborator = await isTeamCollaborator(teamData.id || '');
   const hasTeam = isOwner && isCollaborator;
 
   const hadInvitation = await initTeamInvitation(hasTeam, teamData);
-  await initTeamOwner(hasTeam, hadInvitation, teamData);
+  await initTeamOwner(hasTeam, hadInvitation, teamData, companyData);
 };

@@ -1,3 +1,4 @@
+import { Company } from '@/models/company.model';
 import { Team } from '@/models/team.model';
 import { TeamCollaborator, TeamRoles } from '@/models/teamCollaborator.model';
 import { User } from '@/models/user.model';
@@ -17,12 +18,13 @@ export const isTeamOwner = async (id: string) => {
 export const initTeamOwner = async (
   hasTeam: boolean,
   hadInvitation: boolean,
-  { id = '', company_name = '' }: User
+  { id = '' }: User,
+  { name: companyName }: Company
 ) => {
   if (hasTeam || hadInvitation) return false;
 
   const team = await Team.create({
-    name: company_name,
+    name: companyName,
     created_by: id,
   });
 
