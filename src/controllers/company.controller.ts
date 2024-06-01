@@ -38,15 +38,18 @@ export const findMyCompany = (id: string) => {
   return Company.findOne({ where: { created_by: id } });
 };
 
-export const finishUpUserRegistration = async (userData: IUserCompany) => {
+export const finishUpUserRegistration = async (
+  userId: string,
+  incomingData: IUserCompany
+) => {
   const companyData: Attributes<Company> = {
-    name: userData.company_name,
-    region: userData.company_region,
-    website: userData.company_website,
-    type: userData.company_type,
-    build_for: userData.build_for,
-    build_for_text: userData.build_for_text,
-    created_by: userData.id,
+    name: incomingData.company_name,
+    region: incomingData.company_region,
+    website: incomingData.company_website,
+    type: incomingData.company_type,
+    build_for: incomingData.build_for,
+    build_for_text: incomingData.build_for_text,
+    created_by: userId,
   };
 
   return createCompany(companyData);

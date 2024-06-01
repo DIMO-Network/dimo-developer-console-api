@@ -17,6 +17,7 @@ export function createUser(userData: Attributes<User>) {
 }
 
 export async function updateUserById(id: string, userData: Attributes<User>) {
+  console.log(userData);
   const [affectedRows, [updatedUser]] = await User.update(userData, {
     where: { id },
     returning: true,
