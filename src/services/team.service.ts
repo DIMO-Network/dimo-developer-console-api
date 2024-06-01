@@ -19,12 +19,13 @@ export const initTeamOwner = async (
   hasTeam: boolean,
   hadInvitation: boolean,
   { id = '' }: User,
-  { name: companyName }: Company
+  { id: companyId = '', name: companyName }: Company
 ) => {
   if (hasTeam || hadInvitation) return false;
 
   const team = await Team.create({
     name: companyName,
+    company_id: companyId,
     created_by: id,
   });
 

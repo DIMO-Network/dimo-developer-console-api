@@ -16,6 +16,7 @@ export class Team extends Model<
 > {
   declare id?: string;
   declare name: string;
+  declare company_id: string;
   declare created_by: string;
   declare deleted?: boolean;
   declare deleted_at?: Date;
@@ -25,14 +26,8 @@ export class Team extends Model<
     paginationOptions: PaginationOptions
   ) {
     const filter = transformObjectToSequelize(findOptions, {
-      like: [
-        'name',
-        'email',
-        'company_name',
-        'company_website',
-        'company_region',
-      ],
-      exact: ['role'],
+      like: ['name'],
+      exact: ['role', 'company_id', 'created_by'],
     });
     return paginateData(Team, { where: filter }, paginationOptions);
   }
@@ -53,6 +48,14 @@ Team.init(
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
+        notNull: true,
+      },
+    },
+    company_id: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
         notNull: true,
       },
     },

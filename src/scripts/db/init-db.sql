@@ -33,6 +33,7 @@ CREATE TABLE IF NOT EXISTS companies (
 CREATE TABLE IF NOT EXISTS teams (
   id VARCHAR(36) PRIMARY KEY NOT NULL,
   name VARCHAR(150) NOT NULL,
+  company_id VARCHAR(36) NOT NULL,
   created_by VARCHAR(36) NOT NULL,
   created_at TIMESTAMP,
   updated_at TIMESTAMP,
@@ -40,7 +41,10 @@ CREATE TABLE IF NOT EXISTS teams (
   deleted_at TIMESTAMP,
   CONSTRAINT fk_user
       FOREIGN KEY(created_by) 
-        REFERENCES users(id)
+        REFERENCES users(id),
+  CONSTRAINT fk_company
+      FOREIGN KEY(company_id) 
+        REFERENCES companies(id)
 );
 
 CREATE TABLE IF NOT EXISTS team_collaborators (
