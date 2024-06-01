@@ -3,12 +3,17 @@ import _ from 'lodash';
 import { AuthenticationMiddleware } from '@/middlewares/authentication.middleware';
 import { isErrorWithMessage } from '@/utils/error.utils';
 import { USER_MODIFIABLE_FIELDS, User } from '@/models/user.model';
-import { updateUserById } from '@/controllers/user.controller';
+import {
+  getCompanyAndTeam,
+  updateUserById,
+} from '@/controllers/user.controller';
 
 export async function GET(request: NextRequest) {
   try {
     await AuthenticationMiddleware(request);
-    return Response.json(request.user?.user);
+    const user = request.user!.user as User;
+    const userCompleteInfo = await getCompanyAndTeam(user);
+    return Response.json(userCompleteInfo);
   } catch (error: unknown) {
     console.error({
       error,
