@@ -10,6 +10,15 @@ import DB from '@/services/db';
 import { PaginationOptions, paginateData } from '@/utils/paginateData';
 import { FilterObject, transformObjectToSequelize } from '@/utils/filter';
 
+export const COMPANY_MODIFIABLE_FIELDS = [
+  'name',
+  'type',
+  'region',
+  'website',
+  'build_for',
+  'build_for_text',
+];
+
 export class Company extends Model<
   InferAttributes<Company>,
   InferCreationAttributes<Company>

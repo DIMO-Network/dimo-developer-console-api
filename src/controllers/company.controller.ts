@@ -3,7 +3,6 @@ import { Attributes } from 'sequelize';
 import { FilterObject } from '@/utils/filter';
 import { PaginationOptions } from '@/utils/paginateData';
 import { Company } from '@/models/company.model';
-import { IUserCompany } from '@/types/user';
 
 export const getCompany = async (
   filter: FilterObject,
@@ -40,15 +39,10 @@ export const findMyCompany = (id: string) => {
 
 export const finishUpUserRegistration = async (
   userId: string,
-  incomingData: IUserCompany
+  incomingData: Attributes<Company>
 ) => {
   const companyData: Attributes<Company> = {
-    name: incomingData.company_name,
-    region: incomingData.company_region,
-    website: incomingData.company_website,
-    type: incomingData.company_type,
-    build_for: incomingData.build_for,
-    build_for_text: incomingData.build_for_text,
+    ...incomingData,
     created_by: userId,
   };
 

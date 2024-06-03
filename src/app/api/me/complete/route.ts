@@ -2,11 +2,12 @@ import _ from 'lodash';
 
 import { associateTeam } from '@/controllers/team.controller';
 import { AuthenticationMiddleware } from '@/middlewares/authentication.middleware';
-import { USER_COMPANY_MODIFIABLE_FIELDS, User } from '@/models/user.model';
+import { COMPANY_MODIFIABLE_FIELDS, Company } from '@/models/company.model';
 import { findUserById, getCompanyAndTeam } from '@/controllers/user.controller';
-import { IUserCompany } from '@/types/user';
 import { finishUpUserRegistration } from '@/controllers/company.controller';
 import { fleetGeneration } from '@/controllers/lead.controller';
+import { User } from '@/models/user.model';
+import { Attributes } from 'sequelize';
 
 export async function PUT(request: NextRequest) {
   await AuthenticationMiddleware(request);
@@ -14,9 +15,9 @@ export async function PUT(request: NextRequest) {
   const incomingData = await request.json();
 
   const incomingCompany = _.pick(
-    incomingData,
-    USER_COMPANY_MODIFIABLE_FIELDS
-  ) as IUserCompany;
+    incomingData.company,
+    COMPANY_MODIFIABLE_FIELDS
+  ) as Attributes<Company>;
   const user = (await findUserById(userId)) as User;
   const company = await finishUpUserRegistration(userId, incomingCompany);
   await associateTeam(user, company);
