@@ -17,7 +17,7 @@ export const transformObject = (
 ) => {
   return keys?.reduce((acc, key) => {
     const value = filter[key];
-    if (_.isNull(value)) return acc;
+    if (_.isEmpty(value)) return acc;
     else return transformFn(key, value);
   }, {}) ?? {};
 };
