@@ -25,7 +25,7 @@ class DB {
       PGDATABASE: database = '',
     } = process.env;
     return new Sequelize(
-      `postgres://${user}:${password}@${host}:${port}/${database}`,
+      `postgres://${user}:${password}@${host}:${port}/${database}?sslmode=require`,
       {
         dialectModule: pg,
       }
