@@ -24,7 +24,7 @@ export const createUser = async (userData: Attributes<User>) => {
 
 export const updateUserById = async (
   id: string,
-  userData: Attributes<User>
+  userData: Partial<Attributes<User>>
 ) => {
   console.log(userData);
   const [affectedRows, [updatedUser]] = await User.update(userData, {

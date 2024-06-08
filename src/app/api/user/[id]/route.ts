@@ -26,7 +26,7 @@ export async function PUT(request: Request, { params: { id } }: Params) {
     'company_region',
     'company_website',
     'crm_id',
-  ]) as Attributes<User>;
+  ]) as Partial<Attributes<User>>;
   const createdUser = await updateUserById(id, userData);
 
   return Response.json(createdUser);
