@@ -3,7 +3,8 @@ import { GitHubAuthService } from './github';
 
 class OAuthError extends Error {}
 
-const handleError = () => {
+const handleError = (err: unknown) => {
+  console.error(err);
   throw new OAuthError('Something went wrong');
 };
 
