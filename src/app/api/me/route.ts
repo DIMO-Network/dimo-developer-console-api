@@ -1,16 +1,19 @@
 import _ from 'lodash';
 
-import { associateTeam } from '@/controllers/team.controller';
 import { AuthenticationMiddleware } from '@/middlewares/authentication.middleware';
-import { fleetGeneration } from '@/controllers/lead.controller';
 import { isErrorWithMessage } from '@/utils/error.utils';
-import { updateUserById } from '@/controllers/user.controller';
-import { User } from '@/models/user.model';
+import { USER_MODIFIABLE_FIELDS, User } from '@/models/user.model';
+import {
+  getCompanyAndTeam,
+  updateUserById,
+} from '@/controllers/user.controller';
 
 export async function GET(request: NextRequest) {
   try {
     await AuthenticationMiddleware(request);
-    return Response.json(request.user?.user);
+    const user = request.user!.user as User;
+    const userCompleteInfo = await getCompanyAndTeam(user);
+    return Response.json(userCompleteInfo);
   } catch (error: unknown) {
     console.error({
       error,
@@ -28,26 +31,10 @@ export async function GET(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
   await AuthenticationMiddleware(request);
-  const searchParams = request.nextUrl.searchParams;
-  const loggedUser = request.user?.user;
-  const userId = loggedUser?.id ?? '';
-  const incomingUser = _.pick(await request.json(), [
-    'name',
-    'email',
-    'role',
-    'build_for',
-    'build_for_text',
-    'company_name',
-    'company_website',
-    'company_region',
-  ]) as User;
-  const complete = Boolean(searchParams.get('complete'));
+  const { id: userId = '' } = request.user!.user as User;
+  const incomingData = await request.json();
 
-  const user = await updateUserById(userId, incomingUser);
-  if (user && complete) {
-    fleetGeneration(user);
-    associateTeam(user);
-  }
-
+  const incomingUser = _.pick(incomingData, USER_MODIFIABLE_FIELDS) as User;
+  const user = (await updateUserById(userId, incomingUser)) as User;
   return Response.json(user);
 }

@@ -17,6 +17,8 @@ export const processOAuth = async (code: string, app: string, url: string) => {
       name: user.name,
       email: user.email,
       auth: app,
+      auth_login: user.authLogin,
+      avatar_url: user.avatarUrl,
       refresh_token: token.refreshToken || '',
       refresh_token_expiration: new Date(token.expiryDate),
     },
@@ -29,9 +31,4 @@ export const processOAuth = async (code: string, app: string, url: string) => {
 
 export const generateToken = ({ id = '' }: User) => {
   return AuthUtils.generateToken({ id });
-};
-
-export default {
-  processOAuth,
-  generateToken,
 };

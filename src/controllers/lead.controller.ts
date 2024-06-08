@@ -1,15 +1,13 @@
 import _ from 'lodash';
 import axios from 'axios';
 
-import { User } from '@/models/user.model';
-
 const zapierRestClient = axios.create({
   baseURL: 'https://hooks.zapier.com/',
 });
 
-export const fleetGeneration = (user: User | null) => {
-  if (_.isEmpty(user)) return null;
-  const userData = user.dataValues;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const fleetGeneration = (userData: any) => {
+  if (_.isEmpty(userData)) return null;
 
   console.log(`Creating Lead for user ${userData.id}`, { user: userData });
   return zapierRestClient

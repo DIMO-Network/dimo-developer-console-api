@@ -5,6 +5,7 @@ import { getUserByToken } from '@/services/user.service';
 import { isErrorWithMessage } from '@/utils/error.utils';
 import { isIn } from '@/utils/middlewareUtils';
 import { LoggedUser } from '@/utils/loggedUser';
+import { User } from '@/models/user.model';
 
 const PROTECTED_PATHS = ['/api/me', '/api/my'];
 
@@ -22,7 +23,8 @@ export const logUser = async () => {
   const token = tokenByCookie || tokenByHeader;
 
   if (token) {
-    return getUserByToken(token);
+    const { dataValues } = (await getUserByToken(token)) as User;
+    return dataValues;
   }
 
   return null;

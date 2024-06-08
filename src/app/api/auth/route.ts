@@ -1,4 +1,4 @@
-import Controller from '@/controllers/auth.controller';
+import * as Controller from '@/controllers/auth.controller';
 import { isErrorWithMessage } from '@/utils/error.utils';
 
 interface IProps {

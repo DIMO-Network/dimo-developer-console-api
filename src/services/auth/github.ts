@@ -76,6 +76,7 @@ export class GitHubAuthService extends AuthService {
     return {
       name: _.get(user, 'name', ''),
       email,
+      authLogin: _.get(user, 'login', ''),
       avatarUrl: _.get(user, 'avatar_url', ''),
     };
   }

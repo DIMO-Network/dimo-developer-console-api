@@ -10,13 +10,27 @@ import DB from '@/services/db';
 import { PaginationOptions, paginateData } from '@/utils/paginateData';
 import { FilterObject, transformObjectToSequelize } from '@/utils/filter';
 
-export class Team extends Model<
-  InferAttributes<Team>,
-  InferCreationAttributes<Team>
+export const COMPANY_MODIFIABLE_FIELDS = [
+  'name',
+  'type',
+  'region',
+  'website',
+  'build_for',
+  'build_for_text',
+];
+
+export class Company extends Model<
+  InferAttributes<Company>,
+  InferCreationAttributes<Company>
 > {
   declare id?: string;
   declare name: string;
-  declare company_id: string;
+  declare website: string;
+  declare region: string;
+  declare type: string;
+  declare build_for: string;
+  declare build_for_text?: string;
+  declare crm_id?: string;
   declare created_by: string;
   declare deleted?: boolean;
   declare deleted_at?: Date;
@@ -26,14 +40,14 @@ export class Team extends Model<
     paginationOptions: PaginationOptions
   ) {
     const filter = transformObjectToSequelize(findOptions, {
-      like: ['name'],
-      exact: ['role', 'company_id', 'created_by'],
+      like: ['name', 'website', 'build_for_text'],
+      exact: ['region', 'type', 'build_for'],
     });
-    return paginateData(Team, { where: filter }, paginationOptions);
+    return paginateData(Company, { where: filter }, paginationOptions);
   }
 }
 
-Team.init(
+Company.init(
   {
     id: {
       type: DataTypes.UUID,
@@ -51,13 +65,41 @@ Team.init(
         notNull: true,
       },
     },
-    company_id: {
-      type: DataTypes.UUID,
+    website: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      validate: {
+        isUrl: true,
+      },
+    },
+    region: {
+      type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        notEmpty: true,
         notNull: true,
       },
+    },
+    type: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notNull: true,
+      },
+    },
+    build_for: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notNull: true,
+      },
+    },
+    build_for_text: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    crm_id: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
     created_by: {
       type: DataTypes.UUID,
@@ -79,8 +121,8 @@ Team.init(
   },
   {
     sequelize: DB.connection as Sequelize,
-    modelName: 'Team',
-    tableName: 'teams',
+    modelName: 'Company',
+    tableName: 'companies',
     createdAt: 'created_at',
     updatedAt: 'updated_at',
   }
