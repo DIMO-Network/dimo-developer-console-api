@@ -6,17 +6,17 @@ import _ from 'lodash';
 import { AuthService } from './base';
 
 export class GitHubAuthService extends AuthService {
-  private client: AxiosInstance;
   private apiClient: AxiosInstance;
+  private client: AxiosInstance;
 
-  constructor() {
+  constructor(baseUrl: string) {
     const {
       env: {
         GITHUB_CLIENT_ID: clientId = '',
         GITHUB_CLIENT_SECRET: clientSecret = '',
       },
     } = process;
-    super(clientId, clientSecret);
+    super(clientId, clientSecret, baseUrl);
 
     this.client = axios.create({
       baseURL: 'https://github.com',

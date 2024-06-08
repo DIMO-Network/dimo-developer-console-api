@@ -18,18 +18,22 @@ class DB {
 
   connect() {
     const {
+      env: { VERCEL_ENV },
+    } = process;
+    const {
       PGUSER: user = '',
       PGPASSWORD: password = '',
       PGHOST: host = '',
       PGPORT: port = '',
       PGDATABASE: database = '',
     } = process.env;
-    return new Sequelize(
-      `postgres://${user}:${password}@${host}:${port}/${database}?sslmode=require`,
-      {
-        dialectModule: pg,
-      }
-    );
+    const postgresUrl = `postgres://${user}:${password}@${host}:${port}/${database}${
+      VERCEL_ENV ? '?sslmode=require' : ''
+    }`;
+
+    return new Sequelize(postgresUrl, {
+      dialectModule: pg,
+    });
   }
 }
 

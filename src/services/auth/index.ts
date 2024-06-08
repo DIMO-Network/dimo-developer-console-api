@@ -8,14 +8,14 @@ const handleError = (err: unknown) => {
   throw new OAuthError('Something went wrong');
 };
 
-export const processOAuth = async (code: string, app: string) => {
+export const processOAuth = async (code: string, app: string, url: string) => {
   const ProviderService = {
     github: GitHubAuthService,
     google: GoogleAuthService,
   }[app];
 
   if (ProviderService) {
-    const providerService = new ProviderService();
+    const providerService = new ProviderService(url);
     const token = await providerService
       .processCallback(code)
       .catch(handleError);

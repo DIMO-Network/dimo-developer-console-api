@@ -10,14 +10,15 @@ import { AuthService } from './base';
 export class GoogleAuthService extends AuthService {
   private client: Auth.OAuth2Client;
   private scopes: string[];
-  constructor() {
+
+  constructor(baseUrl: string) {
     const {
       env: {
         GOOGLE_CLIENT_ID: clientId = '',
         GOOGLE_CLIENT_SECRET: clientSecret = '',
       },
     } = process;
-    super(clientId, clientSecret);
+    super(clientId, clientSecret, baseUrl);
 
     this.scopes = [
       'https://www.googleapis.com/auth/userinfo.email',
@@ -26,7 +27,7 @@ export class GoogleAuthService extends AuthService {
     this.client = new google.auth.OAuth2({
       clientId,
       clientSecret,
-      redirectUri: 'http://localhost:3000/api/auth/callback/google',
+      redirectUri: `https://${baseUrl}/api/auth/callback/google`,
     });
   }
 

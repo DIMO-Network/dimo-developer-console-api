@@ -7,8 +7,8 @@ import {
 } from '@/models/error.model';
 import { UniqueConstraintError } from 'sequelize';
 
-export const processOAuth = async (code: string, app: string) => {
-  const { token, user } = await AuthService.processOAuth(code, app);
+export const processOAuth = async (code: string, app: string, url: string) => {
+  const { token, user } = await AuthService.processOAuth(code, app, url);
 
   const where = { email: user.email, auth: app };
   const [currentUser] = await User.findOrCreate({
