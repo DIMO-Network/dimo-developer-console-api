@@ -18,9 +18,7 @@ class DB {
 
   connect() {
     const {
-      env: { VERCEL_ENV },
-    } = process;
-    const {
+      VERCEL_ENV,
       PGUSER: user = '',
       PGPASSWORD: password = '',
       PGHOST: host = '',
