@@ -27,7 +27,7 @@ export class GoogleAuthService extends AuthService {
     this.client = new google.auth.OAuth2({
       clientId,
       clientSecret,
-      redirectUri: `https://${baseUrl}/api/auth/callback/google`,
+      redirectUri: `https://${baseUrl}/api/auth/cb/google`,
     });
   }
 
