@@ -18,6 +18,10 @@ export const findUserById = async (id: string) => {
   return User.findOne({ where: { id } });
 };
 
+export const findUserByEmail = async (email: string) => {
+  return User.findOne({ where: { email } });
+};
+
 export const createUser = async (userData: Attributes<User>) => {
   return User.create(userData);
 };

@@ -1,5 +1,8 @@
 import _ from 'lodash';
 
+import { NextRequest } from 'next/server';
+import { getToken } from 'next-auth/jwt';
+
 import { AuthenticationMiddleware } from '@/middlewares/authentication.middleware';
 import { isErrorWithMessage } from '@/utils/error.utils';
 import { USER_MODIFIABLE_FIELDS, User } from '@/models/user.model';
@@ -7,8 +10,17 @@ import {
   getCompanyAndTeam,
   updateUserById,
 } from '@/controllers/user.controller';
+import { findUserByEmail } from '@/services/user.service';
 
-export async function GET(request: NextRequest) {
+export const GET = async (request: NextRequest) => {
+  const token = await getToken({ req: request });
+  const { email = '' } = token ?? {};
+
+  const user = await findUserByEmail(email ?? '');
+  return Response.json(user);
+};
+
+export async function GETs(request: NextRequest) {
   try {
     await AuthenticationMiddleware(request);
     const user = request.user!.user as User;
