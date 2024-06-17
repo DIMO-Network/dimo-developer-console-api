@@ -9,6 +9,8 @@ import {
 import DB from '@/services/db';
 import { PaginationOptions, paginateData } from '@/utils/paginateData';
 import { FilterObject } from '@/utils/filter';
+import { User } from './user.model';
+import { Team } from './team.model';
 
 export enum TeamRoles {
   OWNER = 'OWNER',
@@ -30,7 +32,10 @@ export class TeamCollaborator extends Model<
     findOptions: FilterObject,
     paginationOptions: PaginationOptions
   ) {
-    return paginateData(TeamCollaborator, findOptions, paginationOptions);
+    return paginateData(TeamCollaborator, findOptions, paginationOptions, [
+      User,
+      Team,
+    ]);
   }
 }
 
@@ -88,3 +93,6 @@ TeamCollaborator.init(
     updatedAt: 'updated_at',
   }
 );
+
+TeamCollaborator.belongsTo(User, { foreignKey: 'user_id' });
+TeamCollaborator.belongsTo(Team, { foreignKey: 'team_id' });

@@ -53,7 +53,7 @@ export const getCompanyAndTeam = async (user: User) => {
   const team = await findTeamById(teamAssociated?.team_id ?? '');
 
   return {
-    ...user.dataValues,
+    ...(user.dataValues || user),
     company: company?.dataValues,
     team: team?.dataValues,
   };

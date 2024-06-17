@@ -1,4 +1,4 @@
-import { Model, FindOptions, ModelStatic } from 'sequelize';
+import { Model, FindOptions, ModelStatic, Includeable } from 'sequelize';
 
 export interface PaginationOptions {
   page: number;
@@ -16,7 +16,8 @@ export const getPaginationFromParams = (params: {
 export async function paginateData<T extends Model>(
   model: ModelStatic<T>,
   options: FindOptions,
-  paginationOptions: PaginationOptions
+  paginationOptions: PaginationOptions,
+  include?: Includeable | Includeable[]
 ): Promise<{ data: T[]; totalItems: number; totalPages: number }> {
   const { page, pageSize } = paginationOptions;
 
@@ -31,6 +32,7 @@ export async function paginateData<T extends Model>(
     ...options,
     limit: pageSize,
     offset,
+    include,
   });
 
   // Calculate total pages
