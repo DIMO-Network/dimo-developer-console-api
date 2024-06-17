@@ -3,9 +3,9 @@ import { Attributes } from 'sequelize';
 import { User } from '@/models/user.model';
 import { FilterObject } from '@/utils/filter';
 import { PaginationOptions } from '@/utils/paginateData';
-import { findMyCompany } from './company.controller';
+import { findMyCompany } from '@/controllers/company.controller';
 import { findTeamCollaboratorByUserId } from '@/services/teamCollaborator.service';
-import { findTeamById } from './team.controller';
+import { findTeamById } from '@/controllers/team.controller';
 
 export const getUsers = async (
   filter: FilterObject,

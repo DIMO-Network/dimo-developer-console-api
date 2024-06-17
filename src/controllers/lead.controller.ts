@@ -17,5 +17,8 @@ export const fleetGeneration = (userData: any) => {
         user: userData,
         response: data,
       })
+    )
+    .catch((err) =>
+      console.error('Something went wrong while creating the lead', err)
     );
 };

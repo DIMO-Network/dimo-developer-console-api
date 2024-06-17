@@ -9,6 +9,7 @@ import {
 import DB from '@/services/db';
 import { PaginationOptions, paginateData } from '@/utils/paginateData';
 import { FilterObject, transformObjectToSequelize } from '@/utils/filter';
+import { User } from './user.model';
 
 export const COMPANY_MODIFIABLE_FIELDS = [
   'name',
@@ -127,3 +128,5 @@ Company.init(
     updatedAt: 'updated_at',
   }
 );
+
+Company.belongsTo(User, { foreignKey: 'created_by' });

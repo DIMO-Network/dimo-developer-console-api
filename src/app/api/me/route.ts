@@ -1,6 +1,5 @@
 import _ from 'lodash';
 
-import { NextRequest } from 'next/server';
 import { JWT, getToken } from 'next-auth/jwt';
 
 import { AuthenticationMiddleware } from '@/middlewares/authentication.middleware';
@@ -15,9 +14,13 @@ import { processOAuth } from '@/controllers/auth.controller';
 export const GET = async (request: NextRequest) => {
   try {
     const token = (await getToken({ req: request })) as JWT;
-    const user = await processOAuth(token);
-    const userCompleteInfo = await getCompanyAndTeam(user);
-    return Response.json(userCompleteInfo);
+
+    if (token) {
+      const user = await processOAuth(token);
+      const userCompleteInfo = await getCompanyAndTeam(user);
+      return Response.json(userCompleteInfo);
+    }
+    return Response.json({});
   } catch (error: unknown) {
     console.error({
       error,
