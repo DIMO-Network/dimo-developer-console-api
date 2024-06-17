@@ -1,5 +1,5 @@
-import AuthService from '@/services/auth';
-import AuthUtils from '@/utils/auth';
+import { JWT } from 'next-auth/jwt';
+
 import { User } from '@/models/user.model';
 import {
   handleErrorType,
@@ -7,28 +7,21 @@ import {
 } from '@/models/error.model';
 import { UniqueConstraintError } from 'sequelize';
 
-export const processOAuth = async (code: string, app: string, url: string) => {
-  const { token, user } = await AuthService.processOAuth(code, app, url);
-
-  const where = { email: user.email, auth: app };
+export const processOAuth = async (token: JWT) => {
+  const { email, provider: auth } = token;
+  const where = { email, auth };
   const [currentUser] = await User.findOrCreate({
     where,
     defaults: {
-      name: user.name,
-      email: user.email,
-      auth: app,
-      auth_login: user.authLogin,
-      avatar_url: user.avatarUrl,
-      refresh_token: token.refreshToken || '',
-      refresh_token_expiration: new Date(token.expiryDate),
+      name: token.name,
+      email: token.email,
+      auth,
+      auth_login: token.email,
+      avatar_url: token.picture,
     },
   }).catch(
     handleErrorType(UniqueConstraintError, handleUniqueConstraintError('email'))
   );
 
   return currentUser;
-};
-
-export const generateToken = ({ id = '' }: User) => {
-  return AuthUtils.generateToken({ id });
 };
