@@ -12,6 +12,7 @@ import { FilterObject, transformObjectToSequelize } from '@/utils/filter';
 
 const GITHUB_AUTH = 'github';
 const GOOGLE_AUTH = 'google';
+const CREDENTIALS_AUTH = 'credentials';
 
 const DEFAULT_ROLE = 'admin';
 
@@ -79,7 +80,7 @@ User.init(
       validate: {
         notNull: true,
         notEmpty: true,
-        isIn: [[GITHUB_AUTH, GOOGLE_AUTH]],
+        isIn: [[GITHUB_AUTH, GOOGLE_AUTH, CREDENTIALS_AUTH]],
       },
     },
     role: {
