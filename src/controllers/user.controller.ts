@@ -22,6 +22,14 @@ export const findUserByEmail = async (email: string) => {
   return User.findOne({ where: { email } });
 };
 
+export const findUserByEmailOrAddress = async (address: string | null) => {
+  return User.findOne({
+    where: {
+      address: address ?? '',
+    },
+  });
+};
+
 export const createUser = async (userData: Attributes<User>) => {
   return User.create(userData);
 };

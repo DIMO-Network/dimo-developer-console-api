@@ -25,6 +25,7 @@ export class User extends Model<
   declare id?: string;
   declare name: string;
   declare email: string;
+  declare address?: string;
   declare auth: string;
   declare auth_login: string;
   declare avatar_url?: string | null;
@@ -73,6 +74,10 @@ User.init(
         notNull: true,
         isEmail: true,
       },
+    },
+    address: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
     auth: {
       type: DataTypes.STRING,
