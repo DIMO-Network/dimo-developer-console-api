@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { JWT, getToken } from 'next-auth/jwt';
+import { getToken } from 'next-auth/jwt';
 
 import { associateTeam } from '@/controllers/team.controller';
 import { COMPANY_MODIFIABLE_FIELDS, Company } from '@/models/company.model';
@@ -8,9 +8,10 @@ import { finishUpUserRegistration } from '@/controllers/company.controller';
 // import { fleetGeneration } from '@/controllers/lead.controller';
 import { User } from '@/models/user.model';
 import { Attributes } from 'sequelize';
+import { Token } from '@/types/auth';
 
 export async function PUT(request: NextRequest) {
-  const token = (await getToken({ req: request })) as JWT;
+  const token = (await getToken({ req: request })) as Token;
   const { userId = '' } = token;
   const incomingData = await request.json();
 
