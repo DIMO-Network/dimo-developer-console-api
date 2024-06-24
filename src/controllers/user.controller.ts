@@ -22,10 +22,14 @@ export const findUserByEmail = async (email: string) => {
   return User.findOne({ where: { email } });
 };
 
-export const findUserByEmailOrAddress = async (address: string | null) => {
+export const findUserByEmailOrAddress = async (
+  item: string | null,
+  provider: string | null
+) => {
+  const type = provider === 'credentials' ? 'address' : 'email';
   return User.findOne({
     where: {
-      address: address ?? '',
+      [type]: item ?? '',
     },
   });
 };
@@ -38,7 +42,6 @@ export const updateUserById = async (
   id: string,
   userData: Partial<Attributes<User>>
 ) => {
-  console.log(userData);
   const [affectedRows, [updatedUser]] = await User.update(userData, {
     where: { id },
     returning: true,

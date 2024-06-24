@@ -30,12 +30,10 @@ export const authOptions: AuthOptions = {
         },
       },
       async authorize(credentials, req) {
-        console.log('credentials', credentials);
         try {
           const siwe = new SiweMessage(
             JSON.parse(credentials?.message || '{}')
           );
-          console.log({ siwe });
           const nextAuthUrl = 'http://localhost:3000/';
           // process.env.NEXTAUTH_URL ||
           //   (process.env.VERCEL_URL
@@ -46,7 +44,6 @@ export const authOptions: AuthOptions = {
           }
 
           const nextAuthHost = new URL(nextAuthUrl).host;
-          console.log({ nextAuthHost });
           if (siwe.domain !== nextAuthHost) {
             return null;
           }
@@ -59,7 +56,6 @@ export const authOptions: AuthOptions = {
           }
 
           await siwe.verify({ signature: credentials?.signature || '' });
-          console.log({ id: siwe.address });
 
           return {
             id: siwe.address,
@@ -83,22 +79,11 @@ export const authOptions: AuthOptions = {
   secret: process.env.NEXAUTH_SECRET,
   callbacks: {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    async jwt({ token, user, account, profile, isNewUser }: any) {
-      console.log('JWT: ', {
-        token: JSON.stringify(token, null, 2),
-        user: JSON.stringify(user, null, 2),
-        account: JSON.stringify(account, null, 2),
-        profile: JSON.stringify(profile, null, 2),
-        isNewUser: JSON.stringify(isNewUser, null, 2),
-      });
+    async jwt({ token }: any) {
       return token;
     },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    async session({ session, token }: { session: any; token: any }) {
-      console.log('SESSION: ', {
-        session: JSON.stringify(session, null, 2),
-        token: JSON.stringify(token, null, 2),
-      });
+    async session({ session }: { session: any; token: any }) {
       return session;
     },
   },
