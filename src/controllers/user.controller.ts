@@ -3,9 +3,9 @@ import { Attributes } from 'sequelize';
 import { User } from '@/models/user.model';
 import { FilterObject } from '@/utils/filter';
 import { PaginationOptions } from '@/utils/paginateData';
-import { findMyCompany } from './company.controller';
+import { findMyCompany } from '@/controllers/company.controller';
 import { findTeamCollaboratorByUserId } from '@/services/teamCollaborator.service';
-import { findTeamById } from './team.controller';
+import { findTeamById } from '@/controllers/team.controller';
 
 export const getUsers = async (
   filter: FilterObject,
@@ -18,6 +18,22 @@ export const findUserById = async (id: string) => {
   return User.findOne({ where: { id } });
 };
 
+export const findUserByEmail = async (email: string) => {
+  return User.findOne({ where: { email } });
+};
+
+export const findUserByEmailOrAddress = async (
+  item: string | null,
+  provider: string | null
+) => {
+  const type = provider === 'credentials' ? 'address' : 'email';
+  return User.findOne({
+    where: {
+      [type]: item ?? '',
+    },
+  });
+};
+
 export const createUser = async (userData: Attributes<User>) => {
   return User.create(userData);
 };
@@ -26,7 +42,6 @@ export const updateUserById = async (
   id: string,
   userData: Partial<Attributes<User>>
 ) => {
-  console.log(userData);
   const [affectedRows, [updatedUser]] = await User.update(userData, {
     where: { id },
     returning: true,

@@ -12,6 +12,7 @@ import { FilterObject, transformObjectToSequelize } from '@/utils/filter';
 
 const GITHUB_AUTH = 'github';
 const GOOGLE_AUTH = 'google';
+const CREDENTIALS_AUTH = 'credentials';
 
 const DEFAULT_ROLE = 'admin';
 
@@ -24,6 +25,7 @@ export class User extends Model<
   declare id?: string;
   declare name: string;
   declare email: string;
+  declare address?: string;
   declare auth: string;
   declare auth_login: string;
   declare avatar_url?: string | null;
@@ -73,13 +75,17 @@ User.init(
         isEmail: true,
       },
     },
+    address: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
     auth: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notNull: true,
         notEmpty: true,
-        isIn: [[GITHUB_AUTH, GOOGLE_AUTH]],
+        isIn: [[GITHUB_AUTH, GOOGLE_AUTH, CREDENTIALS_AUTH]],
       },
     },
     role: {
