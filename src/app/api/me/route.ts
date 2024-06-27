@@ -17,6 +17,7 @@ import { isErrorWithMessage } from '@/utils/error.utils';
 export const GET = async (request: NextRequest) => {
   try {
     const token = (await getToken({ req: request })) as Token;
+    console.log({ token });
 
     if (hasMandatoryInformation(token)) {
       const user = await processOAuth(token);
