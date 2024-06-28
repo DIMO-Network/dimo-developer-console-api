@@ -1,11 +1,11 @@
 import { Attributes } from 'sequelize';
 
+import { FilterObject } from '@/utils/filter';
+import { findTeamCollaboratorByUserId } from '@/services/teamCollaborator.service';
+import { PaginationOptions } from '@/utils/paginateData';
 import { TeamCollaborator, TeamRoles } from '@/models/teamCollaborator.model';
 import { User } from '@/models/user.model';
-import { findTeamCollaboratorByUserId } from '@/services/teamCollaborator.service';
 import { ValidatorError } from '@/utils/error.utils';
-import { FilterObject } from '@/utils/filter';
-import { PaginationOptions } from '@/utils/paginateData';
 
 export async function getTeamCollaborators(
   filter: FilterObject,
@@ -14,11 +14,27 @@ export async function getTeamCollaborators(
   return TeamCollaborator.findAllPaginated(filter, pagination);
 }
 
+export async function getMyTeamCollaborators(
+  teamId: string,
+  filter: FilterObject,
+  pagination: PaginationOptions
+) {
+  return getTeamCollaborators(
+    {
+      ...filter,
+      team_id: teamId,
+    },
+    pagination
+  );
+}
+
 export async function findTeamCollaboratorById(id: string) {
   return TeamCollaborator.findOne({ where: { id } });
 }
 
-export async function addTeamCollaborator(teamCollaboratorData: Attributes<TeamCollaborator>) {
+export async function addTeamCollaborator(
+  teamCollaboratorData: Attributes<TeamCollaborator>
+) {
   return TeamCollaborator.create(teamCollaboratorData);
 }
 
