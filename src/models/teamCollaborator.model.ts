@@ -8,7 +8,7 @@ import {
 
 import DB from '@/services/db';
 import { PaginationOptions, paginateData } from '@/utils/paginateData';
-import { FilterObject } from '@/utils/filter';
+import { FilterObject, transformObjectToSequelize } from '@/utils/filter';
 import { User } from './user.model';
 import { Team } from './team.model';
 
@@ -32,10 +32,17 @@ export class TeamCollaborator extends Model<
     findOptions: FilterObject,
     paginationOptions: PaginationOptions
   ) {
-    return paginateData(TeamCollaborator, findOptions, paginationOptions, [
-      User,
-      Team,
-    ]);
+    const filter = transformObjectToSequelize(findOptions, {
+      like: ['role'],
+      exact: ['team_id', 'user_id', 'id'],
+    });
+
+    return paginateData(
+      TeamCollaborator,
+      { where: filter },
+      paginationOptions,
+      [User, Team]
+    );
   }
 }
 

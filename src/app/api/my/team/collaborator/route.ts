@@ -1,7 +1,9 @@
-import { getTeamCollaborators } from '@/controllers/teamCollaborator.controller';
-import { AuthenticationMiddleware } from '@/middlewares/authentication.middleware';
-import { isErrorWithMessage } from '@/utils/error.utils';
+import { getCompanyAndTeam } from '@/controllers/user.controller';
 import { getPaginationFromParams } from '@/utils/paginateData';
+import { getMyTeamCollaborators } from '@/controllers/teamCollaborator.controller';
+import { isErrorWithMessage } from '@/utils/error.utils';
+import { User } from '@/models/user.model';
+import AuthenticationMiddleware from '@/middlewares/authentication.middleware';
 
 export const GET = async (request: NextRequest) => {
   try {
@@ -9,7 +11,14 @@ export const GET = async (request: NextRequest) => {
     const params = Object.fromEntries(request.nextUrl.searchParams.entries());
     const pagination = getPaginationFromParams(params);
 
-    const invitations = await getTeamCollaborators(params, pagination);
+    const user = request.user?.user as User;
+
+    const userComplete = await getCompanyAndTeam(user);
+    const invitations = await getMyTeamCollaborators(
+      userComplete.team?.id ?? '',
+      params,
+      pagination
+    );
 
     return Response.json(invitations);
   } catch (error: unknown) {

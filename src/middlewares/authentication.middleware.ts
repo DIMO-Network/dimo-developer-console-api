@@ -1,29 +1,14 @@
-import { NextResponse } from 'next/server';
-import { cookies, headers } from 'next/headers';
-
-import { getUserByToken } from '@/services/user.service';
-import { isErrorWithMessage } from '@/utils/error.utils';
-import { isIn } from '@/utils/middlewareUtils';
+import { findUserById } from '@/controllers/user.controller';
+import { getToken } from 'next-auth/jwt';
 import { LoggedUser } from '@/utils/loggedUser';
+import { Token } from '@/types/auth';
 import { User } from '@/models/user.model';
 
-const PROTECTED_PATHS = ['/api/me', '/api/my'];
-
-const mustLogin = (request: NextRequest) => {
-  const url = request.nextUrl.pathname;
-
-  const isProtected = PROTECTED_PATHS.some(isIn(url));
-  return isProtected;
-};
-
-export const logUser = async () => {
-  const { value: tokenByCookie = '' } = cookies().get('token') ?? {};
-  const completeTokenByHeader = headers().get('Authorization') ?? '';
-  const [, tokenByHeader = ''] = completeTokenByHeader.split(' ');
-  const token = tokenByCookie || tokenByHeader;
+export const logUser = async (request: NextRequest) => {
+  const token = (await getToken({ req: request })) as Token;
 
   if (token) {
-    const { dataValues } = (await getUserByToken(token)) as User;
+    const { dataValues } = (await findUserById(token?.userId ?? '')) as User;
     return dataValues;
   }
 
@@ -31,23 +16,14 @@ export const logUser = async () => {
 };
 
 export const AuthenticationMiddleware = async (request: NextRequest) => {
-  if (!mustLogin(request)) return NextResponse.next();
-
   try {
-    const user = await logUser();
+    const user = await logUser(request);
     request.user = new LoggedUser(user);
   } catch (error: unknown) {
     console.error({
       error,
       step: '[OAuth] Get user information by token',
     });
-    const message = isErrorWithMessage(error) ? error?.message : '';
-    return Response.json(
-      {
-        message: message,
-      },
-      { status: 400 }
-    );
   }
 };
 
