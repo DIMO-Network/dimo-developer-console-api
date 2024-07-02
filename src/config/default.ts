@@ -1,4 +1,4 @@
-export const UNPROTECTED_PATHS = [];
+export const UNPROTECTED_PATHS = ['/api/auth/exist'];
 
 export const backendUrl = 'http://localhost:3001/';
 
