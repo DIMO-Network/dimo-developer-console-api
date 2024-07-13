@@ -9,19 +9,18 @@ import {
 import DB from '@/services/db';
 import { PaginationOptions, paginateData } from '@/utils/paginateData';
 import { FilterObject, transformObjectToSequelize } from '@/utils/filter';
-import { Company } from './company.model';
+import { Workspace } from './workspace.model';
 
-export const MODIFIABLE_FIELDS = ['token_id', 'owner', 'client_id'];
+export const MODIFIABLE_FIELDS = ['name', 'token_id', 'owner', 'client_id'];
 
-export class License extends Model<
-  InferAttributes<License>,
-  InferCreationAttributes<License>
+export class App extends Model<
+  InferAttributes<App>,
+  InferCreationAttributes<App>
 > {
   declare id?: string;
-  declare token_id: string;
-  declare owner: string;
-  declare client_id: string;
-  declare company_id?: string;
+  declare name: string;
+  declare scope: string;
+  declare workspace_id: string;
   declare deleted?: boolean;
   declare deleted_at?: Date;
 
@@ -30,14 +29,14 @@ export class License extends Model<
     paginationOptions: PaginationOptions
   ) {
     const filter = transformObjectToSequelize(findOptions, {
-      like: [],
-      exact: ['token_id', 'owner', 'client_id'],
+      like: ['name', 'scope'],
+      exact: ['workspace_id'],
     });
-    return paginateData(License, { where: filter }, paginationOptions);
+    return paginateData(App, { where: filter }, paginationOptions, [Workspace]);
   }
 }
 
-License.init(
+App.init(
   {
     id: {
       type: DataTypes.UUID,
@@ -48,32 +47,21 @@ License.init(
       },
       primaryKey: true,
     },
-    token_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      unique: true,
-      validate: {
-        isNumeric: true,
-        notNull: true,
-      },
-    },
-    owner: {
+    name: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        isAlphanumeric: true,
         notNull: true,
       },
     },
-    client_id: {
+    scope: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        isAlphanumeric: true,
         notNull: true,
       },
     },
-    company_id: {
+    workspace_id: {
       type: DataTypes.UUID,
       allowNull: false,
       validate: {
@@ -93,11 +81,11 @@ License.init(
   },
   {
     sequelize: DB.connection as Sequelize,
-    modelName: 'License',
-    tableName: 'licenses',
+    modelName: 'App',
+    tableName: 'apps',
     createdAt: 'created_at',
     updatedAt: 'updated_at',
   }
 );
 
-License.belongsTo(Company, { foreignKey: 'company_id' });
+App.belongsTo(Workspace, { foreignKey: 'workspace_id' });
