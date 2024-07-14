@@ -14,12 +14,9 @@ export const getApps = async (
 export const getMyApps = async (
   filter: FilterObject,
   pagination: PaginationOptions,
-  workspaceId: string
+  companyId: string
 ) => {
-  return App.findAllPaginated(
-    { ...filter, workspace_id: workspaceId },
-    pagination
-  );
+  return App.findAllPaginated({ ...filter, company_id: companyId }, pagination);
 };
 
 export const findAppById = async (id: string) => {
@@ -28,11 +25,18 @@ export const findAppById = async (id: string) => {
 
 export const createApp = async (
   appData: Attributes<App>,
-  workspaceId: string
+  workspaceId: string,
+  companyId: string
 ) => {
-  return App.create({ ...appData, workspace_id: workspaceId });
+  return App.create({
+    ...appData,
+    workspace_id: workspaceId,
+    company_id: companyId,
+  });
 };
 
 export const findMyApp = (workspaceId: string) => {
-  return App.findOne({ where: { workspace_id: workspaceId } });
+  return App.findOne({
+    where: { workspace_id: workspaceId },
+  });
 };

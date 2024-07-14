@@ -11,7 +11,7 @@ import { PaginationOptions, paginateData } from '@/utils/paginateData';
 import { FilterObject, transformObjectToSequelize } from '@/utils/filter';
 import { Workspace } from './workspace.model';
 
-export const MODIFIABLE_FIELDS = ['name', 'token_id', 'owner', 'client_id'];
+export const MODIFIABLE_FIELDS = ['name', 'scope', 'workspace_id'];
 
 export class App extends Model<
   InferAttributes<App>,
@@ -21,6 +21,7 @@ export class App extends Model<
   declare name: string;
   declare scope: string;
   declare workspace_id: string;
+  declare company_id: string;
   declare deleted?: boolean;
   declare deleted_at?: Date;
 
@@ -30,7 +31,7 @@ export class App extends Model<
   ) {
     const filter = transformObjectToSequelize(findOptions, {
       like: ['name', 'scope'],
-      exact: ['workspace_id'],
+      exact: ['workspace_id', 'company_id'],
     });
     return paginateData(App, { where: filter }, paginationOptions, [Workspace]);
   }
@@ -62,6 +63,14 @@ App.init(
       },
     },
     workspace_id: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+        notNull: true,
+      },
+    },
+    company_id: {
       type: DataTypes.UUID,
       allowNull: false,
       validate: {

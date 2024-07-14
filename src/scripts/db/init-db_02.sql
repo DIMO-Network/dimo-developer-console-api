@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS apps (
   name VARCHAR(100) NOT NULL,
   scope VARCHAR(36) NOT NULL,
   workspace_id VARCHAR(36) NOT NULL,
+  company_id VARCHAR(36) NOT NULL,
   created_at TIMESTAMP,
   updated_at TIMESTAMP,
   deleted BOOLEAN,
