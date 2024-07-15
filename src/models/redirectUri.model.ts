@@ -9,19 +9,17 @@ import {
 import DB from '@/services/db';
 import { PaginationOptions, paginateData } from '@/utils/paginateData';
 import { FilterObject, transformObjectToSequelize } from '@/utils/filter';
-import { Workspace } from './workspace.model';
-import { RedirectUri } from './redirectUri.model';
 
-export const MODIFIABLE_FIELDS = ['name', 'scope', 'workspace_id'];
+export const MODIFIABLE_FIELDS = ['uri', 'app_id', 'status'];
 
-export class App extends Model<
-  InferAttributes<App>,
-  InferCreationAttributes<App>
+export class RedirectUri extends Model<
+  InferAttributes<RedirectUri>,
+  InferCreationAttributes<RedirectUri>
 > {
   declare id?: string;
-  declare name: string;
-  declare scope: string;
-  declare workspace_id: string;
+  declare uri: string;
+  declare app_id: string;
+  declare status: boolean;
   declare company_id: string;
   declare deleted?: boolean;
   declare deleted_at?: Date;
@@ -31,14 +29,14 @@ export class App extends Model<
     paginationOptions: PaginationOptions
   ) {
     const filter = transformObjectToSequelize(findOptions, {
-      like: ['name', 'scope'],
-      exact: ['workspace_id', 'company_id'],
+      like: ['uri'],
+      exact: ['company_id', 'app_id', 'status'],
     });
-    return paginateData(App, { where: filter }, paginationOptions, [Workspace]);
+    return paginateData(RedirectUri, { where: filter }, paginationOptions);
   }
 }
 
-App.init(
+RedirectUri.init(
   {
     id: {
       type: DataTypes.UUID,
@@ -49,21 +47,14 @@ App.init(
       },
       primaryKey: true,
     },
-    name: {
+    uri: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notNull: true,
       },
     },
-    scope: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notNull: true,
-      },
-    },
-    workspace_id: {
+    app_id: {
       type: DataTypes.UUID,
       allowNull: false,
       validate: {
@@ -79,6 +70,11 @@ App.init(
         notNull: true,
       },
     },
+    status: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+      defaultValue: false,
+    },
     deleted: {
       type: DataTypes.BOOLEAN,
       allowNull: true,
@@ -91,12 +87,9 @@ App.init(
   },
   {
     sequelize: DB.connection as Sequelize,
-    modelName: 'App',
-    tableName: 'apps',
+    modelName: 'RedirectUri',
+    tableName: 'redirect_uris',
     createdAt: 'created_at',
     updatedAt: 'updated_at',
   }
 );
-
-App.belongsTo(Workspace, { foreignKey: 'workspace_id' });
-App.hasMany(RedirectUri, { foreignKey: 'app_id' });
