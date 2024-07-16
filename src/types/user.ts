@@ -7,6 +7,7 @@ export interface IUser {
   email: string;
   auth: string;
   role?: string;
+  team?: string | ITeam;
   refresh_token?: string;
   refresh_token_expiration?: Date;
   created_at?: Date;
@@ -16,6 +17,5 @@ export interface IUser {
 }
 
 export interface IUserWithCompanyAndTeam extends IUser {
-  team: ITeam;
   company: ICompany;
 }
