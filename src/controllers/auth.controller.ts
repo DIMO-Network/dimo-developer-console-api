@@ -1,34 +1,33 @@
-import AuthService from '@/services/auth';
-import AuthUtils from '@/utils/auth';
 import { User } from '@/models/user.model';
 import {
   handleErrorType,
   handleUniqueConstraintError,
 } from '@/models/error.model';
-import { UniqueConstraintError } from 'sequelize';
+import { Op, UniqueConstraintError } from 'sequelize';
+import { Token } from '@/types/auth';
 
-export const processOAuth = async (code: string, app: string, url: string) => {
-  const { token, user } = await AuthService.processOAuth(code, app, url);
+export const hasMandatoryInformation = (user: Token) => {
+  return (
+    (Boolean(user?.email) || Boolean(user?.address)) && Boolean(user?.provider)
+  );
+};
 
-  const where = { email: user.email, auth: app };
+export const processOAuth = async (token: Token) => {
+  const { email = '', provider: auth = '', address = '' } = token;
+  const where = { [Op.or]: [{ email }, { address }], auth };
+
   const [currentUser] = await User.findOrCreate({
     where,
     defaults: {
-      name: user.name,
-      email: user.email,
-      auth: app,
-      auth_login: user.authLogin,
-      avatar_url: user.avatarUrl,
-      refresh_token: token.refreshToken || '',
-      refresh_token_expiration: new Date(token.expiryDate),
+      name: token.name,
+      email: token.email,
+      address: token.address,
+      auth,
+      auth_login: token.email,
+      avatar_url: token.picture,
     },
   }).catch(
     handleErrorType(UniqueConstraintError, handleUniqueConstraintError('email'))
   );
-
   return currentUser;
-};
-
-export const generateToken = ({ id = '' }: User) => {
-  return AuthUtils.generateToken({ id });
 };

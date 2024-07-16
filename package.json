@@ -19,15 +19,18 @@
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
     "next": "14.2.2",
+    "next-auth": "^4.24.7",
     "pg": "^8.11.5",
     "react": "^18",
     "react-dom": "^18",
-    "sequelize": "^6.37.3"
+    "sequelize": "^6.37.3",
+    "siwe": "^2.3.2"
   },
   "devDependencies": {
-    "@types/node": "^20",
+    "@types/node": "^20.14.9",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/validator": "^13.12.0",
     "eslint": "^8",
     "eslint-config-next": "14.2.2",
     "typescript": "^5"
