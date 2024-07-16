@@ -3,8 +3,9 @@ import { Attributes } from 'sequelize';
 import { App } from '@/models/app.model';
 import { FilterObject } from '@/utils/filter';
 import { PaginationOptions } from '@/utils/paginateData';
-import { Workspace } from '@/models/workspace.model';
 import { RedirectUri } from '@/models/redirectUri.model';
+import { Signer } from '@/models/signer.model';
+import { Workspace } from '@/models/workspace.model';
 
 export const getApps = async (
   filter: FilterObject,
@@ -40,6 +41,6 @@ export const createApp = async (
 export const findMyApp = (id: string, companyId: string) => {
   return App.findOne({
     where: { id, company_id: companyId },
-    include: [Workspace, RedirectUri],
+    include: [Workspace, RedirectUri, Signer],
   });
 };

@@ -9,20 +9,16 @@ import {
 import DB from '@/services/db';
 import { PaginationOptions, paginateData } from '@/utils/paginateData';
 import { FilterObject, transformObjectToSequelize } from '@/utils/filter';
-import { Workspace } from '@/models/workspace.model';
-import { RedirectUri } from '@/models/redirectUri.model';
-import { Signer } from '@/models/signer.model';
 
-export const MODIFIABLE_FIELDS = ['name', 'scope', 'workspace_id'];
+export const MODIFIABLE_FIELDS = ['api_key', 'app_id'];
 
-export class App extends Model<
-  InferAttributes<App>,
-  InferCreationAttributes<App>
+export class Signer extends Model<
+  InferAttributes<Signer>,
+  InferCreationAttributes<Signer>
 > {
   declare id?: string;
-  declare name: string;
-  declare scope: string;
-  declare workspace_id: string;
+  declare api_key: string;
+  declare app_id: string;
   declare company_id: string;
   declare deleted?: boolean;
   declare deleted_at?: Date;
@@ -32,14 +28,14 @@ export class App extends Model<
     paginationOptions: PaginationOptions
   ) {
     const filter = transformObjectToSequelize(findOptions, {
-      like: ['name', 'scope'],
-      exact: ['workspace_id', 'company_id'],
+      like: [],
+      exact: ['company_id', 'app_id', 'api_key'],
     });
-    return paginateData(App, { where: filter }, paginationOptions, [Workspace]);
+    return paginateData(Signer, { where: filter }, paginationOptions);
   }
 }
 
-App.init(
+Signer.init(
   {
     id: {
       type: DataTypes.UUID,
@@ -50,21 +46,14 @@ App.init(
       },
       primaryKey: true,
     },
-    name: {
+    api_key: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notNull: true,
       },
     },
-    scope: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notNull: true,
-      },
-    },
-    workspace_id: {
+    app_id: {
       type: DataTypes.UUID,
       allowNull: false,
       validate: {
@@ -92,13 +81,9 @@ App.init(
   },
   {
     sequelize: DB.connection as Sequelize,
-    modelName: 'App',
-    tableName: 'apps',
+    modelName: 'Signer',
+    tableName: 'signers',
     createdAt: 'created_at',
     updatedAt: 'updated_at',
   }
 );
-
-App.belongsTo(Workspace, { foreignKey: 'workspace_id' });
-App.hasMany(RedirectUri, { foreignKey: 'app_id' });
-App.hasMany(Signer, { foreignKey: 'app_id' });

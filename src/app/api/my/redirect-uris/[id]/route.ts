@@ -40,7 +40,7 @@ export const PUT = async (
   } catch (error: unknown) {
     console.error({
       error,
-      step: '[My App] Create redirect uri',
+      step: '[My App] Update redirect uri',
     });
     const message = isErrorWithMessage(error) ? error?.message : '';
     return Response.json({ message }, { status: 400 });
@@ -67,7 +67,7 @@ export const DELETE = async (
   } catch (error: unknown) {
     console.error({
       error,
-      step: '[My App] Create redirect uri',
+      step: '[My App] Delete redirect uri',
     });
     const message = isErrorWithMessage(error) ? error?.message : '';
     return Response.json({ message }, { status: 400 });

@@ -49,3 +49,20 @@ CREATE TABLE IF NOT EXISTS redirect_uris (
       FOREIGN KEY(app_id) 
         REFERENCES apps(id)
 );
+
+CREATE TABLE IF NOT EXISTS signers (
+  id VARCHAR(36) PRIMARY KEY NOT NULL,
+  api_key VARCHAR(100) NOT NULL,
+  app_id VARCHAR(36) NOT NULL,
+  company_id VARCHAR(36) NOT NULL,
+  created_at TIMESTAMP,
+  updated_at TIMESTAMP,
+  deleted BOOLEAN,
+  deleted_at TIMESTAMP,
+  CONSTRAINT fk_company
+      FOREIGN KEY(company_id) 
+        REFERENCES companies(id),
+  CONSTRAINT fk_app
+      FOREIGN KEY(app_id) 
+        REFERENCES apps(id)
+);
