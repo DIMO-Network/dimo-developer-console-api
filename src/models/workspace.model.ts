@@ -53,7 +53,6 @@ Workspace.init(
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        isAlphanumeric: true,
         notNull: true,
       },
     },
