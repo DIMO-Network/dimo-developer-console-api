@@ -10,7 +10,7 @@ import DB from '@/services/db';
 import { PaginationOptions, paginateData } from '@/utils/paginateData';
 import { FilterObject, transformObjectToSequelize } from '@/utils/filter';
 
-export const MODIFIABLE_FIELDS = ['api_key', 'app_id'];
+export const MODIFIABLE_FIELDS = ['api_key', 'app_id', 'address'];
 
 export class Signer extends Model<
   InferAttributes<Signer>,
@@ -18,6 +18,7 @@ export class Signer extends Model<
 > {
   declare id?: string;
   declare api_key: string;
+  declare address: string;
   declare app_id: string;
   declare company_id: string;
   declare deleted?: boolean;
@@ -47,6 +48,13 @@ Signer.init(
       primaryKey: true,
     },
     api_key: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notNull: true,
+      },
+    },
+    address: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
