@@ -3,11 +3,13 @@ import { Attributes } from 'sequelize';
 
 export const createSigner = async (
   apiKey: string,
+  address: string,
   appId: string,
   companyId: string
 ) => {
   return Signer.create({
     api_key: apiKey,
+    address,
     company_id: companyId,
     app_id: appId,
   });
