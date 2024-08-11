@@ -6,6 +6,7 @@ This repository hosts the codebase for the DIMO Developer Console API, powering 
 
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
+  - [Set Up Google and GitHub OAuth Applications](#set-up-google-and-github-oauth-applications)
   - [Installation](#installation)
   - [Running the Development Server](#running-the-development-server)
   - [Building for Production](#building-for-production)
@@ -26,14 +27,37 @@ Before you begin, ensure you have the following installed on your machine:
 - [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) or [Yarn](https://classic.yarnpkg.com/lang/en/docs/install/#mac-stable)
 - [Docker](https://docs.docker.com/engine/install/)
 - [Docker compose](https://docs.docker.com/compose/install/)
+- A Google Developer Account and GitHub Account for OAuth integration.
+
+### Set Up Google and GitHub OAuth Applications
+
+1. Create a Google OAuth App:
+
+- Go to the [Google Developer Console](https://console.cloud.google.com/welcome).
+- Create a new project (if you don’t already have one).
+- Navigate to OAuth consent screen and configure it.
+- Under Credentials, create an OAuth 2.0 Client ID.
+- Add a Redirect URI: http://localhost:3000/api/auth/callback/google.
+- Ensure the app has access to the People API:
+  - Go to Library and search for "People API".
+  - Enable the People API for your project.
+- Note down your Client ID and Client Secret. These will be used in your environment variables.
+
+2. Create a GitHub OAuth App:
+
+- Go to [GitHub Developer Settings](https://github.com/settings/developers).
+- Under OAuth Apps, click New OAuth App.
+- Set the Authorization callback URL to http://localhost:3000/api/auth/callback/github.
+Under OAuth scopes, ensure the app requests access to email addresses in read-only mode.
+- Note down your Client ID and Client Secret. These will be used in your environment variables.
 
 ### Installation
 
 1. Clone the repository:
 
 ```bash
-git clone git@github.com:DIMO-Network/dimo-developer-console.git
-cd dimo-developer-console
+git clone git@github.com:DIMO-Network/dimo-developer-console-api.git
+cd dimo-developer-console-api
 ```
 
 2. Set up environment variables:
@@ -122,9 +146,7 @@ A brief description of the main folders and files in the project:
 ## Technologies Used
 
 - **Next.js**: A React framework for server-side rendering, static site generation, and more.
-- **React**: A JavaScript library for building user interfaces.
 - **PostgreSQL**: A powerful, open-source relational database system.
-- **CSS/PostCSS**: For styling components.
 - **JavaScript/ES6+**: Modern JavaScript syntax and features.
 
 
