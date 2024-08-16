@@ -69,9 +69,6 @@ Company.init(
     website: {
       type: DataTypes.STRING,
       allowNull: true,
-      validate: {
-        isUrl: true,
-      },
     },
     region: {
       type: DataTypes.STRING,
