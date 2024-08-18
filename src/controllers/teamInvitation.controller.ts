@@ -44,12 +44,9 @@ export const addTeamInvitation = async (
     throw new ValidatorError('Team invitation params are not valid');
 
   const hasInvitation = Boolean(await findTeamInvitationByEmail(email));
-  if (hasInvitation)
-    throw new ValidatorError('The email provided has an invitation already');
-
   const isEmailRegistered = Boolean(await findUserByEmail(email));
-  if (isEmailRegistered)
-    throw new ValidatorError('The email provided is an user already');
+  if (hasInvitation || isEmailRegistered)
+    throw new ValidatorError('The email provided has an invitation already');
 
   return TeamInvitation.create(inputTeamInvitation);
 };

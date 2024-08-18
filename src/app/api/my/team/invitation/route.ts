@@ -51,7 +51,7 @@ export const POST = async (request: NextRequest) => {
   } catch (error: unknown) {
     console.error({
       error,
-      step: '[My Team Invitation] Get team invitations by the logged user',
+      step: '[My Team Invitation] Send team invitation',
     });
     const message = isErrorWithMessage(error) ? error?.message : '';
     return Response.json({ message }, { status: 400 });
