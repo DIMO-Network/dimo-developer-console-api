@@ -80,6 +80,18 @@ export const acceptTeamInvitation = async (
   user: User,
   invitationCode: string
 ) => {
+  const teamId = await checkTeamInvitation(invitationCode);
+
+  const teamCollaboratorData = {
+    team_id: teamId,
+    user_id: user.id ?? '',
+    role: TeamRoles.COLLABORATOR,
+  };
+
+  return await addTeamCollaborator(teamCollaboratorData);
+};
+
+export const checkTeamInvitation = async (invitationCode: string) => {
   const invitationId = Buffer.from(invitationCode, 'base64').toString('utf8');
   const { team_id: teamId, expires_at: expiresAt = new Date() } =
     (await findTeamInvitationById(invitationId)) ?? {};
@@ -89,12 +101,5 @@ export const acceptTeamInvitation = async (
   const now = new Date();
   const isAvailable = now < expiresAt;
   if (!isAvailable) throw new ValidatorError('The invitation has expired');
-
-  const teamCollaboratorData = {
-    team_id: teamId,
-    user_id: user.id ?? '',
-    role: TeamRoles.COLLABORATOR,
-  };
-
-  return await addTeamCollaborator(teamCollaboratorData);
+  return teamId;
 };
