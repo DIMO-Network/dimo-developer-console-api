@@ -1,5 +1,7 @@
 import _ from 'lodash';
 
+import { cookies } from 'next/headers';
+
 import { checkTeamInvitation } from '@/controllers/teamInvitation.controller';
 import { isErrorWithMessage } from '@/utils/error.utils';
 
@@ -12,8 +14,9 @@ export const POST = async (request: NextRequest) => {
     };
 
     await checkTeamInvitation(invitationCode);
+    cookies().set('invitation', invitationCode);
 
-    return Response.json({ message: 'Invitation is valid' }, { status: 200 });
+    return Response.json({ message: 'The invitation is valid' }, { status: 200 });
   } catch (error: unknown) {
     console.error({
       error,

@@ -15,7 +15,12 @@ import {
   addTeamCollaborator,
   getTeamCollaborator,
 } from '@/services/teamCollaborator.service';
-import { TeamRoles } from '@/models/teamCollaborator.model';
+import {
+  getInvitationId,
+  isActiveInvitation,
+  isMyTeamInvitation,
+  markAsAccepted,
+} from '@/services/teamInvitation.service';
 
 export const getTeamInvitations = (
   filter: FilterObject,
@@ -76,30 +81,26 @@ export const deleteTeamInvitationById = (id: string) => {
   );
 };
 
-export const acceptTeamInvitation = async (
-  user: User,
-  invitationCode: string
-) => {
-  const teamId = await checkTeamInvitation(invitationCode);
+export const acceptTeamInvitation = async (user: User, isNew: boolean) => {
+  const invitationId = getInvitationId();
+  if (!isNew && !invitationId) return null;
+
+  const teamInvitation = await checkTeamInvitation(invitationId as string);
+  isMyTeamInvitation(teamInvitation, user);
 
   const teamCollaboratorData = {
-    team_id: teamId,
-    user_id: user.id ?? '',
-    role: TeamRoles.COLLABORATOR,
+    team_id: teamInvitation?.team_id as string,
+    user_id: user.id as string,
+    role: teamInvitation?.role as string,
   };
 
-  return await addTeamCollaborator(teamCollaboratorData);
+  await addTeamCollaborator(teamCollaboratorData);
+  await markAsAccepted(invitationId as string);
 };
 
-export const checkTeamInvitation = async (invitationCode: string) => {
-  const invitationId = Buffer.from(invitationCode, 'base64').toString('utf8');
-  const { team_id: teamId, expires_at: expiresAt = new Date() } =
-    (await findTeamInvitationById(invitationId)) ?? {};
+export const checkTeamInvitation = async (invitationId: string) => {
+  const teamInvitation = await findTeamInvitationById(invitationId);
+  isActiveInvitation(teamInvitation);
 
-  if (!teamId) throw new ValidatorError('Invitation was not found');
-
-  const now = new Date();
-  const isAvailable = now < expiresAt;
-  if (!isAvailable) throw new ValidatorError('The invitation has expired');
-  return teamId;
+  return teamInvitation;
 };
