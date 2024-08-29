@@ -22,7 +22,9 @@ export const GET = async (request: NextRequest) => {
     if (!hasMandatoryInformation(token)) return Response.json({});
 
     const [user, isNew] = await processOAuth(token);
-    acceptTeamInvitation(user, isNew);
+    await acceptTeamInvitation(user, isNew).catch((error) =>
+      console.error(error.message)
+    );
     const userCompleteInfo = await getCompanyAndTeam(user);
     return Response.json(userCompleteInfo);
   } catch (error: unknown) {

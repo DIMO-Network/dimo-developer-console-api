@@ -1,5 +1,3 @@
-import { cookies } from 'next/headers';
-
 import { TeamCollaborator, TeamRoles } from '@/models/teamCollaborator.model';
 import {
   InvitationStatuses,
@@ -30,39 +28,13 @@ export const initTeamInvitation = async (
   return true;
 };
 
-export const getInvitationId = () => {
-  const invitationCode = cookies().get('invitation');
-  if (!invitationCode?.value) return null;
-
-  return Buffer.from(invitationCode.value, 'base64').toString('utf8');
-};
-
 export const isActiveInvitation = (teamInvitation: TeamInvitation | null) => {
-  const {
-    team_id: teamId,
-    expires_at: expiresAt = new Date(),
-    status,
-  } = teamInvitation ?? {};
+  const { team_id: teamId, status } = teamInvitation ?? {};
 
   if (!teamId) throw new ValidatorError('The invitation was not found');
-  if (status === InvitationStatuses.ACCEPTED)
-    throw new ValidatorError('The invitation was already accepted');
-
-  const now = new Date();
-  const isAvailable = now < expiresAt;
-  if (!isAvailable) throw new ValidatorError('The invitation has expired');
+  if (status === InvitationStatuses.ACCEPTED) return false;
 
   return true;
-};
-
-export const isMyTeamInvitation = (
-  teamInvitation: TeamInvitation | null,
-  user: User
-) => {
-  const isMyInvitation = teamInvitation?.email === user.email;
-  if (!isMyInvitation) throw new ValidatorError('The invitation was not found');
-
-  return teamInvitation?.email === user.email;
 };
 
 export const markAsAccepted = async (invitationId: string) => {

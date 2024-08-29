@@ -16,9 +16,7 @@ import {
   getTeamCollaborator,
 } from '@/services/teamCollaborator.service';
 import {
-  getInvitationId,
   isActiveInvitation,
-  isMyTeamInvitation,
   markAsAccepted,
 } from '@/services/teamInvitation.service';
 
@@ -82,11 +80,9 @@ export const deleteTeamInvitationById = (id: string) => {
 };
 
 export const acceptTeamInvitation = async (user: User, isNew: boolean) => {
-  const invitationId = getInvitationId();
-  if (!isNew && !invitationId) return null;
+  if (!isNew) return null;
 
-  const teamInvitation = await checkTeamInvitation(invitationId as string);
-  isMyTeamInvitation(teamInvitation, user);
+  const teamInvitation = await checkTeamInvitation(user);
 
   const teamCollaboratorData = {
     team_id: teamInvitation?.team_id as string,
@@ -95,11 +91,11 @@ export const acceptTeamInvitation = async (user: User, isNew: boolean) => {
   };
 
   await addTeamCollaborator(teamCollaboratorData);
-  await markAsAccepted(invitationId as string);
+  await markAsAccepted(teamInvitation?.id as string);
 };
 
-export const checkTeamInvitation = async (invitationId: string) => {
-  const teamInvitation = await findTeamInvitationById(invitationId);
+export const checkTeamInvitation = async (user: User) => {
+  const teamInvitation = await findTeamInvitationByEmail(user?.email);
   isActiveInvitation(teamInvitation);
 
   return teamInvitation;
