@@ -14,7 +14,7 @@ import {
 } from '@/controllers/auth.controller';
 import { Token } from '@/types/auth';
 import { isErrorWithMessage } from '@/utils/error.utils';
-import { acceptTeamInvitation } from '@/controllers/teamInvitation.controller';
+import { acceptTeamInvitation } from '@/controllers/teamCollaborator.controller';
 
 export const GET = async (request: NextRequest) => {
   try {
