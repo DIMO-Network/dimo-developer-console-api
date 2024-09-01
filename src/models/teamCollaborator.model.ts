@@ -17,14 +17,22 @@ export enum TeamRoles {
   COLLABORATOR = 'COLLABORATOR',
 }
 
+export enum InvitationStatuses {
+  PENDING = 'PENDING',
+  SENT = 'SENT',
+  ACCEPTED = 'ACCEPTED',
+}
+
 export class TeamCollaborator extends Model<
   InferAttributes<TeamCollaborator>,
   InferCreationAttributes<TeamCollaborator>
 > {
   declare id?: string;
   declare team_id: string;
-  declare user_id: string;
+  declare user_id?: string;
+  declare email?: string;
   declare role: string;
+  declare status: string;
   declare deleted?: boolean;
   declare deleted_at?: Date;
 
@@ -67,10 +75,13 @@ TeamCollaborator.init(
     },
     user_id: {
       type: DataTypes.UUID,
-      allowNull: false,
+      allowNull: true,
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: true,
       validate: {
-        notEmpty: true,
-        notNull: true,
+        isEmail: true,
       },
     },
     role: {
@@ -81,6 +92,11 @@ TeamCollaborator.init(
         notNull: true,
         isIn: [[TeamRoles.OWNER, TeamRoles.COLLABORATOR]],
       },
+    },
+    status: {
+      type: DataTypes.STRING,
+      defaultValue: InvitationStatuses.PENDING,
+      allowNull: true,
     },
     deleted: {
       type: DataTypes.BOOLEAN,
