@@ -18,7 +18,7 @@
     "googleapis": "^134.0.0",
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
-    "next": "14.2.2",
+    "next": "14.2.12",
     "next-auth": "^4.24.7",
     "pg": "^8.11.5",
     "react": "^18",
