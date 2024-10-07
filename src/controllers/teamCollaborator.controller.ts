@@ -122,6 +122,7 @@ export const getCollaboratorTeam = async (id: string) => {
 
 export const invitePersonToMyTeam = async (
   user: User,
+  companyName: string,
   email: string,
   role: string
 ) => {
@@ -137,7 +138,7 @@ export const invitePersonToMyTeam = async (
   });
 
   const template = generateTeamInvitationTemplate(
-    'Yoky Code',
+    companyName,
     `${config.frontendUrl}sign-in`
   );
   Mailer.sendMail({
