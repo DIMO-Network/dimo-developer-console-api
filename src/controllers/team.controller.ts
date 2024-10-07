@@ -1,7 +1,6 @@
 import { Attributes } from 'sequelize';
 
 import { FilterObject } from '@/utils/filter';
-import { initTeamInvitation } from '@/services/teamInvitation.service';
 import { initTeamOwner, isTeamOwner } from '@/services/team.service';
 import { isTeamCollaborator } from '@/services/teamCollaborator.service';
 import { PaginationOptions } from '@/utils/paginateData';
@@ -41,6 +40,5 @@ export const associateTeam = async (teamData: User, companyData: Company) => {
   const isCollaborator = await isTeamCollaborator(teamData.id || '');
   const hasTeam = isOwner && isCollaborator;
 
-  const hadInvitation = await initTeamInvitation(hasTeam, teamData);
-  await initTeamOwner(hasTeam, hadInvitation, teamData, companyData);
+  await initTeamOwner(hasTeam, teamData, companyData);
 };

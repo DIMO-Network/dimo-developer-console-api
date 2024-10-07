@@ -3,9 +3,9 @@ import { Attributes } from 'sequelize';
 import { User } from '@/models/user.model';
 import { FilterObject } from '@/utils/filter';
 import { PaginationOptions } from '@/utils/paginateData';
-import { findMyCompany } from '@/controllers/company.controller';
 import { findTeamCollaboratorByUserId } from '@/services/teamCollaborator.service';
 import { findTeamById } from '@/controllers/team.controller';
+import { findCompanyById } from '@/services/company.service';
 
 export const getUsers = async (
   filter: FilterObject,
@@ -59,12 +59,13 @@ export const deleteUserById = async (id: string) => {
 
 export const getCompanyAndTeam = async (user: User) => {
   const userId = user.id ?? '';
-  const company = await findMyCompany(userId);
   const teamAssociated = await findTeamCollaboratorByUserId(userId);
   const team = await findTeamById(teamAssociated?.team_id ?? '');
+  const company = await findCompanyById(team?.company_id ?? '');
 
   return {
     ...(user.dataValues || user),
+    role: teamAssociated?.role,
     company: company?.dataValues,
     team: team?.dataValues,
   };
