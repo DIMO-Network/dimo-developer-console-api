@@ -1,5 +1,7 @@
 import nodemailer from 'nodemailer';
 
+import config from '@/config';
+
 interface MailOptions {
   to: string;
   subject: string;
@@ -23,7 +25,7 @@ class Mailer {
 
   async sendMail(options: MailOptions): Promise<void> {
     const mailOptions = {
-      from: process.env.MAIL_FROM,
+      from: config.mailFrom,
       to: options.to,
       subject: options.subject,
       html: options.html,
@@ -40,4 +42,5 @@ class Mailer {
 }
 
 const mailer = new Mailer();
-export default mailer;
+
+export default mailer as Mailer;

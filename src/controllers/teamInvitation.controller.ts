@@ -16,6 +16,10 @@ import {
   getTeamCollaborator,
 } from '@/services/teamCollaborator.service';
 import { TeamRoles } from '@/models/teamCollaborator.model';
+import { generateTeamInvitationTemplate } from '@/templates/team';
+
+import config from '@/config';
+import Mailer from '@/utils/mailer';
 
 export const getTeamInvitations = (
   filter: FilterObject,
@@ -63,13 +67,25 @@ export const invitePersonToMyTeam = async (
   expirationDate.setDate(expirationDate.getDate() + 7);
 
   const team = await getTeamCollaborator(user?.id ?? '');
-  return await addTeamInvitation({
+  const invitation = await addTeamInvitation({
     team_id: team?.team_id ?? '',
     email,
     role,
     status: InvitationStatuses.PENDING,
     expires_at: expirationDate,
   });
+
+  const template = generateTeamInvitationTemplate(
+    'Yoky Code',
+    `${config.frontendUrl}sign-in`
+  );
+  Mailer.sendMail({
+    to: email,
+    subject: 'Join Our Team and Build Innovative Apps Together!',
+    html: template,
+  });
+
+  return invitation;
 };
 
 export const deleteTeamInvitationById = (id: string) => {

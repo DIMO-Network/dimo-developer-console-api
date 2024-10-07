@@ -108,7 +108,7 @@ export const generateTeamInvitationTemplate = (
                                     <td style="padding-bottom:10px;padding-left:60px;padding-right:60px;padding-top:10px">
                                       <div
                                         style="color:#000;direction:ltr;font-family:Georgia,Times,'Times New Roman',serif;font-size:16px;font-weight:400;letter-spacing:0;line-height:150%;text-align:left">
-                                        <p style="margin:0">Welcome aboard</p>
+                                        <p style="margin:0">Looking forward to seeing you onboard!</p>
                                       </div>
                                     </td>
                                   </tr>
