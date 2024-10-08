@@ -16,6 +16,10 @@ import { User } from '@/models/user.model';
 import { ValidatorError } from '@/utils/error.utils';
 import { validateMandatoryFields } from '@/utils/vaslidations';
 import { findUserByEmail } from '@/services/user.service';
+import { generateTeamInvitationTemplate } from '@/templates/team';
+
+import config from '@/config';
+import Mailer from '@/utils/mailer';
 
 export async function getTeamCollaborators(
   filter: FilterObject,
@@ -118,6 +122,7 @@ export const getCollaboratorTeam = async (id: string) => {
 
 export const invitePersonToMyTeam = async (
   user: User,
+  companyName: string,
   email: string,
   role: string
 ) => {
@@ -125,12 +130,24 @@ export const invitePersonToMyTeam = async (
   expirationDate.setDate(expirationDate.getDate() + 7);
 
   const team = await getCollaboratorTeam(user?.id ?? '');
-  return await addTeamCollaborator({
+  const invitation = await addTeamCollaborator({
     team_id: team?.team_id ?? '',
     email,
     role,
     status: InvitationStatuses.PENDING,
   });
+
+  const template = generateTeamInvitationTemplate(
+    companyName,
+    `${config.frontendUrl}sign-in`
+  );
+  Mailer.sendMail({
+    to: email,
+    subject: 'Join Our Team and Build Innovative Apps Together!',
+    html: template,
+  });
+
+  return invitation;
 };
 
 export const acceptTeamInvitation = async (user: User, isNew: boolean) => {

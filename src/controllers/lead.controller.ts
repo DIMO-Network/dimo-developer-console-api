@@ -7,12 +7,18 @@ const zapierRestClient = axios.create({
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const fleetGeneration = (userData: any) => {
-  if (_.isEmpty(userData)) return null;
+  const { ZAPIER_LEAD_WEBHOOK_PATH: zapierPath = '' } = process.env;
+  if (_.isEmpty(userData) || _.isEmpty(zapierPath)) {
+    console.log(`Skipping Lead generation for user ${userData.id}`, {
+      user: userData,
+    });
+    return null;
+  }
 
   // eslint-disable-next-line no-console
   console.log(`Creating Lead for user ${userData.id}`, { user: userData });
   return zapierRestClient
-    .post('hooks/catch/18609896/37bp6qs/', userData)
+    .post(zapierPath, userData)
     .then(({ data }) =>
       // eslint-disable-next-line no-console
       console.log(`Lead information sent for user ${userData.id}`, {

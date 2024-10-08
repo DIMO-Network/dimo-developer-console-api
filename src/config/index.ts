@@ -6,6 +6,7 @@ type Configuration = {
   UNPROTECTED_PATHS: string[];
   backendUrl: string;
   frontendUrl: string;
+  mailFrom: string;
 };
 
 export const getConfig = (): Configuration => {
