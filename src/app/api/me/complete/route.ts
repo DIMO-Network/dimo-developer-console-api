@@ -9,6 +9,7 @@ import { finishUpUserRegistration } from '@/controllers/company.controller';
 import { User } from '@/models/user.model';
 import { Attributes } from 'sequelize';
 import { Token } from '@/types/auth';
+import { fleetGeneration } from '@/controllers/lead.controller';
 
 export async function PUT(request: NextRequest) {
   const token = (await getToken({ req: request })) as Token;
@@ -23,7 +24,7 @@ export async function PUT(request: NextRequest) {
   const company = await finishUpUserRegistration(userId, incomingCompany);
   await associateTeam(user, company);
   const userCompleteInfo = await getCompanyAndTeam(user);
-  // fleetGeneration(userCompleteInfo);
+  fleetGeneration(userCompleteInfo);
 
   return Response.json(userCompleteInfo);
 }

@@ -62,11 +62,13 @@ export const getCompanyAndTeam = async (user: User) => {
   const teamAssociated = await findTeamCollaboratorByUserId(userId);
   const team = await findTeamById(teamAssociated?.team_id ?? '');
   const company = await findCompanyById(team?.company_id ?? '');
+  const companyOwner = await findUserById(company?.created_by ?? '');
 
   return {
     ...(user.dataValues || user),
     role: teamAssociated?.role,
     company: company?.dataValues,
     team: team?.dataValues,
+    company_email_owner: companyOwner?.dataValues.email,
   };
 };
