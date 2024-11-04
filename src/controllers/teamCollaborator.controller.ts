@@ -141,7 +141,7 @@ export const invitePersonToMyTeam = async (
     companyName,
     `${config.frontendUrl}sign-in`
   );
-  Mailer.sendMail({
+  await Mailer.sendMail({
     to: email,
     subject: 'Join Our Team and Build Innovative Apps Together!',
     html: template,
