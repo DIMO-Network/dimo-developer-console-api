@@ -137,15 +137,18 @@ export const invitePersonToMyTeam = async (
     status: InvitationStatuses.PENDING,
   });
 
+  console.log('Generating template for team invitation');
   const template = generateTeamInvitationTemplate(
     companyName,
     `${config.frontendUrl}sign-in`
   );
+  console.log('Sending email: sendMail function');
   await Mailer.sendMail({
     to: email,
     subject: 'Join Our Team and Build Innovative Apps Together!',
     html: template,
   });
+  console.log('Mailer: message send');
 
   return invitation;
 };
