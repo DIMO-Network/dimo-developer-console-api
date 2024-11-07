@@ -55,7 +55,7 @@ export async function updateTeamCollaboratorById(
 
 export const deleteTeamCollaboratorById = async (id: string) => {
   return TeamCollaborator.update(
-    { deleted: false, deleted_at: new Date() },
+    { deleted: true, deleted_at: new Date() },
     { where: { id } }
   );
 };
