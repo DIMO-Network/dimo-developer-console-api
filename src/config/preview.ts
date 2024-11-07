@@ -1,3 +1,3 @@
-export const backendUrl = 'https://console-staging-api.dimo.xyz/';
+export const backendUrl = 'https://console-staging-api.dimo.org/';
 
-export const frontendUrl = 'https://console-staging.dimo.xyz/';
+export const frontendUrl = 'https://console-staging.dimo.org/';
