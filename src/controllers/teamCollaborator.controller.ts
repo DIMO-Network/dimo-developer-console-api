@@ -138,7 +138,7 @@ export const invitePersonToMyTeam = async (
   });
 
   const template = generateTeamInvitationTemplate(
-    companyName,
+    user.name.split(' ')[0],
     `${config.frontendUrl}sign-in`
   );
   await Mailer.sendMail({

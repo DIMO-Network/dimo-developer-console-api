@@ -1,5 +1,5 @@
 export const generateTeamInvitationTemplate = (
-  organizationName: string,
+  userName: string,
   cta: string
 ): string => {
   return `
@@ -63,7 +63,7 @@ export const generateTeamInvitationTemplate = (
                                     <td style="padding-bottom:10px;padding-left:60px;padding-right:60px;padding-top:10px">
                                       <div
                                         style="color:#000;direction:ltr;font-family:Georgia,Times,'Times New Roman',serif;font-size:16px;font-weight:400;letter-spacing:0;line-height:150%;text-align:left">
-                                        <p style="margin:0">Hi,</p>
+                                        <p style="margin:0">Welcome,</p>
                                       </div>
                                     </td>
                                   </tr>
@@ -76,8 +76,8 @@ export const generateTeamInvitationTemplate = (
                                     <td style="padding-bottom:10px;padding-left:60px;padding-right:60px;padding-top:10px">
                                       <div
                                         style="color:#000;direction:ltr;font-family:Georgia,Times,'Times New Roman',serif;font-size:16px;font-weight:400;letter-spacing:0;line-height:150%;text-align:left">
-                                        <p style="margin:0">${organizationName} has been invited you to collaborate with them. Click
-                                          the button below to set up your account and get started:</p>
+                                        <p style="margin:0">${userName} invited you to collaborate with them on the DIMO Developer Platform. Click
+                                          the button below to get started:</p>
                                       </div>
                                     </td>
                                   </tr>
@@ -108,7 +108,7 @@ export const generateTeamInvitationTemplate = (
                                     <td style="padding-bottom:10px;padding-left:60px;padding-right:60px;padding-top:10px">
                                       <div
                                         style="color:#000;direction:ltr;font-family:Georgia,Times,'Times New Roman',serif;font-size:16px;font-weight:400;letter-spacing:0;line-height:150%;text-align:left">
-                                        <p style="margin:0">Looking forward to seeing you onboard!</p>
+                                        <p style="margin:0">We look forward to seeing you onboard!</p>
                                       </div>
                                     </td>
                                   </tr>
