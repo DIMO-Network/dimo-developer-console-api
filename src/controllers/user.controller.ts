@@ -58,7 +58,6 @@ export const deleteUserById = async (id: string) => {
 };
 
 export const getCompanyAndTeam = async (user: User) => {
-  if (!user) return null;
   const userId = user.id ?? '';
   const teamAssociated = await findTeamCollaboratorByUserId(userId);
   const team = await findTeamById(teamAssociated?.team_id ?? '');
