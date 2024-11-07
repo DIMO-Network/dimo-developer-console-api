@@ -1,8 +1,8 @@
-import { NextResponse } from 'next/server';
 import axios from 'axios';
+import { NextResponse } from 'next/server';
 
 
-const GET = async (_: NextRequest) => {
+const GET = async () => {
   const client = axios.create({
     baseURL: process.env.COINMARKET_API!
   });
