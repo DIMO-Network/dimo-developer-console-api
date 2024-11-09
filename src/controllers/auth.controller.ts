@@ -12,11 +12,11 @@ export const hasMandatoryInformation = (user: Token) => {
   );
 };
 
-export const processOAuth = async (token: Token) => {
+export const processOAuth = async (token: Token): Promise<[User, boolean]> => {
   const { email = '', provider: auth = '', address = '' } = token;
   const where = { [Op.or]: [{ email }, { address }], auth };
 
-  const [currentUser] = await User.findOrCreate({
+  const [currentUser, isNew] = await User.findOrCreate({
     where,
     defaults: {
       name: token.name,
@@ -29,5 +29,5 @@ export const processOAuth = async (token: Token) => {
   }).catch(
     handleErrorType(UniqueConstraintError, handleUniqueConstraintError('email'))
   );
-  return currentUser;
+  return [currentUser, isNew];
 };
