@@ -6,6 +6,8 @@ import { PaginationOptions } from '@/utils/paginateData';
 import { RedirectUri } from '@/models/redirectUri.model';
 import { Signer } from '@/models/signer.model';
 import { Workspace } from '@/models/workspace.model';
+import { deleteSigner } from '@/services/signer.service';
+import { updateMyRedirectUri } from '@/services/redirectUri.service';
 
 export const getApps = async (
   filter: FilterObject,
@@ -43,4 +45,39 @@ export const findMyApp = (id: string, companyId: string) => {
     where: { id, company_id: companyId },
     include: [Workspace, RedirectUri, Signer],
   });
+};
+
+export const updateApp = async (
+  id: string,
+  newData: Partial<Attributes<App>>
+) => {
+  return App.update(newData, { where: { id } });
+};
+
+export const updateMyApp = async (
+  id: string,
+  companyId: string,
+  newData: Partial<Attributes<App>>
+) => {
+  const app = await findMyApp(id, companyId);
+  if (app) return updateApp(id, newData);
+  else
+    throw new Error('User does not have permissions to modify the application');
+};
+
+export const deleteOwnApp = async (id: string, companyId: string) => {
+  const app = await findMyApp(id, companyId);
+
+  if (app) {
+    await deleteSigner(id, companyId);
+    await updateMyRedirectUri(id, companyId, {
+      status: false,
+      deleted: true,
+      deleted_at: new Date(),
+    });
+    await updateMyApp(id, companyId, {
+      deleted: true,
+      deleted_at: new Date(),
+    });
+  }
 };
