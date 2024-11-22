@@ -6,8 +6,8 @@ import { PaginationOptions } from '@/utils/paginateData';
 import { RedirectUri } from '@/models/redirectUri.model';
 import { Signer } from '@/models/signer.model';
 import { Workspace } from '@/models/workspace.model';
-import { deleteSigner } from '@/services/signer.service';
-import { updateMyRedirectUri } from '@/services/redirectUri.service';
+import { deleteSigners } from '@/services/signer.service';
+import { deleteRedirectUris } from '@/services/redirectUri.service';
 
 export const getApps = async (
   filter: FilterObject,
@@ -66,18 +66,10 @@ export const updateMyApp = async (
 };
 
 export const deleteOwnApp = async (id: string, companyId: string) => {
-  const app = await findMyApp(id, companyId);
-
-  if (app) {
-    await deleteSigner(id, companyId);
-    await updateMyRedirectUri(id, companyId, {
-      status: false,
-      deleted: true,
-      deleted_at: new Date(),
-    });
-    await updateMyApp(id, companyId, {
-      deleted: true,
-      deleted_at: new Date(),
-    });
-  }
+  await updateMyApp(id, companyId, {
+    deleted: true,
+    deleted_at: new Date(),
+  });
+  await deleteSigners(id, companyId);
+  await deleteRedirectUris(id, companyId);
 };
