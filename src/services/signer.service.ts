@@ -35,11 +35,14 @@ export const updateMySigner = async (
     );
 };
 
-export const deleteSigner = async (id: string, companyId: string) => {
-  return updateMySigner(id, companyId, {
-    deleted: true,
-    deleted_at: new Date(),
-  });
+export const deleteSigners = async (appId: string, companyId: string) => {
+  return Signer.update(
+    {
+      deleted: true,
+      deleted_at: new Date(),
+    },
+    { where: { app_id: appId, company_id: companyId } }
+  );
 };
 
 export const findMySignerById = async (id: string, companyId: string) => {
