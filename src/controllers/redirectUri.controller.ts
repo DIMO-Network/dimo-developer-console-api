@@ -4,7 +4,7 @@ import { RedirectUri } from '@/models/redirectUri.model';
 import {
   createRedirectUri,
   updateMyRedirectUri,
-  deleteRedirectUri,
+  deleteRedirectUris,
 } from '@/services/redirectUri.service';
 import { IUserWithCompanyAndTeam } from '@/types/user';
 
@@ -31,5 +31,5 @@ export const deleteOwnRedirectUri = async (
   user: IUserWithCompanyAndTeam
 ) => {
   const companyId = user?.company?.id ?? '';
-  return deleteRedirectUri(id, companyId);
+  return deleteRedirectUris(id, companyId);
 };
