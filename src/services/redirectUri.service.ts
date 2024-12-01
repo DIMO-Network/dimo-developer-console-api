@@ -34,11 +34,15 @@ export const updateMyRedirectUri = async (
     );
 };
 
-export const deleteRedirectUri = async (id: string, companyId: string) => {
-  return updateMyRedirectUri(id, companyId, {
-    deleted: true,
-    deleted_at: new Date(),
-  });
+export const deleteRedirectUris = async (appId: string, companyId: string) => {
+  return RedirectUri.update(
+    {
+      status: false,
+      deleted: true,
+      deleted_at: new Date(),
+    },
+    { where: { app_id: appId, company_id: companyId } }
+  );
 };
 
 export const findMyRedirectUriById = async (id: string, companyId: string) => {
