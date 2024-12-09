@@ -136,10 +136,11 @@ export const invitePersonToMyTeam = async (
     role,
     status: InvitationStatuses.PENDING,
   });
+  const code = Buffer.from(invitation?.id ?? '').toString('base64');
 
   const template = generateTeamInvitationTemplate(
     user.name.split(' ')[0],
-    `${config.frontendUrl}sign-in`
+    `${config.frontendUrl}sign-in?code=${code}`
   );
   await Mailer.sendMail({
     to: email,
@@ -150,10 +151,15 @@ export const invitePersonToMyTeam = async (
   return invitation;
 };
 
-export const acceptTeamInvitation = async (user: User, isNew: boolean) => {
-  if (!isNew) return null;
+export const acceptTeamInvitation = async (
+  user: User,
+  isNew: boolean,
+  invitationCode: string | null
+) => {
+  if (!isNew && !invitationCode) return null;
 
-  const teamInvitation = await findTeamInvitationByEmail(user?.email);
+  const invitationId = Buffer.from(invitationCode!, 'base64').toString('ascii');
+  const teamInvitation = await findTeamCollaboratorById(invitationId);
 
   if (teamInvitation?.status === InvitationStatuses.PENDING)
     await markAsAccepted(teamInvitation?.id as string, user);
