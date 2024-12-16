@@ -7,6 +7,7 @@ type Configuration = {
   backendUrl: string;
   frontendUrl: string;
   mailFrom: string;
+  purchaseEmailReceiver: string;
 };
 
 export const getConfig = (): Configuration => {
