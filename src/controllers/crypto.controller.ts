@@ -1,5 +1,6 @@
-import { User } from '@/models/user.model';
 import { generateTokenBoughtTemplate } from '@/templates/dcx';
+import { TokenPurchaseTransaction } from '@/types/crypto';
+import { User } from '@/models/user.model';
 
 import config from '@/config';
 import Mailer from '@/utils/mailer';
@@ -7,13 +8,13 @@ import Mailer from '@/utils/mailer';
 export const sentTokenBoughtEmail = async (
   user: User,
   token: string,
-  transactionData: { amount: number }
+  transactionData: TokenPurchaseTransaction
 ) => {
   const template = generateTokenBoughtTemplate(
     user.name,
     user.email,
     token,
-    transactionData.amount
+    transactionData
   );
   await Mailer.sendMail({
     to: config.purchaseEmailReceiver,

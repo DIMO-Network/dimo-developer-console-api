@@ -1,8 +1,10 @@
+import { TokenPurchaseTransaction } from '@/types/crypto';
+
 export const generateTokenBoughtTemplate = (
   userName: string,
   email: string,
   token: string,
-  amount: number
+  transactionData: TokenPurchaseTransaction
 ): string => {
   return `
     <div style="margin:0;background-color:#fff;padding:0">
@@ -99,6 +101,14 @@ export const generateTokenBoughtTemplate = (
                                     <td style="padding-bottom:10px;padding-left:60px;padding-right:60px;padding-top:10px">
                                       <div
                                         style="color:#000;direction:ltr;font-family:Georgia,Times,'Times New Roman',serif;font-size:16px;font-weight:400;letter-spacing:0;line-height:150%;text-align:left">
+                                        <p style="margin:0">wallet address: ${transactionData.wallet}</p>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td style="padding-bottom:10px;padding-left:60px;padding-right:60px;padding-top:10px">
+                                      <div
+                                        style="color:#000;direction:ltr;font-family:Georgia,Times,'Times New Roman',serif;font-size:16px;font-weight:400;letter-spacing:0;line-height:150%;text-align:left">
                                         <p style="margin:0">Token: ${token}</p>
                                       </div>
                                     </td>
@@ -107,7 +117,7 @@ export const generateTokenBoughtTemplate = (
                                     <td style="padding-bottom:10px;padding-left:60px;padding-right:60px;padding-top:10px">
                                       <div
                                         style="color:#000;direction:ltr;font-family:Georgia,Times,'Times New Roman',serif;font-size:16px;font-weight:400;letter-spacing:0;line-height:150%;text-align:left">
-                                        <p style="margin:0">Amount: ${amount}</p>
+                                        <p style="margin:0">Amount: ${transactionData.amount}</p>
                                       </div>
                                     </td>
                                   </tr>

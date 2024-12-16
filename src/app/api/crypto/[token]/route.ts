@@ -1,8 +1,10 @@
-import { sentTokenBoughtEmail } from '@/controllers/crypto.controller';
-import AuthenticationMiddleware from '@/middlewares/authentication.middleware';
-import { User } from '@/models/user.model';
 import axios from 'axios';
 import { NextResponse } from 'next/server';
+
+import { AuthenticationMiddleware } from '@/middlewares/authentication.middleware';
+import { sentTokenBoughtEmail } from '@/controllers/crypto.controller';
+import { TokenPurchaseTransaction } from '@/types/crypto';
+import { User } from '@/models/user.model';
 
 export const GET = async (
   _: NextRequest,
@@ -33,7 +35,7 @@ export const POST = async (
 
   const loggedUser = request.user?.user as User;
   const { token } = params;
-  const transactionData = (await request.json()) as { amount: number };
+  const transactionData = (await request.json()) as TokenPurchaseTransaction;
   let success = false;
 
   try {
