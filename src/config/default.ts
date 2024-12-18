@@ -6,4 +6,4 @@ export const frontendUrl = 'http://localhost:3000/';
 
 export const mailFrom = 'DIMO <no-reply@dimo.org>';
 
-export const purchaseEmailReceiver = 'diego@dimo.co';
+export const purchaseEmailReceiver = '<your_email_here>';
