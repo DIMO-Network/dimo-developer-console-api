@@ -1,7 +1,7 @@
 import { Attributes } from 'sequelize';
 
 import { Signer } from '@/models/signer.model';
-import { createSigner, deleteSigner } from '@/services/signer.service';
+import { createSigner, deleteSigners } from '@/services/signer.service';
 import { IUserWithCompanyAndTeam } from '@/types/user';
 
 export const createOwnSigner = async (
@@ -18,5 +18,5 @@ export const deleteOwnSigner = async (
   user: IUserWithCompanyAndTeam
 ) => {
   const companyId = user?.company?.id ?? '';
-  return deleteSigner(id, companyId);
+  return deleteSigners(id, companyId);
 };
