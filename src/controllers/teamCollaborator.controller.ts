@@ -125,7 +125,7 @@ export const invitePersonToMyTeam = async (
   companyName: string,
   email: string,
   role: string
-) => {
+): Promise<TeamCollaborator> => {
   const expirationDate = new Date();
   expirationDate.setDate(expirationDate.getDate() + 7);
 
@@ -155,8 +155,9 @@ export const acceptTeamInvitation = async (
   user: User,
   isNew: boolean,
   invitationCode: string | null
-) => {
-  if (!isNew && !invitationCode) return null;
+): Promise<void> => {
+  if (!isNew) return;
+  if (Object.is(invitationCode, null)) return;
 
   const invitationId = Buffer.from(invitationCode!, 'base64').toString('ascii');
   const teamInvitation = await findTeamCollaboratorById(invitationId);
