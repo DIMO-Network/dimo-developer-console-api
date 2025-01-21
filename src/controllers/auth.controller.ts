@@ -20,7 +20,7 @@ export const processOAuth = async (token: Token): Promise<[User, boolean]> => {
     defaults: {
       name: token.name,
       email: token.email,
-      address: token.address,
+      address: address,
       auth,
       auth_login: token.email,
       avatar_url: token.picture,
