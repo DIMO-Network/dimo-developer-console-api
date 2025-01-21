@@ -3,7 +3,7 @@ import {
   handleErrorType,
   handleUniqueConstraintError,
 } from '@/models/error.model';
-import { Op, UniqueConstraintError } from 'sequelize';
+import { UniqueConstraintError } from 'sequelize';
 import { Token } from '@/types/auth';
 
 export const hasMandatoryInformation = (user: Token) => {
