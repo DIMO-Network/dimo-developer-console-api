@@ -14,10 +14,9 @@ export const hasMandatoryInformation = (user: Token) => {
 
 export const processOAuth = async (token: Token): Promise<[User, boolean]> => {
   const { email = '', provider: auth = '', address = '' } = token;
-  const where = { [Op.or]: [{ email }, { address }], auth };
-
+  
   const [currentUser, isNew] = await User.findOrCreate({
-    where,
+    where: { email },
     defaults: {
       name: token.name,
       email: token.email,
