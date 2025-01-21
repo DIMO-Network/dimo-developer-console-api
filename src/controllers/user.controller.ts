@@ -23,13 +23,11 @@ export const findUserByEmail = async (email: string) => {
 };
 
 export const findUserByEmailOrAddress = async (
-  item: string | null,
-  provider: string | null
-) => {
-  const type = provider === 'credentials' ? 'address' : 'email';
+  item: string | null  
+) => {  
   return User.findOne({
     where: {
-      [type]: item ?? '',
+      email: item ?? '',
     },
   });
 };

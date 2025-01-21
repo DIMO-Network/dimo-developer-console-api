@@ -22,7 +22,6 @@ export const GET = async (request: NextRequest) => {
     if (!hasMandatoryInformation(token)) return Response.json({});
 
     const invitationCode = request.nextUrl.searchParams.get('invitation_code');
-
     const [user, isNew] = await processOAuth(token);
     await acceptTeamInvitation(user, isNew, invitationCode).catch((error) =>
       console.error(error.message)
