@@ -30,26 +30,7 @@ Before you begin, ensure you have the following installed on your machine:
 - A Google Developer Account and GitHub Account for OAuth integration.
 
 ### Set Up Google and GitHub OAuth Applications
-
-1. Create a Google OAuth App:
-
-- Go to the [Google Developer Console](https://console.cloud.google.com/welcome).
-- Create a new project (if you don’t already have one).
-- Navigate to OAuth consent screen and configure it.
-- Under Credentials, create an OAuth 2.0 Client ID.
-- Add a Redirect URI: http://localhost:3000/api/auth/callback/google.
-- Ensure the app has access to the People API:
-  - Go to Library and search for "People API".
-  - Enable the People API for your project.
-- Note down your Client ID and Client Secret. These will be used in your environment variables.
-
-2. Create a GitHub OAuth App:
-
-- Go to [GitHub Developer Settings](https://github.com/settings/developers).
-- Under OAuth Apps, click New OAuth App.
-- Set the Authorization callback URL to http://localhost:3000/api/auth/callback/github.
-Under OAuth scopes, ensure the app requests access to email addresses in read-only mode.
-- Note down your Client ID and Client Secret. These will be used in your environment variables.
+Follow the steps outlined [here](https://github.com/DIMO-Network/dimo-developer-console?tab=readme-ov-file#set-up-google-and-github-oauth-applications) to set up your Google and Github OAuth applications. The credentials that you created for those applications should be reused here.
 
 ### Installation
 
@@ -65,22 +46,24 @@ cd dimo-developer-console-api
 - Create a .env.local file in the root directory of the project:
 
 ```bash
+PGHOST=localhost
+PGUSER=admin
+PGDATABASE=dimo-dev-console
+PGPASSWORD=12345
+PGPORT=5433
+
+NEXTAUTH_SECRET=<YOUR_SECRET>
+NEXTAUTH_URL=http://localhost:3000
 GITHUB_CLIENT_ID=<YOUR_GITHUB_CLIENT_ID>
 GITHUB_CLIENT_SECRET=<YOUR_GITHUB_CLIENT_SECRET>
-
 GOOGLE_CLIENT_ID=<YOUR_GOOGLE_CLIENT_ID>
 GOOGLE_CLIENT_SECRET=<YOUR_GOOGLE_CLIENT_SECRET>
 
-PGHOST=<YOUR_PG_HOST>
-PGUSER=<YOUR_PG_USER>
-PGDATABASE=<YOUR_PG_DATABASE>
-PGPASSWORD=<YOUR_PG_PASSWORD>
-PGPORT=<YOUR_PG_PORT>
-
-ZAPIER_LEAD_WEBHOOK_PATH=<ZAPIER LEAD GENERATION PATH, empty for dev environments>
-
-NEXTAUTH_SECRET=<YOUR_NEXTAUTH_SECRET>
-NEXTAUTH_URL=http://localhost:3000/
+# Your ZAPIER lead generation path, leave empty for dev environments
+ZAPIER_LEAD_WEBHOOK_PATH=
+STRIPE_API_KEY=<YOUR_SECRET>
+COINMARKET_API=<YOUR_SECRET>
+COINMARKET_API_KEY=<YOUR_SECRET>
 ```
 
 3. Database Setup:
