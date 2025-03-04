@@ -50,8 +50,9 @@ PGHOST=localhost
 PGUSER=admin
 PGDATABASE=dimo-dev-console
 PGPASSWORD=12345
-PGPORT=5433
+PGPORT=5432
 
+# TODO - try to remove these if not needed
 NEXTAUTH_SECRET=<YOUR_SECRET>
 NEXTAUTH_URL=http://localhost:3000
 GITHUB_CLIENT_ID=<YOUR_GITHUB_CLIENT_ID>
