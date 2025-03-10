@@ -9,8 +9,8 @@ interface SupportEmailData {
   message: string;
 }
 
-export const sendSupportEmail = async (data: SupportEmailData) => {
-  const { userName, userEmail, walletAddress, inquiryType, message } = data;
+const validateSupportEmailData = (data: SupportEmailData) => {
+  const { walletAddress, inquiryType, message } = data;
 
   if (!walletAddress || typeof walletAddress !== 'string') {
     throw new Error('Invalid walletAddress');
@@ -21,7 +21,12 @@ export const sendSupportEmail = async (data: SupportEmailData) => {
   if (!message || typeof message !== 'string') {
     throw new Error('Invalid message');
   }
+};
 
+export const sendSupportEmail = async (data: SupportEmailData) => {
+  validateSupportEmailData(data);
+
+  const { userName, userEmail, walletAddress, inquiryType, message } = data;
   const emailTemplate = generateSupportEmailTemplate(
     userName,
     userEmail,
