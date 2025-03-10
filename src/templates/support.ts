@@ -77,7 +77,7 @@ export const generateSupportEmailTemplate = (
                                     <td style="padding-bottom:10px;padding-left:60px;padding-right:60px;padding-top:10px">
                                       <div
                                         style="color:#000;direction:ltr;font-family:Georgia,Times,'Times New Roman',serif;font-size:16px;font-weight:400;letter-spacing:0;line-height:150%;text-align:left">
-                                        <p style="margin:0">The user ${userName} has submitted a support inquiry.</p>
+                                        <p style="margin:0">The user ${userName} has submitted a support inquiry via developer console.</p>
                                       </div>
                                     </td>
                                   </tr>
@@ -221,7 +221,7 @@ export const generateSupportEmailTemplate = (
                                         <div
                                           style="font-size:12px;font-family:Lato,Tahoma,Verdana,Segoe,sans-serif;color:#939393;line-height:1.2">
                                           <p style="margin:0;font-size:12px;text-align:center">
-                                            <span style="word-break:break-word;font-size:12px">©<code>2024</code>&nbsp;
+                                            <span style="word-break:break-word;font-size:12px">©<code>2025</code>&nbsp;
                                               Digital Infrastructure Inc.<br>1041 N Dupont Hwy #1244 Dover, DE
                                               19901<br></span>
                                           </p>
