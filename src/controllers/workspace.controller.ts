@@ -11,7 +11,9 @@ export const getWorkspace = async (
   return Workspace.findAllPaginated(filter, pagination);
 };
 
-export const findWorkspaceById = async (id: string) => {
+export const findWorkspaceById = async (
+  id: string
+): Promise<Workspace | null> => {
   return Workspace.findOne({ where: { id } });
 };
 
@@ -28,4 +30,15 @@ export const createWorkspace = async (
 
 export const findMyWorkspace = (companyId: string) => {
   return Workspace.findOne({ where: { company_id: companyId } });
+};
+
+export const updateWorkspace = async (
+  id: string,
+  workspaceData: Partial<Attributes<Workspace>>
+) => {
+  const workspace = await findWorkspaceById(id);
+  if (!workspace) {
+    throw new Error('Workspace not found');
+  }
+  return workspace.update(workspaceData);
 };
