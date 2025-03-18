@@ -7,6 +7,7 @@ import {
 import { getCompanyAndTeam } from '@/controllers/user.controller';
 import { isErrorWithMessage } from '@/utils/error.utils';
 import { User } from '@/models/user.model';
+import { updateWorkspace } from '@/controllers/workspace.controller';
 
 type Params = { params: { id: string } };
 
@@ -68,7 +69,14 @@ export const PUT = async (
     const companyId = userCompleteInfo?.company?.id ?? '';
 
     const newData = await request.json();
+    const app = await findMyApp(appId, companyId);
     await updateMyApp(appId, companyId, newData);
+
+    if (newData.Workspace?.name) {
+      await updateWorkspace(app!.workspace_id, {
+        name: newData.Workspace.name,
+      });
+    }
 
     return Response.json({});
   } catch (error: unknown) {
