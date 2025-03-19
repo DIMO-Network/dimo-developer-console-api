@@ -15,10 +15,7 @@ import { Signer } from '@/models/signer.model';
 
 export const MODIFIABLE_FIELDS = ['name', 'scope', 'workspace_id'];
 
-export class App extends Model<
-  InferAttributes<App>,
-  InferCreationAttributes<App>
-> {
+export class App extends Model<InferAttributes<App>, InferCreationAttributes<App>> {
   declare id?: string;
   declare name: string;
   declare scope: string;
@@ -29,7 +26,7 @@ export class App extends Model<
 
   static findAllPaginated(
     findOptions: FilterObject,
-    paginationOptions: PaginationOptions
+    paginationOptions: PaginationOptions,
   ) {
     const filter = transformObjectToSequelize(findOptions, {
       like: ['name', 'scope'],
@@ -96,7 +93,7 @@ App.init(
     tableName: 'apps',
     createdAt: 'created_at',
     updatedAt: 'updated_at',
-  }
+  },
 );
 
 App.belongsTo(Workspace, { foreignKey: 'workspace_id' });

@@ -9,13 +9,13 @@ type Params = { params: { id: string } };
 
 export const DELETE = async (
   request: NextRequest,
-  { params: { id: signerId } }: Params
+  { params: { id: signerId } }: Params,
 ) => {
   try {
     await AuthenticationMiddleware(request);
     const loggedUser = request.user?.user as User;
     const userCompleteInfo = (await getCompanyAndTeam(
-      loggedUser
+      loggedUser,
     )) as IUserWithCompanyAndTeam;
 
     const deletedSigner = await deleteOwnSigner(signerId, userCompleteInfo);

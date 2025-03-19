@@ -71,6 +71,7 @@ COINMARKET_API_KEY=<YOUR_SECRET>
 ```bash
 docker-compose up -d
 ```
+
 - This command will start a PostgreSQL instance on your local machine as defined in the docker-compose.yml file.
 
 4. Install the dependencies:
@@ -125,13 +126,11 @@ A brief description of the main folders and files in the project:
 - `./src/types`: TypeScript type definitions and interfaces used throughout the application.
 - `./src/utils`: Utility functions and helper methods that are used across different parts of the application.
 
-
 ## Technologies Used
 
 - **Next.js**: A React framework for server-side rendering, static site generation, and more.
 - **PostgreSQL**: A powerful, open-source relational database system.
 - **JavaScript/ES6+**: Modern JavaScript syntax and features.
-
 
 ## Database Setup
 

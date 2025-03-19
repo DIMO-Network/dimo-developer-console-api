@@ -22,7 +22,7 @@ export const isTeamOwner = async (id: string) => {
 export const initTeamOwner = async (
   hasTeam: boolean,
   { id = '' }: User,
-  { id: companyId = '', name: companyName }: Company
+  { id: companyId = '', name: companyName }: Company,
 ) => {
   if (hasTeam) return false;
 

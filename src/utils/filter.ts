@@ -13,13 +13,15 @@ export interface FilterConfig {
 export const transformObject = (
   keys: string[] | undefined,
   filter: FilterObject,
-  transformFn: (k: string, v: string) => WhereOptions
+  transformFn: (k: string, v: string) => WhereOptions,
 ) => {
-  return keys?.reduce((acc, key) => {
-    const value = filter[key];
-    if (_.isEmpty(value)) return acc;
-    else return transformFn(key, value);
-  }, {}) ?? {};
+  return (
+    keys?.reduce((acc, key) => {
+      const value = filter[key];
+      if (_.isEmpty(value)) return acc;
+      else return transformFn(key, value);
+    }, {}) ?? {}
+  );
 };
 
 export const buildLikeObject = (key: string, value: string | number) => ({
@@ -32,7 +34,7 @@ export const buildExactObject = (key: string, value: string | number) => ({
 
 export const transformObjectToSequelize = (
   filter: FilterObject,
-  filterConfig: FilterConfig
+  filterConfig: FilterConfig,
 ): WhereOptions => {
   // Transform the filter object into Sequelize filter criteria
   const sequelizeFilter: WhereOptions = {

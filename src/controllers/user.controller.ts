@@ -7,10 +7,7 @@ import { findTeamCollaboratorByUserId } from '@/services/teamCollaborator.servic
 import { findTeamById } from '@/controllers/team.controller';
 import { findCompanyById } from '@/services/company.service';
 
-export const getUsers = async (
-  filter: FilterObject,
-  pagination: PaginationOptions
-) => {
+export const getUsers = async (filter: FilterObject, pagination: PaginationOptions) => {
   return User.findAllPaginated(filter, pagination);
 };
 
@@ -22,9 +19,7 @@ export const findUserByEmail = async (email: string) => {
   return User.findOne({ where: { email } });
 };
 
-export const findUserByEmailOrAddress = async (
-  item: string | null  
-) => {  
+export const findUserByEmailOrAddress = async (item: string | null) => {
   return User.findOne({
     where: {
       email: item ?? '',
@@ -36,10 +31,7 @@ export const createUser = async (userData: Attributes<User>) => {
   return User.create(userData);
 };
 
-export const updateUserById = async (
-  id: string,
-  userData: Partial<Attributes<User>>
-) => {
+export const updateUserById = async (id: string, userData: Partial<Attributes<User>>) => {
   const [affectedRows, [updatedUser]] = await User.update(userData, {
     where: { id },
     returning: true,
@@ -49,10 +41,7 @@ export const updateUserById = async (
 };
 
 export const deleteUserById = async (id: string) => {
-  return User.update(
-    { deleted: false, deleted_at: new Date() },
-    { where: { id } }
-  );
+  return User.update({ deleted: false, deleted_at: new Date() }, { where: { id } });
 };
 
 export const getCompanyAndTeam = async (user: User) => {

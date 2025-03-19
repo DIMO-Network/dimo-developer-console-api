@@ -1,10 +1,10 @@
 export const handleErrorType =
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-explicit-any
   (type: any, cb: (e: unknown) => never) =>
-  (error: unknown): never => {
-    if (error instanceof type) cb(error);
-    else throw error;
-  };
+    (error: unknown): never => {
+      if (error instanceof type) cb(error);
+      else throw error;
+    };
 
 export const handleUniqueConstraintError = (field: string) => (): never => {
   throw new UniqueConstraintError(field);

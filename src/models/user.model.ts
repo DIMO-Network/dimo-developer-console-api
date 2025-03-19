@@ -18,10 +18,7 @@ const DEFAULT_ROLE = 'admin';
 
 export const USER_MODIFIABLE_FIELDS = ['name', 'email', 'avatar_url', 'role'];
 
-export class User extends Model<
-  InferAttributes<User>,
-  InferCreationAttributes<User>
-> {
+export class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   declare id?: string;
   declare name: string;
   declare email: string;
@@ -37,7 +34,7 @@ export class User extends Model<
 
   static findAllPaginated(
     findOptions: FilterObject,
-    paginationOptions: PaginationOptions
+    paginationOptions: PaginationOptions,
   ) {
     const filter = transformObjectToSequelize(findOptions, {
       like: ['name', 'email', 'auth_login'],
@@ -132,5 +129,5 @@ User.init(
     tableName: 'users',
     createdAt: 'created_at',
     updatedAt: 'updated_at',
-  }
+  },
 );

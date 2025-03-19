@@ -8,13 +8,13 @@ import Mailer from '@/utils/mailer';
 export const sentTokenBoughtEmail = async (
   user: User,
   token: string,
-  transactionData: TokenPurchaseTransaction
+  transactionData: TokenPurchaseTransaction,
 ) => {
   const template = generateTokenBoughtTemplate(
     user.name,
     user.email,
     token,
-    transactionData
+    transactionData,
   );
   await Mailer.sendMail({
     to: config.purchaseEmailReceiver,

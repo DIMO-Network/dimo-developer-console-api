@@ -4,14 +4,8 @@ import { getToken } from 'next-auth/jwt';
 
 import { AuthenticationMiddleware } from '@/middlewares/authentication.middleware';
 import { USER_MODIFIABLE_FIELDS, User } from '@/models/user.model';
-import {
-  getCompanyAndTeam,
-  updateUserById,
-} from '@/controllers/user.controller';
-import {
-  hasMandatoryInformation,
-  processOAuth,
-} from '@/controllers/auth.controller';
+import { getCompanyAndTeam, updateUserById } from '@/controllers/user.controller';
+import { hasMandatoryInformation, processOAuth } from '@/controllers/auth.controller';
 import { Token } from '@/types/auth';
 import { isErrorWithMessage } from '@/utils/error.utils';
 import { acceptTeamInvitation } from '@/controllers/teamCollaborator.controller';
@@ -24,7 +18,7 @@ export const GET = async (request: NextRequest) => {
     const invitationCode = request.nextUrl.searchParams.get('invitation_code');
     const [user, isNew] = await processOAuth(token);
     await acceptTeamInvitation(user, isNew, invitationCode).catch((error) =>
-      console.error(error.message)
+      console.error(error.message),
     );
     const userCompleteInfo = await getCompanyAndTeam(user);
     return Response.json(userCompleteInfo);
@@ -34,7 +28,7 @@ export const GET = async (request: NextRequest) => {
       {
         message: message,
       },
-      { status: 400 }
+      { status: 400 },
     );
   }
 };

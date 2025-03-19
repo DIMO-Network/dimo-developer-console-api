@@ -35,7 +35,7 @@ export const POST = async (request: NextRequest) => {
 
     const workspaceInput = _.pick(
       await request.json(),
-      MODIFIABLE_FIELDS
+      MODIFIABLE_FIELDS,
     ) as Attributes<Workspace>;
 
     const createdWorkspace = await createWorkspace(workspaceInput, companyId);

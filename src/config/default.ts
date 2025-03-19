@@ -1,4 +1,8 @@
-export const UNPROTECTED_PATHS = ['/api/auth/exist', '/api/invitation/check', '/api/crypto'];
+export const UNPROTECTED_PATHS = [
+  '/api/auth/exist',
+  '/api/invitation/check',
+  '/api/crypto',
+];
 
 export const backendUrl = 'http://localhost:3001/';
 

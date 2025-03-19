@@ -4,7 +4,7 @@ export const generateTokenBoughtTemplate = (
   userName: string,
   email: string,
   token: string,
-  transactionData: TokenPurchaseTransaction
+  transactionData: TokenPurchaseTransaction,
 ): string => {
   return `
     <div style="margin:0;background-color:#fff;padding:0">

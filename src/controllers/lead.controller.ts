@@ -24,10 +24,10 @@ export const fleetGeneration = (userData: any) => {
       console.log(`Lead information sent for user ${userData.id}`, {
         user: userData,
         response: data,
-      })
+      }),
     )
     .catch((err) =>
       // eslint-disable-next-line no-console
-      console.error('Something went wrong while creating the lead', err)
+      console.error('Something went wrong while creating the lead', err),
     );
 };

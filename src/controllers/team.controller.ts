@@ -25,10 +25,7 @@ export function updateTeamById(id: string, teamData: Attributes<Team>) {
 }
 
 export function deleteTeamById(id: string) {
-  return Team.update(
-    { deleted: false, deleted_at: new Date() },
-    { where: { id } }
-  );
+  return Team.update({ deleted: false, deleted_at: new Date() }, { where: { id } });
 }
 
 export function findMyTeam(id: string) {

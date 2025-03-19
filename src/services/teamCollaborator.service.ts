@@ -1,7 +1,4 @@
-import {
-  InvitationStatuses,
-  TeamCollaborator,
-} from '@/models/teamCollaborator.model';
+import { InvitationStatuses, TeamCollaborator } from '@/models/teamCollaborator.model';
 import { User } from '@/models/user.model';
 import { Attributes } from 'sequelize';
 
@@ -18,7 +15,7 @@ export const isTeamCollaborator = async (id: string) => {
 };
 
 export const addTeamCollaborator = async (
-  teamCollaborator: Attributes<TeamCollaborator>
+  teamCollaborator: Attributes<TeamCollaborator>,
 ) => {
   return TeamCollaborator.create(teamCollaborator);
 };
@@ -31,6 +28,6 @@ export const markAsAccepted = async (id: string, user: User) => {
     },
     {
       where: { id: id },
-    }
+    },
   );
 };

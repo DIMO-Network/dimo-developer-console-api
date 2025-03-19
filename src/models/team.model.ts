@@ -10,10 +10,7 @@ import DB from '@/services/db';
 import { PaginationOptions, paginateData } from '@/utils/paginateData';
 import { FilterObject, transformObjectToSequelize } from '@/utils/filter';
 
-export class Team extends Model<
-  InferAttributes<Team>,
-  InferCreationAttributes<Team>
-> {
+export class Team extends Model<InferAttributes<Team>, InferCreationAttributes<Team>> {
   declare id?: string;
   declare name: string;
   declare company_id: string;
@@ -23,7 +20,7 @@ export class Team extends Model<
 
   static findAllPaginated(
     findOptions: FilterObject,
-    paginationOptions: PaginationOptions
+    paginationOptions: PaginationOptions,
   ) {
     const filter = transformObjectToSequelize(findOptions, {
       like: ['name'],
@@ -83,5 +80,5 @@ Team.init(
     tableName: 'teams',
     createdAt: 'created_at',
     updatedAt: 'updated_at',
-  }
+  },
 );

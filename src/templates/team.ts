@@ -1,7 +1,4 @@
-export const generateTeamInvitationTemplate = (
-  userName: string,
-  cta: string
-): string => {
+export const generateTeamInvitationTemplate = (userName: string, cta: string): string => {
   return `
     <div style="margin:0;background-color:#fff;padding:0">
       <div style="display:none;max-height:0px;overflow:hidden">New hardware device, EthOnline Winners, Macaron Mapping

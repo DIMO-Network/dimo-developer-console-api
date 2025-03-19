@@ -11,10 +11,7 @@ import { updateWorkspace } from '@/controllers/workspace.controller';
 
 type Params = { params: { id: string } };
 
-export const GET = async (
-  request: NextRequest,
-  { params: { id: appId } }: Params
-) => {
+export const GET = async (request: NextRequest, { params: { id: appId } }: Params) => {
   try {
     await AuthenticationMiddleware(request);
 
@@ -35,10 +32,7 @@ export const GET = async (
   }
 };
 
-export const DELETE = async (
-  request: NextRequest,
-  { params: { id: appId } }: Params
-) => {
+export const DELETE = async (request: NextRequest, { params: { id: appId } }: Params) => {
   try {
     await AuthenticationMiddleware(request);
     const loggedUser = request.user?.user as User;

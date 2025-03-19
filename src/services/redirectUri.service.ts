@@ -4,7 +4,7 @@ import { Attributes } from 'sequelize';
 export const createRedirectUri = async (
   uri: string,
   appId: string,
-  companyId: string
+  companyId: string,
 ) => {
   return RedirectUri.create({
     uri,
@@ -16,7 +16,7 @@ export const createRedirectUri = async (
 
 export const updateRedirectUri = async (
   id: string,
-  newData: Partial<Attributes<RedirectUri>>
+  newData: Partial<Attributes<RedirectUri>>,
 ) => {
   return RedirectUri.update(newData, { where: { id } });
 };
@@ -24,14 +24,11 @@ export const updateRedirectUri = async (
 export const updateMyRedirectUri = async (
   id: string,
   companyId: string,
-  newData: Partial<Attributes<RedirectUri>>
+  newData: Partial<Attributes<RedirectUri>>,
 ) => {
   const redirectUri = await findMyRedirectUriById(id, companyId);
   if (redirectUri) return updateRedirectUri(id, newData);
-  else
-    throw new Error(
-      'User does not have permissions to modify the redirect URI'
-    );
+  else throw new Error('User does not have permissions to modify the redirect URI');
 };
 
 export const deleteRedirectUris = async (appId: string, companyId: string) => {
@@ -41,7 +38,7 @@ export const deleteRedirectUris = async (appId: string, companyId: string) => {
       deleted: true,
       deleted_at: new Date(),
     },
-    { where: { app_id: appId, company_id: companyId } }
+    { where: { app_id: appId, company_id: companyId } },
   );
 };
 
