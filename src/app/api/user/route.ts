@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import {pick} from 'lodash';
 import { Attributes } from 'sequelize';
 
 import { createUser, getUsers } from '@/controllers/user.controller';
@@ -6,9 +6,9 @@ import { getPaginationFromParams } from '@/utils/paginateData';
 import { USER_MODIFIABLE_FIELDS, User } from '@/models/user.model';
 
 export async function POST(request: Request) {
-  const userData = _.pick(
+  const userData = pick(
     await request.json(),
-    USER_MODIFIABLE_FIELDS
+    USER_MODIFIABLE_FIELDS,
   ) as Attributes<User>;
   const createdUSer = await createUser(userData);
 

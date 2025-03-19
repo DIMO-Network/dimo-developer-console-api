@@ -1,4 +1,4 @@
-import { getToken } from 'next-auth/jwt';
+import { createRemoteJWKSet, jwtVerify } from 'jose';
 import { NextResponse } from 'next/server';
 
 import { isIn } from '@/utils/middlewareUtils';
@@ -23,11 +23,27 @@ export const middleware = async (request: NextRequest) => {
       {
         message: 'Unauthorized Access',
       },
-      { status: 401 }
+      { status: 401 },
     );
   }
 
   return NextResponse.next();
+};
+
+const getToken = async ({ req }: { req: NextRequest }) => {
+  const token = req.headers.get('Authorization')?.replace('Bearer ', '');
+
+  if (!token) {
+    return null;
+  }
+
+  const jwks = createRemoteJWKSet(new URL(process.env.JWT_KEY_SET_URL!));
+  const { payload } = await jwtVerify(token, jwks, {
+    algorithms: ['RS256'],
+    issuer: process.env.JWT_ISSUER,
+  });
+
+  return payload as Token;
 };
 
 export const config = {

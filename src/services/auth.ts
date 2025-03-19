@@ -30,9 +30,7 @@ export const authOptions: AuthOptions = {
       },
       async authorize(credentials, req) {
         try {
-          const siwe = new SiweMessage(
-            JSON.parse(credentials?.message || '{}')
-          );
+          const siwe = new SiweMessage(JSON.parse(credentials?.message || '{}'));
           const nextAuthUrl = 'http://localhost:3000/';
           // process.env.NEXTAUTH_URL ||
           //   (process.env.VERCEL_URL
@@ -47,10 +45,7 @@ export const authOptions: AuthOptions = {
             return null;
           }
 
-          if (
-            siwe.nonce !==
-            (await getCsrfToken({ req: { headers: req.headers } }))
-          ) {
+          if (siwe.nonce !== (await getCsrfToken({ req: { headers: req.headers } }))) {
             return null;
           }
 

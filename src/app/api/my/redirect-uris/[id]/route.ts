@@ -16,24 +16,23 @@ type Params = { params: { id: string } };
 
 export const PUT = async (
   request: NextRequest,
-  { params: { id: redirectUriId } }: Params
+  { params: { id: redirectUriId } }: Params,
 ) => {
   try {
     await AuthenticationMiddleware(request);
     const loggedUser = request.user?.user as User;
     const userCompleteInfo = (await getCompanyAndTeam(
-      loggedUser
+      loggedUser,
     )) as IUserWithCompanyAndTeam;
 
-    const redirectUriInput = _.pick(
-      await request.json(),
-      MODIFIABLE_FIELDS
-    ) as Partial<Attributes<RedirectUri>>;
+    const redirectUriInput = _.pick(await request.json(), MODIFIABLE_FIELDS) as Partial<
+      Attributes<RedirectUri>
+    >;
 
     const updatedRedirectUri = await updateOwnRedirectUri(
       redirectUriId,
       redirectUriInput,
-      userCompleteInfo
+      userCompleteInfo,
     );
 
     return Response.json(updatedRedirectUri);
@@ -49,18 +48,18 @@ export const PUT = async (
 
 export const DELETE = async (
   request: NextRequest,
-  { params: { id: redirectUriId } }: Params
+  { params: { id: redirectUriId } }: Params,
 ) => {
   try {
     await AuthenticationMiddleware(request);
     const loggedUser = request.user?.user as User;
     const userCompleteInfo = (await getCompanyAndTeam(
-      loggedUser
+      loggedUser,
     )) as IUserWithCompanyAndTeam;
 
     const deletedRedirectUri = await deleteOwnRedirectUri(
       redirectUriId,
-      userCompleteInfo
+      userCompleteInfo,
     );
 
     return Response.json(deletedRedirectUri);

@@ -6,7 +6,8 @@
     "dev": "next dev -p 3001",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "lint:format": "prettier . --check --log-level warn --write \"./**/*.{js,ts,css,md,json,tsx}\""
   },
   "dependencies": {
     "@aws-sdk/client-ses": "^3.664.0",
@@ -18,10 +19,10 @@
     "axios": "^1.7.4",
     "eslint-config-prettier": "^9.1.0",
     "googleapis": "^134.0.0",
+    "jose": "^6.0.9",
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
     "next": "14.2.18",
-    "next-auth": "^4.24.10",
     "nodemailer": "^6.9.15",
     "pg": "^8.11.5",
     "react": "^18",
@@ -35,6 +36,7 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/validator": "^13.12.0",
+    "prettier": "^3.5.3",
     "eslint": "^8",
     "eslint-config-next": "14.2.2",
     "typescript": "^5"

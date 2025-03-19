@@ -17,7 +17,7 @@ export const GET = async (request: NextRequest) => {
     const invitations = await getMyTeamCollaborators(
       userComplete.team?.id ?? '',
       params,
-      pagination
+      pagination,
     );
 
     return Response.json(invitations);

@@ -26,7 +26,7 @@ export class RedirectUri extends Model<
 
   static findAllPaginated(
     findOptions: FilterObject,
-    paginationOptions: PaginationOptions
+    paginationOptions: PaginationOptions,
   ) {
     const filter = transformObjectToSequelize(findOptions, {
       like: ['uri'],
@@ -91,5 +91,5 @@ RedirectUri.init(
     tableName: 'redirect_uris',
     createdAt: 'created_at',
     updatedAt: 'updated_at',
-  }
+  },
 );

@@ -6,30 +6,24 @@ import { sentTokenBoughtEmail } from '@/controllers/crypto.controller';
 import { TokenPurchaseTransaction } from '@/types/crypto';
 import { User } from '@/models/user.model';
 
-export const GET = async (
-  _: NextRequest,
-  { params }: { params: { token: string } }
-) => {
+export const GET = async (_: NextRequest, { params }: { params: { token: string } }) => {
   const { token } = params;
   const client = axios.create({
     baseURL: process.env.COINMARKET_API!,
   });
 
-  const { data } = await client.get(
-    `v2/cryptocurrency/quotes/latest?symbol=${token}`,
-    {
-      headers: {
-        'X-CMC_PRO_API_KEY': process.env.COINMARKET_API_KEY!,
-      },
-    }
-  );
+  const { data } = await client.get(`v2/cryptocurrency/quotes/latest?symbol=${token}`, {
+    headers: {
+      'X-CMC_PRO_API_KEY': process.env.COINMARKET_API_KEY!,
+    },
+  });
 
   return NextResponse.json(data);
 };
 
 export const POST = async (
   request: NextRequest,
-  { params }: { params: { token: string } }
+  { params }: { params: { token: string } },
 ) => {
   await AuthenticationMiddleware(request);
 

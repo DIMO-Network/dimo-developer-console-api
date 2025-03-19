@@ -18,7 +18,7 @@ export async function PUT(request: NextRequest) {
 
   const incomingCompany = _.pick(
     incomingData.company,
-    COMPANY_MODIFIABLE_FIELDS
+    COMPANY_MODIFIABLE_FIELDS,
   ) as Attributes<Company>;
   const user = (await findUserById(userId)) as User;
   const company = await finishUpUserRegistration(userId, incomingCompany);
