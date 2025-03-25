@@ -1,4 +1,5 @@
-import jwt from 'jsonwebtoken';
+import { createRemoteJWKSet, jwtVerify } from 'jose';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 
 interface IProps {
   id: string;
@@ -27,4 +28,24 @@ export const generateToken = (payload: IProps) => {
 export default {
   generateToken,
   verifyAuth,
+};
+
+export const getToken = async ({
+  req,
+}: {
+  req: NextRequest;
+}): Promise<JwtPayload | null> => {
+  const token = req.headers.get('Authorization')?.replace('Bearer ', '');
+
+  if (!token) {
+    return null;
+  }
+  console.info(process.env.JWT_KEY_SET_URL!);
+  const jwks = createRemoteJWKSet(new URL(process.env.JWT_KEY_SET_URL!));
+  const { payload } = await jwtVerify(token, jwks, {
+    algorithms: ['RS256'],
+    issuer: process.env.JWT_ISSUER,
+  });
+
+  return payload as JwtPayload;
 };

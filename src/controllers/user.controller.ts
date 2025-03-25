@@ -19,6 +19,10 @@ export const findUserByEmail = async (email: string) => {
   return User.findOne({ where: { email } });
 };
 
+export const findUserByWalletAddress = async (address: string) => {
+  return User.findOne({ where: { address } });
+};
+
 export const findUserByEmailOrAddress = async (item: string | null) => {
   return User.findOne({
     where: {

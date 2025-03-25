@@ -14,9 +14,9 @@ const GITHUB_AUTH = 'github';
 const GOOGLE_AUTH = 'google';
 const CREDENTIALS_AUTH = 'credentials';
 
-const DEFAULT_ROLE = 'admin';
+const DEFAULT_ROLE = 'owner';
 
-export const USER_MODIFIABLE_FIELDS = ['name', 'email', 'avatar_url', 'role'];
+export const USER_MODIFIABLE_FIELDS = ['name', 'email', 'avatar_url', 'role', 'address'];
 
 export class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   declare id?: string;

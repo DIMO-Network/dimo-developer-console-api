@@ -8,5 +8,6 @@ export const GET = async (request: NextRequest) => {
   return Response.json({
     existItem: !!user,
     role: user?.role,
+    currentWallet: user?.address,
   });
 };
