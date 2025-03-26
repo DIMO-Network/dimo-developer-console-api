@@ -4,14 +4,14 @@ import { AuthenticationMiddleware } from '@/middlewares/authentication.middlewar
 import { USER_MODIFIABLE_FIELDS, User } from '@/models/user.model';
 import { getCompanyAndTeam, updateUserById } from '@/controllers/user.controller';
 import { hasMandatoryInformation, processOAuth } from '@/controllers/auth.controller';
-import { Token } from '@/types/auth';
 import { isErrorWithMessage } from '@/utils/error.utils';
 import { acceptTeamInvitation } from '@/controllers/teamCollaborator.controller';
 import { getToken } from '@/utils/auth';
+import { JwtPayload } from 'jsonwebtoken';
 
 export const GET = async (request: NextRequest) => {
   try {
-    const token = (await getToken({ req: request })) as Token;
+    const token = (await getToken({ req: request })) as JwtPayload;
     if (!hasMandatoryInformation(token)) return Response.json({});
 
     const invitationCode = request.nextUrl.searchParams.get('invitation_code');
