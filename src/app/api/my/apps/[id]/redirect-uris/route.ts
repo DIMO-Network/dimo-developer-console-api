@@ -11,26 +11,22 @@ import { IUserWithCompanyAndTeam } from '@/types/user';
 
 type Params = { params: { id: string } };
 
-export const POST = async (
-  request: NextRequest,
-  { params: { id: appId } }: Params
-) => {
+export const POST = async (request: NextRequest, { params: { id: appId } }: Params) => {
   try {
     await AuthenticationMiddleware(request);
     const loggedUser = request.user?.user as User;
     const userCompleteInfo = (await getCompanyAndTeam(
-      loggedUser
+      loggedUser,
     )) as IUserWithCompanyAndTeam;
 
-    const redirectUriInput = _.pick(
-      await request.json(),
-      MODIFIABLE_FIELDS
-    ) as Partial<Attributes<RedirectUri>>;
+    const redirectUriInput = _.pick(await request.json(), MODIFIABLE_FIELDS) as Partial<
+      Attributes<RedirectUri>
+    >;
 
     const createdRedirectUri = await createOwnRedirectUri(
       redirectUriInput,
       appId,
-      userCompleteInfo
+      userCompleteInfo,
     );
 
     return Response.json(createdRedirectUri);

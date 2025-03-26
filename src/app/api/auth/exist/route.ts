@@ -7,5 +7,7 @@ export const GET = async (request: NextRequest) => {
   const user = await findUserByEmailOrAddress(item);
   return Response.json({
     existItem: !!user,
+    role: user?.role,
+    currentWallet: user?.address,
   });
 };

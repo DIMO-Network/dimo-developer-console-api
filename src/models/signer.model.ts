@@ -26,7 +26,7 @@ export class Signer extends Model<
 
   static findAllPaginated(
     findOptions: FilterObject,
-    paginationOptions: PaginationOptions
+    paginationOptions: PaginationOptions,
   ) {
     const filter = transformObjectToSequelize(findOptions, {
       like: [],
@@ -93,5 +93,5 @@ Signer.init(
     tableName: 'signers',
     createdAt: 'created_at',
     updatedAt: 'updated_at',
-  }
+  },
 );

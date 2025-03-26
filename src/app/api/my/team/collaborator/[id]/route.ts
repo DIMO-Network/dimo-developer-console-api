@@ -5,10 +5,7 @@ import { isErrorWithMessage } from '@/utils/error.utils';
 
 type Params = { params: { id: string } };
 
-export const DELETE = async (
-  request: NextRequest,
-  { params: { id } }: Params
-) => {
+export const DELETE = async (request: NextRequest, { params: { id } }: Params) => {
   try {
     await AuthenticationMiddleware(request);
     const loggedUser = request.user?.user as User;
@@ -16,7 +13,7 @@ export const DELETE = async (
 
     return Response.json(
       { message: 'The collaborator has been removed' },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error: unknown) {
     console.error({

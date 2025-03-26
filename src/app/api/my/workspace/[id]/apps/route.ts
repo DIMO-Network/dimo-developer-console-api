@@ -13,7 +13,7 @@ type Params = { params: { id: string } };
 
 export const POST = async (
   request: NextRequest,
-  { params: { id: workspaceId } }: Params
+  { params: { id: workspaceId } }: Params,
 ) => {
   try {
     await AuthenticationMiddleware(request);
@@ -26,10 +26,7 @@ export const POST = async (
       return Response.json({ message: 'Forbidden' }, { status: 403 });
     }
 
-    const appInput = _.pick(
-      await request.json(),
-      MODIFIABLE_FIELDS
-    ) as Attributes<App>;
+    const appInput = _.pick(await request.json(), MODIFIABLE_FIELDS) as Attributes<App>;
 
     const createdApp = await createApp(appInput, workspaceId, companyId);
 
