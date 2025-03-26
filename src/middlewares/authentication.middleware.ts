@@ -1,5 +1,4 @@
 import { LoggedUser } from '@/utils/loggedUser';
-import { Token } from '@/types/auth';
 import { processOAuth } from '@/controllers/auth.controller';
 import { getToken } from '@/utils/auth';
 

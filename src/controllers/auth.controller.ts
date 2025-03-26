@@ -1,6 +1,4 @@
 import { User } from '@/models/user.model';
-import { handleErrorType, handleUniqueConstraintError } from '@/models/error.model';
-import { UniqueConstraintError } from 'sequelize';
 import { Token } from '@/types/auth';
 import { JwtPayload } from 'jsonwebtoken';
 
@@ -22,16 +20,5 @@ export const processOAuth = async (token: JwtPayload | null): Promise<[User, boo
     },
   });
 
-  // const [currentUser, isNew] = await User.findOrCreate({
-  //   where: { email },
-  //   defaults: {
-  //     name: token.name,
-  //     email: token.email,
-  //     address: address,
-  //     auth,
-  //     auth_login: token.email,
-  //     avatar_url: token.picture,
-  //   },
-  // }).catch(handleErrorType(UniqueConstraintError, handleUniqueConstraintError('email')));
   return [currentUser!, false];
 };

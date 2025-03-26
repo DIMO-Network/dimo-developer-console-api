@@ -3,8 +3,7 @@ import { pick } from 'lodash';
 import { associateTeam } from '@/controllers/team.controller';
 import { COMPANY_MODIFIABLE_FIELDS, Company } from '@/models/company.model';
 import {
-  findUserByEmail,
-  findUserById,
+  findUserByEmail,  
   getCompanyAndTeam,
   updateUserById,
 } from '@/controllers/user.controller';
@@ -12,13 +11,16 @@ import { finishUpUserRegistration } from '@/controllers/company.controller';
 // import { fleetGeneration } from '@/controllers/lead.controller';
 import { User, USER_MODIFIABLE_FIELDS } from '@/models/user.model';
 import { Attributes } from 'sequelize';
-import { Token } from '@/types/auth';
 import { fleetGeneration } from '@/controllers/lead.controller';
 import { getToken } from '@/utils/auth';
 import { JwtPayload } from 'jsonwebtoken';
 
 export async function PUT(request: NextRequest) {
   const token = (await getToken({ req: request })) as JwtPayload;
+
+  if (!token) {
+    return Response.json({ message: 'Unauthorized' }, { status: 401 });
+  }
 
   const incomingData = await request.json();
   const user = (await findUserByEmail(incomingData.email)) as User;
@@ -29,7 +31,7 @@ export async function PUT(request: NextRequest) {
   const incommingUser = pick(incomingData, USER_MODIFIABLE_FIELDS) as User;
 
   const userId = user.id!;
-  const updatedUser = await updateUserById(userId, incommingUser);
+  await updateUserById(userId, incommingUser);
 
   if (incomingData.company) {
     const incomingCompany = pick(
