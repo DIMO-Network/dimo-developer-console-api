@@ -1,32 +1,24 @@
 import { User } from '@/models/user.model';
-import {
-  handleErrorType,
-  handleUniqueConstraintError,
-} from '@/models/error.model';
-import { UniqueConstraintError } from 'sequelize';
 import { Token } from '@/types/auth';
+import { JwtPayload } from 'jsonwebtoken';
 
-export const hasMandatoryInformation = (user: Token) => {
-  return (
-    (Boolean(user?.email) || Boolean(user?.address)) && Boolean(user?.provider)
-  );
+export const hasMandatoryInformation = (user: JwtPayload) => {
+  return (Boolean(user?.ethereum_address));
 };
 
-export const processOAuth = async (token: Token): Promise<[User, boolean]> => {
-  const { email = '', provider: auth = '', address = '' } = token;
-  
-  const [currentUser, isNew] = await User.findOrCreate({
-    where: { email },
-    defaults: {
-      name: token.name,
-      email: token.email,
-      address: address,
-      auth,
-      auth_login: token.email,
-      avatar_url: token.picture,
+export const processOAuth = async (token: JwtPayload | null): Promise<[User, boolean]> => {
+
+  if (!token) {
+    throw new Error('Token is required');
+  }
+
+  const { ethereum_address = '' } = token;
+
+  const currentUser = await User.findOne({
+    where: {
+      address: ethereum_address,
     },
-  }).catch(
-    handleErrorType(UniqueConstraintError, handleUniqueConstraintError('email'))
-  );
-  return [currentUser, isNew];
+  });
+
+  return [currentUser!, false];
 };

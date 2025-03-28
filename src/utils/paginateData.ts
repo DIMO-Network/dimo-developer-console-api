@@ -17,7 +17,7 @@ export async function paginateData<T extends Model>(
   model: ModelStatic<T>,
   options: FindOptions,
   paginationOptions: PaginationOptions,
-  include?: Includeable | Includeable[]
+  include?: Includeable | Includeable[],
 ): Promise<{ data: T[]; totalItems: number; totalPages: number }> {
   const { page, pageSize } = paginationOptions;
 

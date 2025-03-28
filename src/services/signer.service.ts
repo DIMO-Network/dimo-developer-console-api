@@ -5,7 +5,7 @@ export const createSigner = async (
   apiKey: string,
   address: string,
   appId: string,
-  companyId: string
+  companyId: string,
 ) => {
   return Signer.create({
     api_key: apiKey,
@@ -15,24 +15,18 @@ export const createSigner = async (
   });
 };
 
-export const updateSigner = async (
-  id: string,
-  newData: Partial<Attributes<Signer>>
-) => {
+export const updateSigner = async (id: string, newData: Partial<Attributes<Signer>>) => {
   return Signer.update(newData, { where: { id } });
 };
 
 export const updateMySigner = async (
   id: string,
   companyId: string,
-  newData: Partial<Attributes<Signer>>
+  newData: Partial<Attributes<Signer>>,
 ) => {
   const signer = await findMySignerById(id, companyId);
   if (signer) return updateSigner(id, newData);
-  else
-    throw new Error(
-      'User does not have permissions to modify the redirect URI'
-    );
+  else throw new Error('User does not have permissions to modify the redirect URI');
 };
 
 export const deleteSigners = async (appId: string, companyId: string) => {
@@ -41,7 +35,7 @@ export const deleteSigners = async (appId: string, companyId: string) => {
       deleted: true,
       deleted_at: new Date(),
     },
-    { where: { app_id: appId, company_id: companyId } }
+    { where: { app_id: appId, company_id: companyId } },
   );
 };
 

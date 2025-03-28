@@ -10,10 +10,7 @@ export const findWorkspaceById = async (id: string) => {
   return Workspace.findOne({ where: { id } });
 };
 
-export const findWorkspaceByIdAndCompany = async (
-  id: string,
-  companyId: string
-) => {
+export const findWorkspaceByIdAndCompany = async (id: string, companyId: string) => {
   return Workspace.findOne({ where: { id, company_id: companyId } });
 };
 

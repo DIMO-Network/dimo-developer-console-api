@@ -11,27 +11,19 @@ import { IUserWithCompanyAndTeam } from '@/types/user';
 
 type Params = { params: { id: string } };
 
-export const POST = async (
-  request: NextRequest,
-  { params: { id: appId } }: Params
-) => {
+export const POST = async (request: NextRequest, { params: { id: appId } }: Params) => {
   try {
     await AuthenticationMiddleware(request);
     const loggedUser = request.user?.user as User;
     const userCompleteInfo = (await getCompanyAndTeam(
-      loggedUser
+      loggedUser,
     )) as IUserWithCompanyAndTeam;
 
-    const signerInput = _.pick(
-      await request.json(),
-      MODIFIABLE_FIELDS
-    ) as Partial<Attributes<Signer>>;
+    const signerInput = _.pick(await request.json(), MODIFIABLE_FIELDS) as Partial<
+      Attributes<Signer>
+    >;
 
-    const createdSigner = await createOwnSigner(
-      signerInput,
-      appId,
-      userCompleteInfo
-    );
+    const createdSigner = await createOwnSigner(signerInput, appId, userCompleteInfo);
 
     return Response.json(createdSigner);
   } catch (error: unknown) {

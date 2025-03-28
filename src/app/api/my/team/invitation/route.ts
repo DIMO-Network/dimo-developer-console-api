@@ -21,7 +21,7 @@ export const POST = async (request: NextRequest) => {
       loggedUser,
       userCompleteInfo?.company?.name ?? '',
       email,
-      role
+      role,
     );
     return Response.json(
       {
@@ -29,7 +29,7 @@ export const POST = async (request: NextRequest) => {
       },
       {
         status: 200,
-      }
+      },
     );
   } catch (error: unknown) {
     console.error({

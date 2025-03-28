@@ -28,7 +28,7 @@ export class Workspace extends Model<
 
   static findAllPaginated(
     findOptions: FilterObject,
-    paginationOptions: PaginationOptions
+    paginationOptions: PaginationOptions,
   ) {
     const filter = transformObjectToSequelize(findOptions, {
       like: [],
@@ -105,7 +105,7 @@ Workspace.init(
     tableName: 'workspaces',
     createdAt: 'created_at',
     updatedAt: 'updated_at',
-  }
+  },
 );
 
 Workspace.belongsTo(Company, { foreignKey: 'company_id' });
