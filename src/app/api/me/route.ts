@@ -22,6 +22,7 @@ export const GET = async (request: NextRequest) => {
     const userCompleteInfo = await getCompanyAndTeam(user);
     return Response.json(userCompleteInfo);
   } catch (error: unknown) {
+    console.error(error);
     const message = isErrorWithMessage(error) ? error?.message : '';
     return Response.json(
       {
