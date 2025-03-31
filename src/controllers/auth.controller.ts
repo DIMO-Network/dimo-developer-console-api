@@ -1,5 +1,4 @@
 import { User } from '@/models/user.model';
-import { Token } from '@/types/auth';
 import { JwtPayload } from 'jsonwebtoken';
 
 export const hasMandatoryInformation = (user: JwtPayload) => {
