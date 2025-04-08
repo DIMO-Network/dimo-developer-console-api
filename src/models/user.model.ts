@@ -16,7 +16,7 @@ const CREDENTIALS_AUTH = 'credentials';
 
 const DEFAULT_ROLE = 'owner';
 
-export const USER_MODIFIABLE_FIELDS = ['name', 'email', 'avatar_url', 'role', 'address'];
+export const USER_MODIFIABLE_FIELDS = ['name', 'email', 'avatar_url', 'role', 'address', 'auth_login', 'auth'];
 
 export class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   declare id?: string;

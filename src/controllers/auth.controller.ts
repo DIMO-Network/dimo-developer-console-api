@@ -5,7 +5,7 @@ export const hasMandatoryInformation = (user: JwtPayload) => {
   return (Boolean(user?.ethereum_address));
 };
 
-export const processOAuth = async (token: JwtPayload | null): Promise<[User, boolean]> => {
+export const processOAuth = async (token: JwtPayload | null): Promise<User | null> => {
 
   if (!token) {
     throw new Error('Token is required');
@@ -19,5 +19,5 @@ export const processOAuth = async (token: JwtPayload | null): Promise<[User, boo
     },
   });
 
-  return [currentUser!, false];
+  return currentUser;
 };

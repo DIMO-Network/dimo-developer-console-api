@@ -5,7 +5,7 @@ import { getToken } from '@/utils/auth';
 export const AuthenticationMiddleware = async (request: NextRequest) => {
   try {
     const token = (await getToken({ req: request }));
-    const [user] = await processOAuth(token);
+    const user = await processOAuth(token);
     request.user = new LoggedUser(user);
   } catch (error: unknown) {
     console.error({

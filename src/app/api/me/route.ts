@@ -15,8 +15,13 @@ export const GET = async (request: NextRequest) => {
     if (!hasMandatoryInformation(token)) return Response.json({});
 
     const invitationCode = request.nextUrl.searchParams.get('invitation_code');
-    const [user, isNew] = await processOAuth(token);
-    await acceptTeamInvitation(user, isNew, invitationCode).catch((error) =>
+    const user = await processOAuth(token);
+
+    if (!user) {
+      return Response.json({ message: 'User not found' }, { status: 404 });
+    }
+
+    await acceptTeamInvitation(user, invitationCode).catch((error) =>
       console.error(error.message),
     );
     const userCompleteInfo = await getCompanyAndTeam(user);
