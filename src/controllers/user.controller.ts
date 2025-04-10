@@ -16,6 +16,7 @@ export const findUserById = async (id: string) => {
 };
 
 export const findUserByEmail = async (email: string) => {
+  if (!email) return null;
   return User.findOne({ where: { email } });
 };
 

@@ -4,6 +4,7 @@ import { associateTeam } from '@/controllers/team.controller';
 import { COMPANY_MODIFIABLE_FIELDS, Company } from '@/models/company.model';
 import {
   findUserByEmail,  
+  findUserByWalletAddress,  
   getCompanyAndTeam,
   updateUserById,
 } from '@/controllers/user.controller';
@@ -23,12 +24,19 @@ export async function PUT(request: NextRequest) {
   }
 
   const incomingData = await request.json();
-  const user = (await findUserByEmail(incomingData.email)) as User;
+  let user = (await findUserByEmail(incomingData.email)) as User;
+
+  if (!user) {
+    user = (await findUserByWalletAddress(token.ethereum_address)) as User;
+  }
 
   if (!user) {
     return Response.json({ message: 'User not found' }, { status: 404 });
   }
-  const incommingUser = pick(incomingData, USER_MODIFIABLE_FIELDS) as User;
+  const incommingUser = pick({
+    ...incomingData,
+    email: user.email,
+  }, USER_MODIFIABLE_FIELDS) as User;
 
   const userId = user.id!;
   await updateUserById(userId, incommingUser);
