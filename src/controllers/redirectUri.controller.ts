@@ -11,7 +11,7 @@ import { IUserWithCompanyAndTeam } from '@/types/user';
 export const createOwnRedirectUri = async (
   { uri = '' }: Partial<Attributes<RedirectUri>>,
   appId: string,
-  user: IUserWithCompanyAndTeam
+  user: IUserWithCompanyAndTeam,
 ) => {
   const companyId = user?.company?.id ?? '';
   return createRedirectUri(uri, appId, companyId);
@@ -20,16 +20,13 @@ export const createOwnRedirectUri = async (
 export const updateOwnRedirectUri = async (
   id: string,
   newData: Partial<Attributes<RedirectUri>>,
-  user: IUserWithCompanyAndTeam
+  user: IUserWithCompanyAndTeam,
 ) => {
   const companyId = user?.company?.id ?? '';
   return updateMyRedirectUri(id, companyId, newData);
 };
 
-export const deleteOwnRedirectUri = async (
-  id: string,
-  user: IUserWithCompanyAndTeam
-) => {
+export const deleteOwnRedirectUri = async (id: string, user: IUserWithCompanyAndTeam) => {
   const companyId = user?.company?.id ?? '';
   return deleteRedirectUris(id, companyId);
 };

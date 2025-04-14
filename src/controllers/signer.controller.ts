@@ -7,16 +7,13 @@ import { IUserWithCompanyAndTeam } from '@/types/user';
 export const createOwnSigner = async (
   { api_key: apiKey = '', address = '' }: Partial<Attributes<Signer>>,
   appId: string,
-  user: IUserWithCompanyAndTeam
+  user: IUserWithCompanyAndTeam,
 ) => {
   const companyId = user?.company?.id ?? '';
   return createSigner(apiKey, address, appId, companyId);
 };
 
-export const deleteOwnSigner = async (
-  id: string,
-  user: IUserWithCompanyAndTeam
-) => {
+export const deleteOwnSigner = async (id: string, user: IUserWithCompanyAndTeam) => {
   const companyId = user?.company?.id ?? '';
   return deleteSigners(id, companyId);
 };

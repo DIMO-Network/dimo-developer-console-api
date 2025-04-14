@@ -1,12 +1,11 @@
-import { getToken } from 'next-auth/jwt';
 import { LoggedUser } from '@/utils/loggedUser';
-import { Token } from '@/types/auth';
 import { processOAuth } from '@/controllers/auth.controller';
+import { getToken } from '@/utils/auth';
 
 export const AuthenticationMiddleware = async (request: NextRequest) => {
   try {
-    const token = (await getToken({ req: request })) as Token;
-    const [user] = await processOAuth(token);
+    const token = (await getToken({ req: request }));
+    const user = await processOAuth(token);
     request.user = new LoggedUser(user);
   } catch (error: unknown) {
     console.error({

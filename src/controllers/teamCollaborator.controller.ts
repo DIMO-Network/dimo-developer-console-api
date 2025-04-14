@@ -23,7 +23,7 @@ import Mailer from '@/utils/mailer';
 
 export async function getTeamCollaborators(
   filter: FilterObject,
-  pagination: PaginationOptions
+  pagination: PaginationOptions,
 ) {
   return TeamCollaborator.findAllPaginated(filter, pagination);
 }
@@ -31,14 +31,14 @@ export async function getTeamCollaborators(
 export async function getMyTeamCollaborators(
   teamId: string,
   filter: FilterObject,
-  pagination: PaginationOptions
+  pagination: PaginationOptions,
 ) {
   return getTeamCollaborators(
     {
       ...filter,
       team_id: teamId,
     },
-    pagination
+    pagination,
   );
 }
 
@@ -48,7 +48,7 @@ export async function findTeamCollaboratorById(id: string) {
 
 export async function updateTeamCollaboratorById(
   id: string,
-  teamCollaboratorData: Attributes<TeamCollaborator>
+  teamCollaboratorData: Attributes<TeamCollaborator>,
 ) {
   return TeamCollaborator.update(teamCollaboratorData, { where: { id } });
 }
@@ -56,32 +56,24 @@ export async function updateTeamCollaboratorById(
 export const deleteTeamCollaboratorById = async (id: string) => {
   return TeamCollaborator.update(
     { deleted: true, deleted_at: new Date() },
-    { where: { id } }
+    { where: { id } },
   );
 };
 
-export const removeMyCollaboratorById = async (
-  { id: userId }: User,
-  id: string
-) => {
+export const removeMyCollaboratorById = async ({ id: userId }: User, id: string) => {
   const { role: currentUserRole } =
     (await findTeamCollaboratorByUserId(userId ?? '')) ?? {};
 
   if (currentUserRole !== TeamRoles.OWNER)
-    throw new ValidatorError(
-      'Do not have enough permissions to remove a collaborator'
-    );
+    throw new ValidatorError('Do not have enough permissions to remove a collaborator');
 
-  const { user_id: collaboratorId } =
-    (await findTeamCollaboratorById(id ?? '')) ?? {};
+  const { user_id: collaboratorId } = (await findTeamCollaboratorById(id ?? '')) ?? {};
   const { totalItems: totalOwners } = await getTeamCollaborators(
     { role: TeamRoles.OWNER, deleted: 'false' },
-    { page: 1, pageSize: 10 }
+    { page: 1, pageSize: 10 },
   );
   if (totalOwners === 1 && userId === collaboratorId)
-    throw new ValidatorError(
-      'Cannot remove the only administrator from the group.'
-    );
+    throw new ValidatorError('Cannot remove the only administrator from the group.');
 
   return deleteTeamCollaboratorById(id);
 };
@@ -95,18 +87,14 @@ export const findTeamInvitationByEmail = (email: string) => {
 };
 
 export const addTeamCollaborator = async (
-  inputTeamCollaborator: Attributes<TeamCollaborator>
+  inputTeamCollaborator: Attributes<TeamCollaborator>,
 ) => {
   const email = inputTeamCollaborator?.email;
   const isValid =
-    validateMandatoryFields(inputTeamCollaborator, [
-      'team_id',
-      'email',
-      'status',
-    ]) && isEmail(email ?? '');
+    validateMandatoryFields(inputTeamCollaborator, ['team_id', 'email', 'status']) &&
+    isEmail(email ?? '');
 
-  if (!isValid)
-    throw new ValidatorError('Team invitation params are not valid');
+  if (!isValid) throw new ValidatorError('Team invitation params are not valid');
 
   const hasInvitation = Boolean(await findTeamInvitationByEmail(email ?? ''));
   const isEmailRegistered = Boolean(await findUserByEmail(email ?? ''));
@@ -124,7 +112,7 @@ export const invitePersonToMyTeam = async (
   user: User,
   companyName: string,
   email: string,
-  role: string
+  role: string,
 ): Promise<TeamCollaborator> => {
   const expirationDate = new Date();
   expirationDate.setDate(expirationDate.getDate() + 7);
@@ -140,7 +128,7 @@ export const invitePersonToMyTeam = async (
 
   const template = generateTeamInvitationTemplate(
     user.name.split(' ')[0],
-    `${config.frontendUrl}sign-in?code=${code}`
+    `${config.frontendUrl}sign-in?code=${code}`,
   );
   await Mailer.sendMail({
     to: email,
@@ -153,10 +141,8 @@ export const invitePersonToMyTeam = async (
 
 export const acceptTeamInvitation = async (
   user: User,
-  isNew: boolean,
-  invitationCode: string | null
-): Promise<void> => {
-  if (!isNew) return;
+  invitationCode: string | null,
+): Promise<void> => {  
   if (Object.is(invitationCode, null)) return;
 
   const invitationId = Buffer.from(invitationCode!, 'base64').toString('ascii');

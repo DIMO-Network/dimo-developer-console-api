@@ -38,19 +38,17 @@ export class TeamCollaborator extends Model<
 
   static findAllPaginated(
     findOptions: FilterObject,
-    paginationOptions: PaginationOptions
+    paginationOptions: PaginationOptions,
   ) {
     const filter = transformObjectToSequelize(findOptions, {
       like: ['role'],
       exact: ['team_id', 'user_id', 'id'],
     });
 
-    return paginateData(
-      TeamCollaborator,
-      { where: filter },
-      paginationOptions,
-      [User, Team]
-    );
+    return paginateData(TeamCollaborator, { where: filter }, paginationOptions, [
+      User,
+      Team,
+    ]);
   }
 }
 
@@ -114,7 +112,7 @@ TeamCollaborator.init(
     tableName: 'team_collaborators',
     createdAt: 'created_at',
     updatedAt: 'updated_at',
-  }
+  },
 );
 
 TeamCollaborator.belongsTo(User, { foreignKey: 'user_id' });
