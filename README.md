@@ -30,6 +30,7 @@ Before you begin, ensure you have the following installed on your machine:
 - A Google Developer Account and GitHub Account for OAuth integration.
 
 ### Set Up Google and GitHub OAuth Applications
+
 Follow the steps outlined [here](https://github.com/DIMO-Network/dimo-developer-console?tab=readme-ov-file#set-up-google-and-github-oauth-applications) to set up your Google and Github OAuth applications. The credentials that you created for those applications should be reused here.
 
 ### Installation
