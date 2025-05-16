@@ -26,7 +26,7 @@ class DB {
       PGDATABASE: database = '',
     } = process.env;
     const postgresUrl = `postgres://${user}:${password}@${host}:${port}/${database}${
-      VERCEL_ENV ? '?sslmode=require' : ''
+      VERCEL_ENV ? '?sslmode=require&connection_limit=40&connect_timeout=30&pool_timeout=30' : ''
     }`;
 
     return new Sequelize(postgresUrl, {
