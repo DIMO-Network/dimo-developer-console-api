@@ -6,7 +6,9 @@ import { JwtPayload } from 'jsonwebtoken';
 import { findUserByWalletAddress } from '@/controllers/user.controller';
 import { User } from '@/models/user.model';
 import { NextResponse } from 'next/server';
-const multiplier = 1000;
+const { DCX_IN_USD = 0.001 } = process.env;
+const DCX_PRICE = Number(DCX_IN_USD);
+
 const POST = async (request: NextRequest) => {
   try {
     const token = (await getToken({ req: request })) as JwtPayload;
@@ -14,8 +16,6 @@ const POST = async (request: NextRequest) => {
     if (!token) {
       return Response.json({ message: 'Unauthorized' }, { status: 401 });
     }
-
-    const user = (await findUserByWalletAddress(token.ethereum_address)) as User;
 
     const { STRIPE_API_KEY, STRIPE_API, STRIPE_PRODUCT_PRICE } = process.env;
     const payload: TokenPurchaseTransaction = await request.json();
@@ -28,17 +28,19 @@ const POST = async (request: NextRequest) => {
       },
     });
 
+    const dcxAmount = Math.ceil(+payload.amount / DCX_PRICE);
+
+    const user = (await findUserByWalletAddress(token.ethereum_address)) as User;
+
+    const targetWallet = payload.wallet ?? user?.address;
+
     const paymentLinPayload = {
       line_items: [
         {
           price: STRIPE_PRODUCT_PRICE!,
-          quantity: payload.amount * (multiplier/10),
+          quantity: dcxAmount,
         },
       ],
-      metadata: {
-        destination_wallet: user!.address,
-        dcx_amount: payload.amount * multiplier,
-      },
       automatic_tax: {
         enabled: true,
       },
@@ -51,24 +53,30 @@ const POST = async (request: NextRequest) => {
       after_completion: {
         type: 'redirect',
         redirect: {
-          url: `${config.frontendUrl}/app`
+          url: `${config.frontendUrl}/app`,
         },
       },
-      inactive_message: 'You\'ve already paid this. Please return to DIMO and continue with building with your credits.',
+      inactive_message:
+        "You've already paid this. Please return to DIMO and continue with building with your credits.",
       invoice_creation: {
         enabled: true,
         invoice_data: {
-          description: `For the purchase of ${payload.amount} Developer Credits`,
+          description: `For the purchase of ${payload.amount} worth of Developer Credits`,
           custom_fields: [
             {
               name: 'DIMO Global Account',
-              value: user!.address,
+              value: targetWallet,
             },
             {
               name: 'Name',
               value: user!.name,
             },
           ],
+          metadata: {
+            destination_wallet: targetWallet,
+            dcx_amount: dcxAmount,
+            owner_wallet: user.address,
+          },
         },
       },
     };
@@ -82,16 +90,13 @@ const POST = async (request: NextRequest) => {
 
     return NextResponse.json({ url }, { status: 200 });
   } catch (e: unknown) {
-    if (e instanceof AxiosError){
+    if (e instanceof AxiosError) {
       console.error(e.response?.data?.error);
-    } else{
+    } else {
       console.error(e);
     }
 
-    return NextResponse.json(
-      { message: 'Error creating payment link' },
-      { status: 500 },
-    );
+    return NextResponse.json({ message: 'Error creating payment link' }, { status: 500 });
   }
 };
 
