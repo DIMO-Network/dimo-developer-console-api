@@ -66,6 +66,7 @@ PaymentReceipt.init(
     modelName: 'PaymentReceipt',
     tableName: 'payment_receipts',
     createdAt: 'created_at',
+    updatedAt: 'updated_at',
   },
 );
 
