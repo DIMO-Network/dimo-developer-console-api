@@ -32,7 +32,7 @@ export const sendSupportEmail = async (data: SupportEmailData) => {
     userEmail,
     walletAddress,
     inquiryType,
-    message
+    message,
   );
 
   try {

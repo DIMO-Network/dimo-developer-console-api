@@ -3,7 +3,7 @@ export const generateSupportEmailTemplate = (
   email: string,
   wallet: string,
   inquiryType: string,
-  message: string
+  message: string,
 ): string => {
   return `
     <div style="margin:0;background-color:#fff;padding:0">

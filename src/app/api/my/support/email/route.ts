@@ -21,11 +21,7 @@ export const POST = async (request: NextRequest) => {
     return NextResponse.json({ success: true });
   } catch (error: unknown) {
     console.error('Error sending support email:', error);
-    const errorMessage =
-      error instanceof Error ? error.message : 'Unknown error';
-    return NextResponse.json(
-      { success: false, message: errorMessage },
-      { status: 400 }
-    );
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    return NextResponse.json({ success: false, message: errorMessage }, { status: 400 });
   }
 };

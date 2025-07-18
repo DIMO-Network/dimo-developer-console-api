@@ -17,19 +17,9 @@ class DB {
   }
 
   connect() {
-    const {
-      VERCEL_ENV,
-      PGUSER: user = '',
-      PGPASSWORD: password = '',
-      PGHOST: host = '',
-      PGPORT: port = '',
-      PGDATABASE: database = '',
-    } = process.env;
-    const postgresUrl = `postgres://${user}:${password}@${host}:${port}/${database}${
-      VERCEL_ENV ? '?sslmode=require&connection_limit=40&connect_timeout=30&pool_timeout=30' : ''
-    }`;
-
-    return new Sequelize(postgresUrl, {
+    const { PG_URL } = process.env;
+    
+    return new Sequelize(PG_URL!, {
       dialectModule: pg,
     });
   }

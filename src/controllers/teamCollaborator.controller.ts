@@ -142,7 +142,7 @@ export const invitePersonToMyTeam = async (
 export const acceptTeamInvitation = async (
   user: User,
   invitationCode: string | null,
-): Promise<void> => {  
+): Promise<void> => {
   if (Object.is(invitationCode, null)) return;
 
   const invitationId = Buffer.from(invitationCode!, 'base64').toString('ascii');

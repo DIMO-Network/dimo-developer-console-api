@@ -1,9 +1,5 @@
 import { AuthenticationMiddleware } from '@/middlewares/authentication.middleware';
-import {
-  deleteOwnApp,
-  findMyApp,
-  updateMyApp,
-} from '@/controllers/app.controller';
+import { deleteOwnApp, findMyApp, updateMyApp } from '@/controllers/app.controller';
 import { getCompanyAndTeam } from '@/controllers/user.controller';
 import { isErrorWithMessage } from '@/utils/error.utils';
 import { User } from '@/models/user.model';
@@ -52,10 +48,7 @@ export const DELETE = async (request: NextRequest, { params: { id: appId } }: Pa
   }
 };
 
-export const PUT = async (
-  request: NextRequest,
-  { params: { id: appId } }: Params
-) => {
+export const PUT = async (request: NextRequest, { params: { id: appId } }: Params) => {
   try {
     await AuthenticationMiddleware(request);
     const loggedUser = request.user?.user as User;

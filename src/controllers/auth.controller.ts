@@ -2,11 +2,10 @@ import { User } from '@/models/user.model';
 import { JwtPayload } from 'jsonwebtoken';
 
 export const hasMandatoryInformation = (user: JwtPayload) => {
-  return (Boolean(user?.ethereum_address));
+  return Boolean(user?.ethereum_address);
 };
 
 export const processOAuth = async (token: JwtPayload | null): Promise<User | null> => {
-
   if (!token) {
     throw new Error('Token is required');
   }
