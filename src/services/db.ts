@@ -18,7 +18,7 @@ class DB {
 
   connect() {
     const { PG_URL } = process.env;
-
+    
     return new Sequelize(PG_URL!, {
       dialectModule: pg,
     });
