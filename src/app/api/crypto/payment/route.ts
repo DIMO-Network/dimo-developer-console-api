@@ -38,7 +38,7 @@ const POST = async (request: NextRequest) => {
       line_items: [
         {
           price: STRIPE_PRODUCT_PRICE!,
-          quantity: dcxAmount,
+          quantity: +payload.amount,
         },
       ],
       automatic_tax: {
