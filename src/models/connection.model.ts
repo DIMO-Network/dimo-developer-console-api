@@ -86,8 +86,8 @@ Connection.init(
     },
     {
         sequelize: DB.connection as Sequelize,
-        modelName: 'App',
-        tableName: 'apps',
+        modelName: 'Connection',
+        tableName: 'connections',
         createdAt: 'created_at',
         updatedAt: 'updated_at',
       },
