@@ -1,5 +1,5 @@
 import { AuthenticationMiddleware } from '@/middlewares/authentication.middleware';
-//doesn't exist yet: import { getMyConnections } from '@/controllers/connection.controller'; 
+import { getMyConnections } from '@/controllers/connection.controller'; 
 import { getCompanyAndTeam } from '@/controllers/user.controller';
 import { getPaginationFromParams } from '@/utils/paginateData';
 import { isErrorWithMessage } from '@/utils/error.utils';
@@ -16,7 +16,6 @@ export const GET = async (request: NextRequest) => {
         const userCompleteInfo = await getCompanyAndTeam(loggedUser);
         const companyId = userCompleteInfo?.company?.id ?? '';
 
-        // Doesnt' exist! 
         const connections = await getMyConnections(params, pagingation, companyId);
         return Response.json(connections);
     } catch (error: unknown) {
@@ -27,4 +26,4 @@ export const GET = async (request: NextRequest) => {
         const message = isErrorWithMessage(error) ? error?.message : '';
         return Response.json({ message }, { status: 400});
     }
-}
+};

@@ -18,7 +18,7 @@ export class Connection extends Model<InferAttributes<Connection>, InferCreation
     declare id?: string;
     declare name: string;
     declare workspace_id: string;
-    declare comapny_id: string;
+    declare company_id: string;
     declare connection_license_public_key: string;
     declare connection_license_private_key: string;
     declare device_issuance_key: string;
