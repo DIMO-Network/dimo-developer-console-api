@@ -63,7 +63,7 @@ Connection.init(
                 notNull: true,
             },
         },
-        comapny_id: {
+        company_id: {
             type: DataTypes.UUID,
             allowNull: false,
             validate: {
