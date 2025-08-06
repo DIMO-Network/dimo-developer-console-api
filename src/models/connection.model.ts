@@ -9,15 +9,18 @@ import {
 import DB from '@/services/db';
 import { PaginationOptions, paginateData } from '@/utils/paginateData';
 import { FilterObject, transformObjectToSequelize } from '@/utils/filter';
-import { Workspace } from '@/models/workspace.model';
+import { Company } from '@/models/company.model';
 
-
-export const CONNECTION_MODIFIABLE_FIELDS = ['name'];
+export const CONNECTION_MODIFIABLE_FIELDS = [
+    'name',
+    'connection_license_public_key',
+    'connection_license_private_key',
+    'device_issuance_key'
+];
 
 export class Connection extends Model<InferAttributes<Connection>, InferCreationAttributes<Connection>> {
     declare id?: string;
     declare name: string;
-    declare workspace_id: string;
     declare company_id: string;
     declare connection_license_public_key: string;
     declare connection_license_private_key: string;
@@ -31,7 +34,7 @@ export class Connection extends Model<InferAttributes<Connection>, InferCreation
       ) {
         const filter = transformObjectToSequelize(findOptions, {
           like: ['name'],
-          exact: ['workspace_id', 'company_id'],
+          exact: ['company_id'],
         });
         return paginateData(Connection, { where: filter }, paginationOptions);
       }
@@ -55,14 +58,6 @@ Connection.init(
                 notNull: true,
             },
         },
-        workspace_id: {
-            type: DataTypes.UUID,
-            allowNull: false, 
-            validate: {
-                notEmpty: true,
-                notNull: true,
-            },
-        },
         company_id: {
             type: DataTypes.UUID,
             allowNull: false,
@@ -71,9 +66,18 @@ Connection.init(
                 notNull: true, 
             }
         },
-        connection_license_public_key: '',
-        connection_license_private_key: '',
-        device_issuance_key: '',
+        connection_license_public_key: {
+            type: DataTypes.TEXT,
+            allowNull: true,
+        },
+        connection_license_private_key: {
+            type: DataTypes.TEXT,
+            allowNull: true,
+        },
+        device_issuance_key: {
+            type: DataTypes.TEXT,
+            allowNull: true,
+        },
         deleted: {
             type: DataTypes.BOOLEAN,
             allowNull: true,
@@ -93,4 +97,4 @@ Connection.init(
       },
 );
 
-Connection.belongsTo(Workspace, { foreignKey: 'workspace_Id'});
+Connection.belongsTo(Company, {foreignKey: 'company_id'});

@@ -3,7 +3,6 @@ import { Attributes } from 'sequelize';
 import { Connection } from '@/models/connection.model';
 import { FilterObject } from '@/utils/filter';
 import { PaginationOptions } from '@/utils/paginateData';
-import { Workspace } from '@/models/workspace.model';
 
 export const getConnections = async (filter: FilterObject, pagination: PaginationOptions) => {
     return Connection.findAllPaginated(filter, pagination);
@@ -23,12 +22,10 @@ export const findConnectionById = async (id: string) => {
 
 export const createConnection = async (
     connectionData: Attributes<Connection>,
-    workspaceId: string,
     companyId: string,
 ) => {
     return Connection.create({
         ...connectionData,
-        workspace_id: workspaceId,
         company_id: companyId,
     });
 };
@@ -36,14 +33,24 @@ export const createConnection = async (
 export const findMyConnection = (id: string, companyId: string) => {
     return Connection.findOne({
         where: { id, company_id: companyId },
-        // TODO BARRETT: need to include connectionLicense Key, PK, and Device Issuance Key
-        include: [Workspace],
     });
 };
 
-// updateConnection 
+export const updateMyConnection = async (
+    id: string,
+    companyId: string,
+    updateData: Attributes<Connection>
+) => {
+    return Connection.update(updateData, {
+        where: { id, company_id: companyId },
+        returning: true,
+    });
+};
 
-// updateMyConnection
-
-// deleteOwnApp
+export const deleteMyConnection = async (id: string, companyId: string) => {
+    return Connection.update(
+        { deleted: true, deleted_at: new Date() },
+        { where: { id, company_id: companyId } }
+    );
+};
 
