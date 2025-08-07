@@ -3,8 +3,8 @@ import { pick } from 'lodash';
 import { associateTeam } from '@/controllers/team.controller';
 import { COMPANY_MODIFIABLE_FIELDS, Company } from '@/models/company.model';
 import {
-  findUserByEmail,  
-  findUserByWalletAddress,  
+  findUserByEmail,
+  findUserByWalletAddress,
   getCompanyAndTeam,
   updateUserById,
 } from '@/controllers/user.controller';
@@ -33,10 +33,13 @@ export async function PUT(request: NextRequest) {
   if (!user) {
     return Response.json({ message: 'User not found' }, { status: 404 });
   }
-  const incommingUser = pick({
-    ...incomingData,
-    email: user.email,
-  }, USER_MODIFIABLE_FIELDS) as User;
+  const incommingUser = pick(
+    {
+      ...incomingData,
+      email: user.email,
+    },
+    USER_MODIFIABLE_FIELDS,
+  ) as User;
 
   const userId = user.id!;
   await updateUserById(userId, incommingUser);
