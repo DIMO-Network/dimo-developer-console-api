@@ -3,7 +3,6 @@ CREATE TABLE IF NOT EXISTS connections (
   name VARCHAR(255) NOT NULL,
   company_id VARCHAR(36) NOT NULL,
   connection_license_public_key TEXT,
-  connection_license_private_key TEXT,
   device_issuance_key TEXT,
   created_at TIMESTAMP,
   updated_at TIMESTAMP,
