@@ -40,7 +40,7 @@ const PUT = async (request: NextRequest, { params }: { params: { id: string } })
 
     const payload: IConfiguration = await request.json();
 
-    await updateConfiguration({ configuration_id: params.id, configuration_name: payload.configurationName!, configuration: payload.configuration! });
+    await updateConfiguration({ configuration_id: params.id, configuration_name: payload.configuration_name!, configuration: payload.configuration! });
 
     return new Response(null, { status: 204 });
   } catch (e: unknown) {
