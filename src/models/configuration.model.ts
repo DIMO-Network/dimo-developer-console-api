@@ -63,7 +63,7 @@ Configuration.init(
   {
     sequelize: DB.connection as Sequelize,
     modelName: 'Configuration',
-    tableName: 'configuration',
+    tableName: 'configurations',
     createdAt: 'created_at',
     updatedAt: 'updated_at',
   },
