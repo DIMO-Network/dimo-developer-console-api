@@ -19,3 +19,9 @@ export interface IUser {
 export interface IUserWithCompanyAndTeam extends IUser {
   company: ICompany;
 }
+
+export interface IConfiguration {
+  clientId?: string;
+  configurationName?: string;
+  configuration: Record<string, unknown>;
+}
