@@ -21,7 +21,7 @@ export interface IUserWithCompanyAndTeam extends IUser {
 }
 
 export interface IConfiguration {
-  clientId?: string;
-  configurationName?: string;
+  client_id?: string;
+  configuration_name?: string;
   configuration: Record<string, unknown>;
 }

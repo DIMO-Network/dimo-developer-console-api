@@ -49,8 +49,8 @@ const POST = async (request: NextRequest) => {
     // save configurations
     const configuration = await saveConfiguration({
       owner_id: loggedUser.id!,
-      client_id: payload.clientId!,
-      configuration_name: payload.configurationName!,
+      client_id: payload.client_id!,
+      configuration_name: payload.configuration_name!,
       configuration: payload.configuration!,
     });
 
