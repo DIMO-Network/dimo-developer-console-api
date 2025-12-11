@@ -40,7 +40,6 @@ export const getToken = async ({
   if (!token) {
     return null;
   }
-  console.info(process.env.JWT_KEY_SET_URL!);
   const jwks = createRemoteJWKSet(new URL(process.env.JWT_KEY_SET_URL!));
   const { payload } = await jwtVerify(token, jwks, {
     algorithms: ['RS256'],
