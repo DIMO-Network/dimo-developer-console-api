@@ -15,9 +15,9 @@ export class Agent extends Model<
 > {
   declare id?: string;
   declare owner_id: string;
-  declare client_id: string;
   declare agent_name: string;
-  declare agent: Record<string, unknown>;
+  declare fleet_mode: boolean;
+  declare vehicle_ids: string[];
 }
 
 Agent.init(
@@ -30,13 +30,6 @@ Agent.init(
         notNull: true,
       },
       primaryKey: true,
-    },
-    client_id: {
-      type: DataTypes.UUID,
-      allowNull: false,
-      validate: {
-        notNull: true,
-      },
     },
     owner_id: {
       type: DataTypes.UUID,
@@ -52,11 +45,19 @@ Agent.init(
         notNull: true,
       },
     },
-    agent: {
-      type: DataTypes.JSONB,
+    fleet_mode: {
+      type: DataTypes.BOOLEAN,
       allowNull: false,
+      defaultValue: false,
       validate: {
         notNull: true,
+      },
+    },
+    vehicle_ids: {
+      type: DataTypes.ARRAY(DataTypes.TEXT),
+      allowNull: true,
+      validate: {
+        notNull: false,
       },
     },
   },
