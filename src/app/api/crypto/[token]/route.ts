@@ -6,7 +6,7 @@ import { sentTokenBoughtEmail } from '@/controllers/crypto.controller';
 import { TokenPurchaseTransaction } from '@/types/crypto';
 import { User } from '@/models/user.model';
 
-export const GET = async (_: NextRequest, { params }: { params: { token: string } }) => {
+const GET = async (_: NextRequest, { params }: { params: { token: string } }) => {
   const { token } = params;
   const client = axios.create({
     baseURL: process.env.COINMARKET_API!,
@@ -21,10 +21,7 @@ export const GET = async (_: NextRequest, { params }: { params: { token: string 
   return NextResponse.json(data);
 };
 
-export const POST = async (
-  request: NextRequest,
-  { params }: { params: { token: string } },
-) => {
+const POST = async (request: NextRequest, { params }: { params: { token: string } }) => {
   await AuthenticationMiddleware(request);
 
   const loggedUser = request.user?.user as User;
@@ -45,3 +42,5 @@ export const POST = async (
 
   return NextResponse.json({ success });
 };
+
+export { GET, POST };

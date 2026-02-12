@@ -30,6 +30,7 @@ Before you begin, ensure you have the following installed on your machine:
 - A Google Developer Account and GitHub Account for OAuth integration.
 
 ### Set Up Google and GitHub OAuth Applications
+
 Follow the steps outlined [here](https://github.com/DIMO-Network/dimo-developer-console?tab=readme-ov-file#set-up-google-and-github-oauth-applications) to set up your Google and Github OAuth applications. The credentials that you created for those applications should be reused here.
 
 ### Installation
@@ -51,17 +52,15 @@ PGUSER=admin
 PGDATABASE=dimo-dev-console
 PGPASSWORD=12345
 PGPORT=5432
-NEXTAUTH_SECRET=<YOUR_SECRET>
-NEXTAUTH_URL=http://localhost:3000
 GITHUB_CLIENT_ID=<YOUR_GITHUB_CLIENT_ID>
 GITHUB_CLIENT_SECRET=<YOUR_GITHUB_CLIENT_SECRET>
 GOOGLE_CLIENT_ID=<YOUR_GOOGLE_CLIENT_ID>
 GOOGLE_CLIENT_SECRET=<YOUR_GOOGLE_CLIENT_SECRET>
-# Your ZAPIER lead generation path, leave empty for dev environments
-ZAPIER_LEAD_WEBHOOK_PATH=
+
+JWT_KEY_SET_URL="https://auth.dev.dimo.zone/keys"
+JWT_ISSUER="https://auth.dev.dimo.zone"
+
 STRIPE_API_KEY=<YOUR_SECRET>
-COINMARKET_API=<YOUR_SECRET>
-COINMARKET_API_KEY=<YOUR_SECRET>
 ```
 
 3. Database Setup:

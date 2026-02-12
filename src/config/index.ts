@@ -14,7 +14,7 @@ export const getConfig = (): Configuration => {
   // Determine the current environment
   const env = process.env.VERCEL_ENV;
 
-  // Select the appropriate configuration to merge with default based on the environment
+  // Select the appropriate configurations to merge with default based on the environment
   let environmentConfig = {};
   switch (env) {
     case 'production':
@@ -30,7 +30,7 @@ export const getConfig = (): Configuration => {
       break;
   }
 
-  // Use lodash to deeply merge the default configuration with the environment-specific configuration
+  // Use lodash to deeply merge the default configurations with the environment-specific configurations
   return {
     ...defaultConfig,
     ...environmentConfig,
