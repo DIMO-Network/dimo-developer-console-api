@@ -9,10 +9,9 @@ import {
   updateUserById,
 } from '@/controllers/user.controller';
 import { finishUpUserRegistration } from '@/controllers/company.controller';
-// import { fleetGeneration } from '@/controllers/lead.controller';
+import { sendLeadEmail } from '@/controllers/lead.controller';
 import { User, USER_MODIFIABLE_FIELDS } from '@/models/user.model';
 import { Attributes } from 'sequelize';
-import { fleetGeneration } from '@/controllers/lead.controller';
 import { getToken } from '@/utils/auth';
 import { JwtPayload } from 'jsonwebtoken';
 
@@ -54,7 +53,7 @@ export async function PUT(request: NextRequest) {
   }
 
   const userCompleteInfo = await getCompanyAndTeam(user);
-  fleetGeneration(userCompleteInfo);
+  sendLeadEmail(userCompleteInfo);
 
   return Response.json(userCompleteInfo);
 }
