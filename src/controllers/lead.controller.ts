@@ -34,7 +34,7 @@ export const sendLeadEmail = async (userData: any) => {
   `;
 
   try {
-    await mailer.sendMail({ to: odooEmail, subject, html });
+    await mailer.sendMail({ to: odooEmail, subject, html, replyTo: email !== 'N/A' ? email : undefined });
     console.log(`Lead email sent for user ${userData.id}`);
   } catch (err) {
     console.error('Error sending lead email', err);

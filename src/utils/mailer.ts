@@ -6,6 +6,7 @@ interface MailOptions {
   to: string;
   subject: string;
   html: string;
+  replyTo?: string;
 }
 
 class Mailer {
@@ -29,6 +30,7 @@ class Mailer {
       to: options.to,
       subject: options.subject,
       html: options.html,
+      ...(options.replyTo && { replyTo: options.replyTo }),
     };
 
     try {
