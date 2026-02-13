@@ -6,6 +6,7 @@ interface MailOptions {
   to: string;
   subject: string;
   html: string;
+  from?: string;
   replyTo?: string;
 }
 
@@ -26,7 +27,7 @@ class Mailer {
 
   async sendMail(options: MailOptions): Promise<void> {
     const mailOptions = {
-      from: config.mailFrom,
+      from: options.from || config.mailFrom,
       to: options.to,
       subject: options.subject,
       html: options.html,
